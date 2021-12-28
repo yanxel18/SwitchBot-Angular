@@ -1,0 +1,109 @@
+.worker-machine-icon-success
+  font-size: 30px
+  color: #00fd6a
+  padding-right: 5px
+.worker-machine-icon-blank
+  font-size: 30px
+  color: #599ce8
+  padding-right: 5px
+.worker-machine-icon-error
+  font-size: 30px
+  color: #ff0000
+  padding-right: 5px
+.worker-machine-button
+  width:140px
+  border:1px solid #599ce8
+  border-radius: 20px
+  color: #599ce8
+.submit-button
+  width:290px
+  font-size: 18px
+  height:40px
+  border-radius: 20px
+  color:#ffffff
+  background-color: #599ce8
+  border:1px solid #599ce8
+.qr-refresh-button
+  background-color: #fafafa
+  border: 1px solid #a3a3a3
+.qr-refresh-button-icon
+  color: #a3a3a3
+.qr-scan-buttons
+  width: 100%
+  column-gap: 5px
+  flex: 1 auto
+  min-width:300px
+.qr-header-text
+  flex:1 auto
+  color:#ffffff
+  width:300px
+  min-width:300px
+  line-height: 0px
+.qr-footer-text h4
+  color:#585858
+  font-weight: bold
+.qr-footer-refresh
+  padding-top:5px
+  width: 100%
+  flex: 1 auto
+  min-width:300px
+.qr-footer-text
+  width: 100%
+  flex: 1 auto
+  min-width:300px
+  line-height: 0px
+.qr-footer-submit
+  padding-top:5px
+  width: 100%
+  flex: 1 auto
+  min-width:300px
+#container
+  background-color: #ffffff
+  border-radius: 10%
+  width: 200px
+  height: 200px
+  display: flex
+  align-items: center
+  justify-content: center
+  overflow: hidden
+  position: relative
+  margin-bottom: 10px
+.circle
+  border-radius: 15%
+  background-color: deepskyblue
+  width: 140px
+  height: 140px
+  position: absolute
+  opacity: 0.25
+  animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .77)
+
+.scan-text
+  height: 0px
+  opacity:0
+  filter:alpha(opacity=0)
+.item
+  z-index: 100
+  padding: 5px
+
+.item img
+  width: 140px
+  background-color: #ffffff
+  border: 5px solid #ffffff
+  border-radius: 5%
+@keyframes scaleIn
+  from
+    transform: scale(1, 1)
+    opacity: .25
+  to
+    transform: scale(1.8, 1.8)
+    opacity: 0
+.scanner-container
+  flex: 1 auto
+  min-height: 250px
+  height: 300px
+  column-gap: 10px
+.qr-container
+  flex: 1 auto
+  width:100%
+.qr-button-containers
+  flex: 1 auto
