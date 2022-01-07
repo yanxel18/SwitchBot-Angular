@@ -1,3 +1,4 @@
+import { CQrscanService } from './../components/c-qrscan/c-qrscan.service';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material-module/material-module';
@@ -13,6 +14,10 @@ import { HideKeyboardModule } from 'hide-keyboard';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { CQrscanComponent } from '../components/c-qrscan/c-qrscan.component';
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { InMemoryCache } from '@apollo/client/core';
 registerLocaleData(localeJa);
 @NgModule({
   declarations: [
@@ -28,11 +33,25 @@ registerLocaleData(localeJa);
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    HideKeyboardModule
+    HideKeyboardModule,
+    HttpClientModule
   ],
   providers: [
+    CQrscanService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
-    { provide: LOCALE_ID, useValue: "ja-JP" }
+    { provide: LOCALE_ID, useValue: "ja-JP" },
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: 'http://localhost:3000/graphql',
+          }),
+        };
+      },
+      deps: [HttpLink],
+    },
   ],
   bootstrap: [AppComponent]
 })

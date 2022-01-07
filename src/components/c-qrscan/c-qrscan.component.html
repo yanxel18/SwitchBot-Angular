@@ -38,7 +38,7 @@
         </button>
       </div>
       <div class="qr-footer-submit" fxLayout="col wrap" fxLayoutAlign="center center">
-        <button [disabled]="!processBtn" class="submit-button" mat-flat-button>操作開始</button>
+        <button [disabled]="!processBtn" (click)="proceed()" class="submit-button" mat-flat-button>操作開始</button>
 
       </div>
       <input hideKeyboard formControlName="qrscantxt"
