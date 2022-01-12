@@ -1,3 +1,5 @@
+import { HttpErrorMessageboxService } from './../error-handler/http-error-messagebox.service';
+import { HttpErrorHandlerService } from './../error-handler/http-error-handler.service';
 import { CQrscanService } from './../components/c-qrscan/c-qrscan.service';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -18,7 +20,26 @@ import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { InMemoryCache } from '@apollo/client/core';
+import { onError } from "@apollo/client/link/error";
+import Swal from 'sweetalert2';
+
+const errorlink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message, locations, path }) => errorMSG(message));
+  if (networkError) errorMSG(networkError.message);
+
+function errorMSG(msg: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'エラーメッセージ',
+      text: msg
+    });
+  }
+}
+);
+
+
 registerLocaleData(localeJa);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +59,8 @@ registerLocaleData(localeJa);
   ],
   providers: [
     CQrscanService,
+    HttpErrorHandlerService,
+    HttpErrorMessageboxService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
     { provide: LOCALE_ID, useValue: "ja-JP" },
     {
@@ -45,9 +68,14 @@ registerLocaleData(localeJa);
       useFactory: (httpLink: HttpLink) => {
         return {
           cache: new InMemoryCache(),
-          link: httpLink.create({
-            uri: 'http://localhost:3000/graphql',
-          }),
+          link: errorlink.concat(httpLink.create({
+            uri: 'http://192.168.44.201:3000/graphql',
+          })),
+          defaultOptions: {
+            watchQuery: {
+              errorPolicy: 'all'
+            }
+          }
         };
       },
       deps: [HttpLink],

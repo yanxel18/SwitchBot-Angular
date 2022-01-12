@@ -7,9 +7,9 @@ const GET_TOKEN = gql`
 }
 `;
 
-const GET_ISMACHINE = gql`
-  query Query($machineQrScan: String!) {
-    isMachineQR(machineQRScan: $machineQrScan)
+const GET_WORKERTOKEN = gql`
+  query Query($machineQrScan: String!, $userQrScan: String!) {
+    WorkerToken(machineQRScan: $machineQrScan, userQRScan: $userQrScan)
   }
 `;
 interface query {
@@ -27,20 +27,26 @@ export class CQrscanService {
     private apollo: Apollo
   ) { }
 
-  validateQRScan(): QueryRef<query> {
+  validateQRScan(QRData: string[]): QueryRef<query> {
     return this.apollo.watchQuery<query>(
       {
-        query: GET_TOKEN
+        query: GET_WORKERTOKEN,
+        variables: {
+          machineQrScan: QRData[0],
+          userQrScan: QRData[1]
+        }
       }
     )
   }
 
-  checkQR(machineQR: string): QueryRef<isMachine>{
-    return this.apollo.watchQuery<isMachine>(
+  checkQR(QRData: string[]): QueryRef<query> {
+
+    return this.apollo.watchQuery<query>(
       {
-        query: GET_ISMACHINE,
+        query: GET_WORKERTOKEN,
         variables: {
-          machineQrScan: machineQR
+          machineQrScan: QRData[0],
+          userQrScan: QRData[1]
         }
       }
     )

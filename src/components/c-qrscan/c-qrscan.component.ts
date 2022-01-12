@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { CQrscanService } from './c-qrscan.service';
 import { Subscription } from 'rxjs';
 import * as Models from '../../interface/Models';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-c-qrscan',
   templateUrl: './c-qrscan.component.html',
@@ -40,23 +40,37 @@ export class CQrscanComponent implements OnDestroy {
   }
   async proceed(): Promise<void> {
     if (this.scannedQRData.length === this.MAX_SCAN) {
-      await this.cqrscanservice.validateQRScan().refetch();
+      console.log(this.scannedQRData);
+      await this.cqrscanservice.validateQRScan(this.scannedQRData).refetch();
       this.unsubscribeF();
-      this.querySubscription.push(this.cqrscanservice.validateQRScan()
+      this.querySubscription.push(this.cqrscanservice.validateQRScan(this.scannedQRData)
         .valueChanges
         .subscribe(({ data, loading }) => {
-          console.log(data);
+          if(data.WorkerToken) {
+          Swal.fire({
+            title: '戻る',
+            text: data.WorkerToken,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: 'いいえ',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'はい'
+          });
+        }
         })
       );
     }
     this.validateMachine();
   }
 
-  validateMachine(): void{
-    this.querySubscription.push(this.cqrscanservice.checkQR(this.scannedQRData[0]).valueChanges
-    .subscribe(({data,loading})=> {
-      console.log(data);
-    }))
+  validateMachine(): void {
+    console.log(this.scannedQRData);
+    this.querySubscription.push(
+      this.cqrscanservice.checkQR(this.scannedQRData).valueChanges
+        .subscribe(({ data, loading }) => {
+          console.log(data);
+        }))
   }
   unsubscribeF(): void {
     this.querySubscription.forEach(x => x.unsubscribe());
