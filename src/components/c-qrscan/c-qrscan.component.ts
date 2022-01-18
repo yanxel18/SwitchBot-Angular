@@ -46,10 +46,19 @@ export class CQrscanComponent implements OnDestroy {
       this.querySubscription.push(this.cqrscanservice.validateQRScan(this.scannedQRData)
         .valueChanges
         .subscribe(({ data, loading }) => {
-          if(data.WorkerToken) {
+          const err = data.WorkerToken.error;
+          if (err){
+            Swal.fire({
+              icon: 'error',
+              title: 'エラーメッセージ!',
+              text: "Error " + err[0]?.message,
+            });
+          }
+           if(data.WorkerToken.Noket) {
+            localStorage.setItem("UserNoket",data.WorkerToken.Noket);
           Swal.fire({
             title: '戻る',
-            text: data.WorkerToken,
+            text: data.WorkerToken.Noket,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -57,7 +66,7 @@ export class CQrscanComponent implements OnDestroy {
             cancelButtonColor: '#d33',
             confirmButtonText: 'はい'
           });
-        }
+         }else localStorage.removeItem("UserNoket");
         })
       );
     }
@@ -65,7 +74,6 @@ export class CQrscanComponent implements OnDestroy {
   }
 
   validateMachine(): void {
-    console.log(this.scannedQRData);
     this.querySubscription.push(
       this.cqrscanservice.checkQR(this.scannedQRData).valueChanges
         .subscribe(({ data, loading }) => {
