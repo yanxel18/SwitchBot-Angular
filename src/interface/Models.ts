@@ -11,3 +11,16 @@ export interface WorkerToken  {
 export interface ErrorMsg {
   message: string | []
 }
+
+export interface MessageInfo {
+  messages: [EMessages],
+  error: [ErrorMsg]
+}
+export interface EMessages {
+  eventMSGID: number
+  eventMSG: string
+}
+
+export interface EventMessages{
+  EventMsg: MessageInfo
+}

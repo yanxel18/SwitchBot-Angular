@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CQrscanService } from './c-qrscan.service';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/internal/Subscription';
 import * as Models from '../../interface/Models';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-c-qrscan',
   templateUrl: './c-qrscan.component.html',
@@ -17,9 +18,9 @@ export class CQrscanComponent implements OnDestroy {
   querySubscription: Subscription[] = [];
   MAX_SCAN = 2;
   constructor(
+    private router: Router,
     private cqrscanservice: CQrscanService
   ) {
-
   }
   qrform = new FormGroup({
     qrscantxt: new FormControl('')
@@ -46,27 +47,18 @@ export class CQrscanComponent implements OnDestroy {
       this.querySubscription.push(this.cqrscanservice.validateQRScan(this.scannedQRData)
         .valueChanges
         .subscribe(({ data, loading }) => {
-          const err = data.WorkerToken.error;
-          if (err){
+          const err = data.WorkerToken.error[0]?.message
+          if (err) {
             Swal.fire({
               icon: 'error',
-              title: 'エラーメッセージ!',
-              text: "Error " + err[0]?.message,
+              title: 'QRスキャン',
+              text: "エラー: " + err
             });
           }
-           if(data.WorkerToken.Noket) {
-            localStorage.setItem("UserNoket",data.WorkerToken.Noket);
-          Swal.fire({
-            title: '戻る',
-            text: data.WorkerToken.Noket,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonText: 'いいえ',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'はい'
-          });
-         }else localStorage.removeItem("UserNoket");
+          if (data.WorkerToken.Noket) {
+            localStorage.setItem("UserNoket", data.WorkerToken.Noket);
+            this.router.navigate(['control']);
+          } else localStorage.removeItem("UserNoket");
         })
       );
     }

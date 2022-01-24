@@ -1,0 +1,18 @@
+<mat-card class="message-container">
+<div class="message-sub-container"  >
+    <div class="header-wrapper" fxLayout="row wrap" fxLayoutAlign="center">
+      <h2>号機: </h2>
+
+
+    </div>
+    <mat-divider></mat-divider>
+    <div class="button-container"  *ngIf="eventMsgs$" fxLayout="row wrap" fxLayoutAlign="center">
+      <div  class="buttons-loop" *ngFor="let item of (eventMsgs$ | async);let i=index">
+        <button [ngClass]="selected === i ? 'error-message-button-red' : 'error-message-button'"  (click)="errorSelect( item.eventMSGID);selected = i"
+       mat-button
+          [class.mat-elevation-z1]="true">{{item.eventMSG}}</button>
+      </div>
+    </div>
+  </div>
+
+</mat-card>
