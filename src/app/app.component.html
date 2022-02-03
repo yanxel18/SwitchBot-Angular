@@ -5,9 +5,8 @@
       <span class="material-icons toolbar-icon" *ngIf="snav.opened">close</span>
     </button>
     <nav id="navigation">
-      <!--navigation goes here-->
     </nav>
-    <h1 class="app-name">SwitchBot</h1>
+    <h1 class="app-name">SBシステム</h1>
   </mat-toolbar>
   <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav position="start" #snav [class.side-nav-is-mobile]="mobileQuery.matches"
@@ -18,10 +17,10 @@
     </mat-sidenav>
     <mat-sidenav-content class="main-container">
       <div class="backgrounder-blue"></div>
-        <router-outlet #outlet="outlet" ></router-outlet>
-
-
-
+      <router-outlet #outlet="outlet"></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  <mat-toolbar class="footer"><div>
+    Taiyo Yuden Co., Ltd&copy; {{year}}
+</div></mat-toolbar>
 </div>

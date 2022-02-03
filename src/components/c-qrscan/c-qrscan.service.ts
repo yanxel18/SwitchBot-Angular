@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
+import { FetchResult } from '@apollo/client/core';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { Observable } from 'rxjs';
 import * as Models from '../../interface/Models'
 
 const GET_WORKERTOKEN = gql`
-  query Query($machineQrScan: String!, $userQrScan: String!) {
+  mutation WorkerToken($machineQrScan: String!, $userQrScan: String!) {
   WorkerToken(machineQRScan: $machineQrScan, userQRScan: $userQrScan) {
     Noket
-    error {
-      message
+    ScanInfo {
+      machineID
+      machineName
+      UInfo {
+        ID
+        FullName
+        GIDFull
+      }
     }
   }
 }
 `;
-
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +29,16 @@ export class CQrscanService {
     private apollo: Apollo
   ) { }
 
+  checkQRdata(QRData: string[]): Observable<FetchResult<Models.WorkerToken>> {
+    return this.apollo.mutate({
+      mutation: GET_WORKERTOKEN,
+      variables: {
+        userQrScan: QRData[0],
+        machineQrScan: QRData[1]
+      }
+    })
+  }
+/*
   validateQRScan(QRData: string[]): QueryRef<Models.WorkerToken> {
     return this.apollo.watchQuery<Models.WorkerToken>(
       {
@@ -45,5 +62,5 @@ export class CQrscanService {
         }
       }
     )
-  }
+  }*/
 }

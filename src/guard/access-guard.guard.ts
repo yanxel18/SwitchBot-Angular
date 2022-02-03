@@ -7,14 +7,12 @@ import { Observable } from 'rxjs';
 })
 export class AccessGuardGuard implements CanActivate {
   constructor(private router: Router){}
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      if (sessionStorage.getItem('UserNoket')) {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      if (localStorage.getItem('UserNoket')) {
         return true;
       }
 
-      this.router.navigate(['control']);
+      this.router.navigate(['scan']);
       return false;
     }
 }
