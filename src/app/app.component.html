@@ -7,12 +7,34 @@
     <nav id="navigation">
     </nav>
     <h1 class="app-name">SBシステム</h1>
+    <span class="spacer"></span>
+    <button  *ngIf="this.WorkerInfo[0]" class="button-acc-menu" mat-button [matMenuTriggerFor]="account_menu">
+      <mat-icon>account_circle</mat-icon>
+      {{ this.WorkerInfo[0]?.GIDFull}}
+    </button>
+    <mat-menu #account_menu="matMenu">
+    <button mat-menu-item (click)="backButton()">
+      <mat-icon>exit_to_app</mat-icon>ログアウト
+    </button>
+  </mat-menu>
   </mat-toolbar>
-  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav position="start" #snav [class.side-nav-is-mobile]="mobileQuery.matches"
+  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0"
+    [hasBackdrop]="true">
+    <mat-sidenav position="start" #snav [class.side-nav-is-mobile]="mobileQuery.matches" [class.not-sidenav-is-mobile]="!mobileQuery.matches"
       [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <mat-nav-list>
-        <a mat-list-item routerLink="." *ngFor="let nav of fillerNav">{{nav}}</a>
+        <span class="nav-label">QRスキャン</span>
+        <a mat-list-item routerLink="/scan" (click)="snav.toggle()" class="menu-button" routerLinkHover
+          routerLinkActive="active-list-item">
+          <mat-icon>crop_free</mat-icon>
+          <span>スキャン</span>
+        </a>
+        <span class="nav-label">情報管理</span>
+        <a mat-list-item routerLink="/panel" (click)="snav.toggle()" class="menu-button"
+          routerLinkActive="active-list-item">
+          <mat-icon>settings</mat-icon>
+          <span>パネル</span>
+        </a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="main-container">
@@ -20,7 +42,9 @@
       <router-outlet #outlet="outlet"></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
-  <mat-toolbar class="footer"><div>
-    Taiyo Yuden Co., Ltd&copy; {{year}}
-</div></mat-toolbar>
+  <mat-toolbar class="footer">
+    <div>
+      Taiyo Yuden Co., Ltd&copy; {{year}}
+    </div>
+  </mat-toolbar>
 </div>

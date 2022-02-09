@@ -4,6 +4,8 @@ import { CQrscanService } from './c-qrscan.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import * as Models from '../../interface/Models';
 import { Router } from '@angular/router';
+import * as Actions from '../../store/actions';
+import { Store } from '@ngrx/store';
 @Component({
   selector: 'app-c-qrscan',
   templateUrl: './c-qrscan.component.html',
@@ -18,7 +20,8 @@ export class CQrscanComponent implements OnDestroy {
   MAX_SCAN = 2;
   constructor(
     private router: Router,
-    private cqrscanservice: CQrscanService
+    private cqrscanservice: CQrscanService,
+    private store: Store<Models.SwitchbotState>
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.removeItems();
@@ -68,8 +71,11 @@ export class CQrscanComponent implements OnDestroy {
       this.unsubscribeF();
       this.querySubscription.push(this.cqrscanservice.checkQRdata(this.scannedQRData)
         .subscribe(({ data } ) => {
-          if (data?.WorkerToken) {
+          const w = data?.WorkerToken.ScanInfo?.UInfo;
+          if (data?.WorkerToken && w) {
+            console.log(w)
             this.setItems(data);
+            this.store.dispatch(Actions.LoadWorkerInfo({payload: w}))
             this.router.navigate(['control']);
           } else this.removeItems();
         })
@@ -85,8 +91,10 @@ export class CQrscanComponent implements OnDestroy {
       localStorage.setItem("GID", data.WorkerToken.ScanInfo.UInfo[0].GIDFull);
     }
 
+
   }
   private removeItems(): void {
+    this.store.dispatch(Actions.LoadWorkerInfo({payload:[]}))
     localStorage.removeItem("UserNoket");
     localStorage.removeItem("WName");
     localStorage.removeItem("GID");

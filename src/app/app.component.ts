@@ -6,8 +6,13 @@ import { Apollo } from 'apollo-angular';
 import { HttpHeaders } from '@angular/common/http';
 import { onError } from "@apollo/client/link/error";
 import Swal from 'sweetalert2';
+import * as Models from '../interface/Models';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import * as Actions from '../store/actions';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import * as Selectors from '../store/selector';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,17 +23,8 @@ export class AppComponent implements OnDestroy {
   year = this.currentTime.getFullYear();
   title = 'switchbot-angular';
   mobileQuery: MediaQueryList;
-  fillerNav = Array.from({ length: 50 }, (_, i) => `Nav Item ${i + 1}`);
-  fillerContent = Array.from(
-    { length: 50 },
-    () =>
-      `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-       labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-       laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-  );
-
+  WorkerInfo: Models.WorkerInfo[] = [];
+  subscription: Subscription[] = [];
   private _mobileQueryListener: () => void;
 
   constructor(
@@ -36,8 +32,9 @@ export class AppComponent implements OnDestroy {
     media: MediaMatcher,
     apollo: Apollo,
     httpLink: HttpLink,
+    private store: Store<Models.SwitchbotState>,
     private router: Router) {
-     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -52,7 +49,10 @@ export class AppComponent implements OnDestroy {
       return forward(operation);
     });
     const Mainlink = middleware.concat(http);
-
+    this.subscription.push(
+      this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
+        data ? this.WorkerInfo = data : this.WorkerInfo = [];
+      }))
     apollo.create({
       cache: new InMemoryCache(),
       link: this.errorlink().concat(Mainlink),
@@ -61,15 +61,16 @@ export class AppComponent implements OnDestroy {
           errorPolicy: 'all'
         }
       }
-
     });
+  }
+  backButton(): void {
+    this.router.navigate(['scan']);
   }
   public errorlink(): ApolloLink {
     return onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) graphQLErrors.map(({ message, locations, path }) => this.errorMSG(message));
       if (networkError) this.errorMSG(networkError.message);
-    }
-    )
+    });
   }
 
   private errorMSG(msg: string): void {
@@ -92,6 +93,7 @@ export class AppComponent implements OnDestroy {
     this.router.navigate(['scan']);
   }
   ngOnDestroy(): void {
+    this.subscription.forEach(x => x.unsubscribe());
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }

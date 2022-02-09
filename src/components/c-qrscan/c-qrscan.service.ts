@@ -15,6 +15,7 @@ const GET_WORKERTOKEN = gql`
         ID
         FullName
         GIDFull
+        AccLvl
       }
     }
   }

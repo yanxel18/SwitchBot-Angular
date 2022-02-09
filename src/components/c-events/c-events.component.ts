@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../interface/Models';
 import { Subscription, Observable, map } from 'rxjs';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as Selectors from '../../store/selector';
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-c-events',
@@ -14,7 +16,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
 
   executeToast = Swal.mixin({
     showConfirmButton: false,
-    allowEscapeKey : false,
+    allowEscapeKey: false,
     allowOutsideClick: false
   });
   subscription: Subscription[] = [];
@@ -22,13 +24,23 @@ export class CEventsComponent implements OnInit, OnDestroy {
   machineName = localStorage.getItem("Machine");
   constructor(
     private ceventservice: CEventsService,
-    private router: Router
+    private router: Router,
+    private store: Store<Models.SwitchbotState>
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
   selected?: number;
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.checkScan()
     this.initializeMessages();
+  }
+
+  async checkScan(): Promise<void> {
+    this.subscription.push(
+       this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
+        if (!data[0]) this.router.navigate(['scan']);
+      })
+    )
   }
   async errorSelect(d: Models.EMessages): Promise<void> {
     Swal.fire({
@@ -50,24 +62,24 @@ export class CEventsComponent implements OnInit, OnDestroy {
           }
         });
         this.subscription.push(this.ceventservice.sendEvent(d.eventMSGID)
-            .subscribe(async ({ data }) => {
-              console.log(data);
-              if (data?.createEventLogs ==="success") {
-                await this.executeToast.fire({
-                  icon: 'success',
-                  text: '設備起動が完了しました！',
-                  timer: 2500,
-                  timerProgressBar: true
-                });
-                this.router.navigate(['scan']);
-              }else{
-                this.executeToast.fire({
-                  icon:'error',
-                  text:"エラーがは発生しました！" + data?.createEventLogs,
-                  showConfirmButton: true
-                });
-              }
-            }));
+          .subscribe(async ({ data }) => {
+            console.log(data);
+            if (data?.createEventLogs === "success") {
+              await this.executeToast.fire({
+                icon: 'success',
+                text: '設備起動が完了しました！',
+                timer: 2500,
+                timerProgressBar: true
+              });
+              this.router.navigate(['scan']);
+            } else {
+              this.executeToast.fire({
+                icon: 'error',
+                text: "エラーがは発生しました！" + data?.createEventLogs,
+                showConfirmButton: true
+              });
+            }
+          }));
       }
     });
   }
@@ -82,10 +94,12 @@ export class CEventsComponent implements OnInit, OnDestroy {
         return data.EventMsg ? data.EventMsg.messages : []
       }));
   }
-  unsubscribeF(): void {
-    this.subscription.forEach(x => x.unsubscribe());
-  }
+
   ngOnDestroy(): void {
     this.unsubscribeF();
+  }
+
+  unsubscribeF(): void {
+    this.subscription.forEach(x => x.unsubscribe());
   }
 }

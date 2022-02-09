@@ -39,9 +39,9 @@ export interface MachineType {
 }
 
 export interface Switchbot {
-    switchbotID: number,
-    switchbotName: string,
-    switchbotMac: string
+    switchbotID?: number,
+    switchbotName?: string,
+    switchbotMac?: string
 }
 
 export interface Raspi {
@@ -56,4 +56,17 @@ export interface EventParam {
 
 export interface CreateEventLogs {
   createEventLogs: string
+}
+
+
+export interface SwitchbotState {
+  WorkerInfo : WorkerInfo[] | []
+}
+
+export interface CreateSwitchBotForm {
+  macAddressTxt: string,
+  switchbotTxt: string
+}
+export interface ResponseCreateSwitchBot {
+  createSwitchBot: string
 }
