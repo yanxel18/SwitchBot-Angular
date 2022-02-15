@@ -8,6 +8,9 @@
       <h2>号機: {{machineName}} </h2>
     </div>
     <mat-divider></mat-divider>
+    <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!eventMsgs$">
+      <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+    </div>
     <div class="button-container" *ngIf="eventMsgs$" fxLayout="row wrap" fxLayoutAlign="center">
       <div class="buttons-loop" *ngFor="let item of (eventMsgs$ | async);let i=index">
         <button  [ngClass]="selected === i ? 'error-message-button-red' : 'error-message-button'"

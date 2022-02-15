@@ -3,15 +3,15 @@ import { FetchResult } from '@apollo/client/link/core';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import * as Models from '../../../interface/Models'
-const GET_EVENTMSGS = gql`
-  query Query {
-    EventMsg {
-      messages {
-        eventMSGID
-        eventMSG
-      }
-    }
+const GET_SWITCHBOT_LIST = gql`
+ query Switchbot {
+  SwitchBot {
+    switchbotID
+    switchbotName
+    switchbotMac
+    switchbotRaspiID
   }
+}
 `;
 
 const CREATE_SWITCHBOT = gql`
@@ -35,5 +35,11 @@ export class DialogService {
         }
       }
     })
+  }
+
+  getSwitchbotList(): QueryRef<Models.ResponseSwitchbotList> {
+    return this.apollo.watchQuery<Models.ResponseSwitchbotList>(
+      { query: GET_SWITCHBOT_LIST }
+    )
   }
 }

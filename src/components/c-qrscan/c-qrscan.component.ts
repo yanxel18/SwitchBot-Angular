@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CQrscanService } from './c-qrscan.service';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -13,11 +13,12 @@ import { Store } from '@ngrx/store';
   providers: [CQrscanService]
 })
 
-export class CQrscanComponent implements OnDestroy {
+export class CQrscanComponent implements AfterViewInit , OnDestroy {
   scannedQRData: string[] = [];
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
   MAX_SCAN = 2;
+  @ViewChild('qrscan') scanTxt!: ElementRef;
   constructor(
     private router: Router,
     private cqrscanservice: CQrscanService,
@@ -26,6 +27,9 @@ export class CQrscanComponent implements OnDestroy {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.removeItems();
   }
+  ngAfterViewInit(): void {
+    this.scanTxt.nativeElement.focus();
+   }
   qrform = new FormGroup({
     qrscantxt: new FormControl('')
   })

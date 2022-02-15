@@ -27,7 +27,7 @@ export interface EMessages {
 export interface EventMessages{
   EventMsg: MessageInfo
 }
-export interface MachineList extends MachineType,Switchbot,Raspi {}
+export interface MachineList extends MachineType,SwitchBot,Raspi {}
 
 export interface MachineUserInfo extends MachineList{
     UInfo: WorkerInfo[]
@@ -38,10 +38,11 @@ export interface MachineType {
     machineModel: string
 }
 
-export interface Switchbot {
+export interface SwitchBot {
     switchbotID?: number,
     switchbotName?: string,
-    switchbotMac?: string
+    switchbotMac?: string,
+    switchbotRaspiID?: number
 }
 
 export interface Raspi {
@@ -69,4 +70,8 @@ export interface CreateSwitchBotForm {
 }
 export interface ResponseCreateSwitchBot {
   createSwitchBot: string
+}
+
+export interface ResponseSwitchbotList{
+    SwitchBot: SwitchBot[] | []
 }

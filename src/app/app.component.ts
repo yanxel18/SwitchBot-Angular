@@ -13,6 +13,7 @@ import * as Actions from '../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as Selectors from '../store/selector';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,6 +30,7 @@ export class AppComponent implements OnDestroy {
 
   constructor(
     changeDetectorRef: ChangeDetectorRef,
+    private dialogRef: MatDialog,
     media: MediaMatcher,
     apollo: Apollo,
     httpLink: HttpLink,
@@ -52,7 +54,7 @@ export class AppComponent implements OnDestroy {
     this.subscription.push(
       this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
         data ? this.WorkerInfo = data : this.WorkerInfo = [];
-      }))
+      }));
     apollo.create({
       cache: new InMemoryCache(),
       link: this.errorlink().concat(Mainlink),
@@ -90,6 +92,7 @@ export class AppComponent implements OnDestroy {
     if (u) this.unAuthorized();
   }
   private unAuthorized(): void {
+    this.dialogRef.closeAll();
     this.router.navigate(['scan']);
   }
   ngOnDestroy(): void {

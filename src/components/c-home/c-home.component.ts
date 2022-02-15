@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DSwitchbotRegComponent } from '../c-home-dialog/d-switchbot-reg/d-switchbot-reg.component';
-
-const switchbotRegDialog  = {
-  minWidth: '320px',
-  maxWidth: '825px',
-};
+import { DSwitchbotViewComponent } from '../c-home-dialog/d-switchbot-view/d-switchbot-view.component';
 @Component({
   selector: 'app-c-home',
   templateUrl: './c-home.component.html',
   styleUrls: ['./c-home.component.sass']
 })
 export class CHomeComponent implements OnInit {
-
+  switchbotViewDialog  = {
+    minWidth: '320px',
+    maxWidth: '825px',
+  };
   constructor(
     private activityList: MatDialog,
   ) { }
@@ -20,11 +19,10 @@ export class CHomeComponent implements OnInit {
   ngOnInit(): void {
     const c = 0;
   }
-  openDialogUpdatePass(): void {
-    const dialogRef = this.activityList.open(DSwitchbotRegComponent, {
+  openDialogSwitchbotView(): void {
+    const dialogRef = this.activityList.open(DSwitchbotViewComponent, {
       disableClose: true,
-      minWidth: switchbotRegDialog.minWidth
+      minWidth: this.switchbotViewDialog.minWidth
     });
-
   }
 }

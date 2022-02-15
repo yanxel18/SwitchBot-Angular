@@ -1,1 +1,47 @@
-<p>d-switchbot-view works!</p>
+<div fxLayout="col wrap" fxLayoutAlign="center center">
+  <div>
+    <mat-icon class="header-icon">device_hub</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>スウィッチボット</h2>
+  </div>
+  <span class="spacer"></span>
+  <button class="add-button"(click)="openDialogSwitchReg()" *ngIf="switchbotList$" mat-icon-button>
+    <mat-icon class="add-button-icon">add</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content>
+  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!switchbotList$">
+    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+  </div>
+  <div class="table-container" fxLayout="row wrap" fxLayoutAlign="center center" *ngIf="switchbotList$">
+    <table mat-table [dataSource]="switchbotList$" class="mat-elevation-z0">
+      <ng-container matColumnDef="名">
+        <th mat-header-cell *matHeaderCellDef class="element-header">名</th>
+        <td mat-cell *matCellDef="let element" class="element-data"> {{element.switchbotName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="MACアドレス">
+        <th mat-header-cell *matHeaderCellDef class="element-header">MACアドレス</th>
+        <td mat-cell *matCellDef="let element" class="element-data"> {{element.switchbotMac}} </td>
+      </ng-container>
+      <ng-container matColumnDef="操作">
+        <th mat-header-cell *matHeaderCellDef  class="element-header">操作</th>
+        <td mat-cell *matCellDef="let element">
+          <button class="edit-button" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="delete-button" mat-icon-button>
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"></tr>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
+  <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+    <mat-icon>cancel</mat-icon>
+  </button>
+</div>
