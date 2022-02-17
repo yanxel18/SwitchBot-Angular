@@ -1,20 +1,19 @@
-export interface machineQR{
+export interface machineQR {
   machineQR: string
 }
-export interface WorkerToken  {
+export interface WorkerToken {
   WorkerToken: {
     ScanInfo: MachineUserInfo | null,
     Noket: string | null
   }
 }
-export interface WorkerInfo{
+export interface WorkerInfo {
   ID: number,
   FullName: string,
   AccLvl: number,
   UserQR: string,
   GIDFull: string
 }
-
 
 export interface MessageInfo {
   messages: [EMessages]
@@ -24,31 +23,31 @@ export interface EMessages {
   eventMSG: string
 }
 
-export interface EventMessages{
+export interface EventMessages {
   EventMsg: MessageInfo
 }
-export interface MachineList extends MachineType,SwitchBot,Raspi {}
+export interface MachineList extends MachineType, SwitchBot, Raspi { }
 
-export interface MachineUserInfo extends MachineList{
-    UInfo: WorkerInfo[]
+export interface MachineUserInfo extends MachineList {
+  UInfo: WorkerInfo[]
 }
 export interface MachineType {
-    machineID: number,
-    machineName: string,
-    machineModel: string
+  machineID: number,
+  machineName: string,
+  machineModel: string
 }
 
 export interface SwitchBot {
-    switchbotID?: number,
-    switchbotName?: string,
-    switchbotMac?: string,
-    switchbotRaspiID?: number
+  switchbotID?: number,
+  switchbotName?: string,
+  switchbotMac?: string,
+  switchbotRaspiID?: number
 }
 
 export interface Raspi {
-    raspiID: number,
-    raspiName: string,
-    raspiServer: string
+  raspiID: number,
+  raspiName: string,
+  raspiServer: string
 }
 
 export interface EventParam {
@@ -61,7 +60,7 @@ export interface CreateEventLogs {
 
 
 export interface SwitchbotState {
-  WorkerInfo : WorkerInfo[] | []
+  WorkerInfo: WorkerInfo[] | []
 }
 
 export interface CreateSwitchBotForm {
@@ -72,6 +71,22 @@ export interface ResponseCreateSwitchBot {
   createSwitchBot: string
 }
 
-export interface ResponseSwitchbotList{
-    SwitchBot: SwitchBot[] | []
+export interface ReponseDeleteSwitchbot {
+  deleteSwitchBot: string
+}
+export interface ReponseUpdateSwitchbot {
+  updateSwitchBot: string
+}
+export interface ResponseSwitchbotList {
+  SwitchBot: SwitchBot[] | []
+}
+export interface ReponseUpdateRaspi {
+  updateRaspi: string
+}
+export interface ReponseRaspiList {
+  RaspiList: Raspi[]
+}
+
+export interface ReponseDeleteRaspi {
+  deleteRaspi: string
 }

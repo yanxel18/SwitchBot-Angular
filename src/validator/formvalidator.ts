@@ -13,3 +13,12 @@ export function MacAddressValidator(): ValidatorFn {
     return !macValid ? { isMacValid: { value: control.value } } : null;
   };
 }
+
+
+export function UrlValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const notallowed = /[!#%^&*()_+\-=\[\]{};'|,<>?]+/;
+    const Valid = notallowed.test(control.value);
+    return Valid ? { isCharValid: { value: control.value } } : null;
+  };
+}

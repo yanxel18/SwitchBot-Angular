@@ -1,1 +1,49 @@
-<p>d-switchbot-edit works!</p>
+<div fxLayout="col wrap" fxLayoutAlign="center center">
+  <div>
+    <mat-icon class="header-icon">device_hub</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>スウィッチボット編集</h2>
+  </div>
+</div>
+<form [formGroup]="switchbotUpdateForm" (ngSubmit)="submitUpdateSwitchbot()" (keydown.enter)="$event.preventDefault()">
+  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!raspiList$">
+    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+  </div>
+  <div mat-dialog-content *ngIf="raspiList$">
+
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>MACアドレス</mat-label>
+        <input formControlName="switchbotMac" maxlength="17" matInput trim="blur">
+        <mat-error *ngIf="switchbotUpdateForm.get('switchbotMac')?.invalid">{{macAddressErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>スウィッチボット名</mat-label>
+        <input formControlName="switchbotName" maxlength="20" matInput trim="blur">
+        <mat-error *ngIf="switchbotUpdateForm.get('switchbotName')?.invalid">{{switchbotNameErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field appearance="outline" class="fieldflex ">
+        <mat-label>RaspberryPi</mat-label>
+        <mat-select formControlName="switchbotRaspiID">
+          <mat-option *ngFor="let raspi of (raspiList$ | async)" [value]="raspi.raspiID">
+            {{raspi.raspiName}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="switchbotUpdateForm.get('switchbotRaspiID')?.invalid">{{switchbotRaspiIDErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
+    <button type="submit" [disabled]="!raspiList$" mat-raised-button class="save-button">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</form>
