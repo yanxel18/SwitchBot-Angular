@@ -24,7 +24,7 @@ export class DSwitchbotEditComponent implements OnDestroy, OnInit {
   switchbotUpdateForm = new FormGroup({
     switchbotMac: new FormControl(this.data.switchbotMac, [Validators.required, SpecialCharValidator(), MacAddressValidator()]),
     switchbotName: new FormControl(this.data.switchbotName, [Validators.required, SpecialCharValidator()]),
-    switchbotRaspiID: new FormControl(this.data.switchbotRaspiID, [Validators.required, SpecialCharValidator()])
+    switchbotRaspiID: new FormControl(this.data.switchbotRaspiID)
   });
 
   async ngOnInit(): Promise<void> {

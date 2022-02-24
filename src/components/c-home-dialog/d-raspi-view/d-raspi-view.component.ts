@@ -1,4 +1,3 @@
-import { DSwitchbotRegComponent } from './../d-switchbot-reg/d-switchbot-reg.component';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef,MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,6 +9,7 @@ import { DialogService } from '../s-dialog-service/dialog.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DRaspiEditComponent } from '../d-raspi-edit/d-raspi-edit.component';
+import { DRaspiRegComponent } from '../d-raspi-reg/d-raspi-reg.component';
 @Component({
   selector: 'app-d-raspi-view',
   templateUrl: './d-raspi-view.component.html',
@@ -34,7 +34,7 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<DRaspiViewComponent>,
     private SBRegDialog: MatDialog,
-    private raspiEditDialog: MatDialog,
+    private SBEditDialog: MatDialog,
     private dialogService: DialogService
   ) { }
 
@@ -47,11 +47,11 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
     await this.dialogService.getRaspiList().refetch();
     this.raspiList$ = this.dialogService.getRaspiList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.RaspiList.filter(x => x.raspiID !== 12);
+          return  data.RaspiList;
       }));
   }
-  openDialogSwitchReg(): void {
-    const dialogRef = this.SBRegDialog.open(DSwitchbotRegComponent, {
+  openDialogRaspiReg(): void {
+    const dialogRef = this.SBRegDialog.open(DRaspiRegComponent, {
       disableClose: true,
       minWidth: this.rRegDialog.minWidth
     });
@@ -62,7 +62,7 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
   }
 
   openDialogRaspiEdit(param: Models.Raspi): void {
-    const dialogRef = this.raspiEditDialog.open(DRaspiEditComponent, {
+    const dialogRef = this.SBEditDialog.open(DRaspiEditComponent, {
       disableClose: true,
       minWidth: this.rEditDialog.minWidth,
       data: param

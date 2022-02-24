@@ -41,7 +41,11 @@ const UPDATE_RASPI = gql`
     updateRaspi(input: $input)
 }
 `;
-
+const CREATE_RASPI = gql`
+  mutation Mutation($input: RaspiCreateParam!) {
+    createRaspi(input: $input)
+}
+`;
 const GET_RASPI_LIST = gql`
   query RaspiList {
       RaspiList {
@@ -52,10 +56,23 @@ const GET_RASPI_LIST = gql`
   }
 `;
 
+const GET_MACHINE_LIST = gql`
+  query MachineList {
+    MachineList {
+      machineID
+      machineName
+      machineModel
+      machineSwitchbotID
+      machineQR
+    }
+  }
+`;
+
 const DELETE_RASPI = gql`
   mutation DeleteRaspi($input: RaspiDeleteParam!) {
   deleteRaspi(input: $input)
 }
+
 `;
 @Injectable({
   providedIn: 'root'
@@ -112,7 +129,18 @@ export class DialogService {
       { query: GET_SWITCHBOT_LIST }
     );
   }
-
+  createRaspi(s: Models.Raspi):
+    Observable<FetchResult<Models.ResponseCreateRaspi>> {
+    return this.apollo.mutate({
+      mutation: CREATE_RASPI,
+      variables: {
+        input: {
+          raspiName: s.raspiName,
+          raspiServer: s.raspiServer
+        }
+      }
+    });
+  }
   getRaspiList(): QueryRef<Models.ReponseRaspiList> {
     return this.apollo.watchQuery<Models.ReponseRaspiList>(
       { query: GET_RASPI_LIST }
@@ -129,5 +157,11 @@ export class DialogService {
         }
       }
     });
+  }
+
+  getMachineList(): QueryRef<Models.ResponseMachineList> {
+    return this.apollo.watchQuery<Models.ResponseMachineList>(
+      { query: GET_MACHINE_LIST }
+    );
   }
 }

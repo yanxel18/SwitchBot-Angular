@@ -12,7 +12,7 @@
     </button>
   </div>
   <div class="button-container" fxLayout="row wrap" fxLayoutAlign="center">
-    <button mat-button class="switchbot-card" [class.mat-elevation-z2]="true">
+    <button mat-button class="switchbot-card"  (click)="openDialogMachineView()" [class.mat-elevation-z2]="true">
       <mat-icon class="menu-list-icon">dns</mat-icon>
       設備管理
     </button>

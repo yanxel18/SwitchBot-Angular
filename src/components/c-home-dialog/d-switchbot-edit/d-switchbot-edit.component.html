@@ -30,6 +30,8 @@
       <mat-form-field appearance="outline" class="fieldflex ">
         <mat-label>RaspberryPi</mat-label>
         <mat-select formControlName="switchbotRaspiID">
+          <mat-option  [value]="null">
+          </mat-option>
           <mat-option *ngFor="let raspi of (raspiList$ | async)" [value]="raspi.raspiID">
             {{raspi.raspiName}}
           </mat-option>

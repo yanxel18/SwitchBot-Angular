@@ -1,1 +1,34 @@
-<p>d-raspi-reg works!</p>
+<div fxLayout="col wrap" fxLayoutAlign="center center">
+  <div>
+    <mat-icon class="header-icon">tablet</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>RaspberryPi登録</h2>
+  </div>
+</div>
+<form [formGroup]="raspiRegForm" (ngSubmit)="submitRegRaspi()" (keydown.enter)="$event.preventDefault()">
+  <div mat-dialog-content>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>名</mat-label>
+        <input formControlName="raspiName" maxlength="50" matInput trim="blur">
+        <mat-error *ngIf="raspiRegForm.get('raspiName')?.invalid">{{raspiNameErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>URL</mat-label>
+        <input formControlName="raspiServer" maxlength="300" matInput trim="blur">
+        <mat-error *ngIf="raspiRegForm.get('raspiServer')?.invalid">{{raspiServerErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
+    <button type="submit" mat-raised-button class="save-button">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</form>

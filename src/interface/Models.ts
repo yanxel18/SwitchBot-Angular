@@ -36,7 +36,13 @@ export interface MachineType {
   machineName: string,
   machineModel: string
 }
-
+export interface MachineListView {
+  machineID?: number,
+  machineName?: string,
+  machineModel?: string,
+  machineSwitchbotID?: number
+  machineQR?: string
+}
 export interface SwitchBot {
   switchbotID?: number,
   switchbotName?: string,
@@ -86,7 +92,13 @@ export interface ReponseUpdateRaspi {
 export interface ReponseRaspiList {
   RaspiList: Raspi[]
 }
-
+export interface ResponseCreateRaspi {
+  createRaspi: string
+}
 export interface ReponseDeleteRaspi {
   deleteRaspi: string
+}
+
+export interface ResponseMachineList{
+  MachineList: MachineListView[] | []
 }
