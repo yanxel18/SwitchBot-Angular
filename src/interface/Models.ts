@@ -102,3 +102,24 @@ export interface ReponseDeleteRaspi {
 export interface ResponseMachineList{
   MachineList: MachineListView[] | []
 }
+
+export interface ResponseUpdateMachine {
+  updateMachine: string
+}
+
+export interface ResponseCreateMachine {
+  createMachine: string
+}
+
+export interface ResponseDeleteMachine {
+  deleteMachine: string
+}
+
+export interface QRFields {
+  description: string | undefined,
+  qrcode: string | undefined
+}
+
+export interface ResponsWorkerList{
+  WorkerList: WorkerInfo[] | []
+}

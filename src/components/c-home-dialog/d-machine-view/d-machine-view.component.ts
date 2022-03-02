@@ -10,6 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DRaspiEditComponent } from '../d-raspi-edit/d-raspi-edit.component';
 import { DRaspiRegComponent } from '../d-raspi-reg/d-raspi-reg.component';
+import { DMachineRegComponent } from '../d-machine-reg/d-machine-reg.component';
 import { DMachineEditComponent } from '../d-machine-edit/d-machine-edit.component';
 @Component({
   selector: 'app-d-machine-view',
@@ -22,7 +23,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
   machineList$!: Observable<Models.MachineListView[]>;
   displayedColumns: string[] = ['名','URL','操作']; ;
 
-  rRegDialog  = {
+  machineRegisterDialog  = {
     minWidth: '320px',
     maxWidth: '825px',
   };
@@ -33,7 +34,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
   };
   constructor(
     public dialogRef: MatDialogRef<DMachineViewComponent>,
-    private SBRegDialog: MatDialog,
+    private SBMachineReg: MatDialog,
     private SBMachineEdit: MatDialog,
     private dialogService: DialogService
   ) { }
@@ -50,10 +51,10 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
           return  data.MachineList;
       }));
   }
-  openDialogRaspiReg(): void {
-    const dialogRef = this.SBRegDialog.open(DRaspiRegComponent, {
+  openDialogRegMachine(): void {
+    const dialogRef = this.SBMachineReg.open(DMachineRegComponent, {
       disableClose: true,
-      minWidth: this.rRegDialog.minWidth
+      minWidth: this.machineRegisterDialog.minWidth
     });
 
     dialogRef.afterClosed().subscribe(d => {
@@ -72,11 +73,11 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
       this.intializedMachineList();
     });
   }
-  deleteItem(p: Models.Raspi): void {
+  deleteItem(p: Models.MachineListView): void {
     if (p){
       Swal.fire({
         title: '削除',
-        text: "RaspberryPiを削除しますか？",
+        text: "設備情報を削除しますか？",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -86,18 +87,18 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           this.appSubscription.push(
-            this.dialogService.deleteRaspi(p.raspiID).subscribe(
+            this.dialogService.deleteMachine(p.machineID).subscribe(
               async ({ data }) => {
-                if (data?.deleteRaspi === "success") {
+                if (data?.deleteMachine === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'RaspberryPiを削除しました！'
+                    text: '設備情報を削除しました！'
                   });
                   this.intializedMachineList();
                 }  else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.deleteRaspi,
+                    text: "エラーがは発生しました！" + data?.deleteMachine,
                     showConfirmButton: true
                   });
                 }

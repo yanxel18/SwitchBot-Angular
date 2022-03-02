@@ -1,0 +1,38 @@
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <mat-card class="message-container">
+    <div class="header-wrapper" fxLayout="row wrap" fxLayoutAlign="center">
+      <h2>QRコード表</h2>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div fxLayout="col wrap" fxLayoutAlign="center center" class="menuArea">
+
+      <form [formGroup]="qrForm" (keydown.enter)="$event.preventDefault()">
+        <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+          <mat-form-field appearance="outline" class="fieldflex ">
+            <mat-label>スウィッチボット</mat-label>
+            <mat-select formControlName="qrList" (selectionChange)="onChangeList($event)">
+              <mat-option value="0">設備情報QRコード</mat-option>
+              <mat-option value="1">作業者QRコード</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+
+    <div class="qr-container" fxLayout="row wrap" fxLayoutAlign="center">
+      <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="qrFields$.length === 0">
+        <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+      </div>
+      <div class="qrloop-container" *ngIf="qrFields$" fxLayout="row wrap" fxLayoutAlign="center">
+        <div class="qrcard-loop" *ngFor="let item of (qrFields$)">
+          <mat-card class="generatedQR" [class.mat-elevation-z1]="true">
+            <div fxLayout="row wrap" fxLayoutAlign="center">{{item.description}}</div>
+            <div fxLayout="row wrap" fxLayoutAlign="center center" class="qr-pic"
+              [innerHTML]="generatedQR(item.qrcode)"></div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

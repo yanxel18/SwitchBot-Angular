@@ -1,1 +1,35 @@
-<p>d-machine-reg works!</p>
+<div fxLayout="col wrap" fxLayoutAlign="center center">
+  <div>
+    <mat-icon class="header-icon">dns</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>設備情報登録</h2>
+  </div>
+</div>
+<form [formGroup]="machineRegisterForm" (ngSubmit)="submitRegisterMachine()" (keydown.enter)="$event.preventDefault()">
+  <div mat-dialog-content>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>設備名</mat-label>
+        <input formControlName="machineName" maxlength="40" matInput trim="blur">
+        <mat-error *ngIf="machineRegisterForm.get('machineName')?.invalid">{{machineNameErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>設備種類</mat-label>
+        <input formControlName="machineModel" maxlength="40" matInput trim="blur">
+        <mat-error *ngIf="machineRegisterForm.get('machineModel')?.invalid">{{machineModelErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
+    <button type="submit" mat-raised-button class="save-button">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</form>

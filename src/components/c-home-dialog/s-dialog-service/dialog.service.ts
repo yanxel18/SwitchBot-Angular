@@ -18,6 +18,14 @@ const GET_SWITCHBOT_LIST = gql`
 }
 `;
 
+const GET_SWITCHBOT_FOR_MACHINELIST = gql`
+  query SwitchBot($filter: SwitchbotFilter) {
+    SwitchBot(filter: $filter) {
+      switchbotName
+      switchbotID
+    }
+  }
+`;
 const CREATE_SWITCHBOT = gql`
   mutation Mutation($input: SwitchbotParam!) {
     createSwitchBot(input: $input)
@@ -73,6 +81,24 @@ const DELETE_RASPI = gql`
   deleteRaspi(input: $input)
 }
 
+`;
+
+const UPDATE_MACHINE = gql`
+  mutation UpdateMachine($input: MachineUpdateParam!) {
+    updateMachine(input: $input)
+}
+`;
+
+const CREATE_MACHINE = gql`
+  mutation CreateMachine($input: MachineCreateParam!) {
+  createMachine(input: $input)
+}
+`;
+
+const DELETE_MACHINE = gql`
+  mutation DeleteMachine($input: MachineDeleteParam!) {
+  deleteMachine(input: $input)
+}
 `;
 @Injectable({
   providedIn: 'root'
@@ -163,5 +189,57 @@ export class DialogService {
     return this.apollo.watchQuery<Models.ResponseMachineList>(
       { query: GET_MACHINE_LIST }
     );
+  }
+  getMachineSwitchbotList(): QueryRef<Models.ResponseSwitchbotList> {
+    return this.apollo.watchQuery<Models.ResponseSwitchbotList>(
+      {
+        query: GET_SWITCHBOT_FOR_MACHINELIST,
+        variables: {
+          filter: {
+            switchbotRaspiIDisNull: true
+          }
+        }
+      }
+    );
+  }
+
+  updateMachine(input: Models.MachineListView):
+    Observable<FetchResult<Models.ResponseUpdateMachine>> {
+    return this.apollo.mutate({
+      mutation: UPDATE_MACHINE,
+      variables: {
+        input: {
+          machineID: input.machineID,
+          machineName: input.machineName,
+          machineModel: input.machineModel,
+          machineSwitchbotID: input.machineSwitchbotID
+        }
+      }
+    });
+  }
+
+  createMachine(s: Models.MachineListView):
+    Observable<FetchResult<Models.ResponseCreateMachine>> {
+    return this.apollo.mutate({
+      mutation: CREATE_MACHINE,
+      variables: {
+        input: {
+          machineName: s.machineName,
+          machineModel: s.machineModel
+        }
+      }
+    });
+  }
+
+  deleteMachine(id: number | undefined):
+    Observable<FetchResult<Models.ResponseDeleteMachine>> {
+    return this.apollo.mutate({
+      mutation: DELETE_MACHINE,
+      variables: {
+        input: {
+          machineID: id,
+        }
+      }
+    });
   }
 }

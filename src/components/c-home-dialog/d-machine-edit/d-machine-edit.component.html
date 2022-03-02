@@ -6,25 +6,41 @@
     <h2>設備情報編集</h2>
   </div>
 </div>
-<form [formGroup]="raspiUpdateForm" (ngSubmit)="submitUpdateRaspi()" (keydown.enter)="$event.preventDefault()">
-  <div mat-dialog-content>
+<form [formGroup]="machineUpdateForm" (ngSubmit)="submitUpdateMachine()" (keydown.enter)="$event.preventDefault()">
+  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!switchbotList$">
+    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+  </div>
+  <div mat-dialog-content *ngIf="switchbotList$">
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
       <mat-form-field class="fieldflex">
-        <mat-label>名</mat-label>
-        <input formControlName="raspiName" maxlength="50" matInput trim="blur">
-        <mat-error *ngIf="raspiUpdateForm.get('raspiName')?.invalid">{{raspiNameErr()}}</mat-error>
+        <mat-label>設備名</mat-label>
+        <input formControlName="machineName" maxlength="40" matInput trim="blur">
+        <mat-error *ngIf="machineUpdateForm.get('machineName')?.invalid">{{machineNameErr()}}</mat-error>
       </mat-form-field>
     </div>
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
       <mat-form-field class="fieldflex">
-        <mat-label>URL</mat-label>
-        <input formControlName="raspiServer" maxlength="300" matInput trim="blur">
-        <mat-error *ngIf="raspiUpdateForm.get('raspiServer')?.invalid">{{raspiServerErr()}}</mat-error>
+        <mat-label>設備種類</mat-label>
+        <input formControlName="machineModel" maxlength="40" matInput trim="blur">
+        <mat-error *ngIf="machineUpdateForm.get('machineModel')?.invalid">{{machineModelErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field appearance="outline" class="fieldflex ">
+        <mat-label>スウィッチボット</mat-label>
+        <mat-select formControlName="machineSwitchbotID">
+          <mat-option  [value]="null">
+          </mat-option>
+          <mat-option *ngFor="let switchbot of (switchbotList$ | async)" [value]="switchbot.switchbotID">
+            {{switchbot.switchbotName}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </div>
+
   <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
-    <button type="submit" mat-raised-button class="save-button">
+    <button type="submit" [disabled]="!switchbotList$" mat-raised-button class="save-button">
       <mat-icon>save</mat-icon>
     </button>
     <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">

@@ -13,30 +13,38 @@ import { DialogService } from '../s-dialog-service/dialog.service';
   styleUrls: ['./d-machine-edit.component.sass'],
   providers: [DialogService]
 })
-export class DMachineEditComponent implements OnDestroy {
+export class DMachineEditComponent implements OnInit,OnDestroy {
+  switchbotList$!: Observable<Models.SwitchBot[]>;
   appSubscription: Subscription[] = [];
   constructor(
     public dialogRef: MatDialogRef<DMachineEditComponent>,
     private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: Models.MachineListView
   ) { }
-  raspiUpdateForm = new FormGroup({
-    raspiName: new FormControl(this.data.machineName, [Validators.required, SpecialCharValidator()]),
-    raspiServer: new FormControl(this.data.machineModel, [Validators.required]),
+  machineUpdateForm = new FormGroup({
+    machineName: new FormControl(this.data.machineName, [Validators.required, SpecialCharValidator()]),
+    machineModel: new FormControl(this.data.machineModel, [Validators.required, SpecialCharValidator()]),
+    machineSwitchbotID: new FormControl(this.data.machineSwitchbotID)
   });
-
+  async ngOnInit(): Promise<void> {
+    await this.dialogService.getMachineSwitchbotList().refetch();
+    this.switchbotList$ = this.dialogService.getMachineSwitchbotList().valueChanges.pipe(map(({ data }) => {
+      return data.SwitchBot ? data.SwitchBot : [];
+    }));
+  }
   closeDialog(): void {
     this.dialogRef.close();
   }
-  submitUpdateRaspi(): void {
-    const newValue: Models.Raspi = {
-      ...this.raspiUpdateForm.value,
-      raspiID: this.data.machineID
+  submitUpdateMachine(): void {
+    const newValue: Models.MachineListView = {
+      ...this.machineUpdateForm.value,
+      machineID: this.data.machineID
     }
-    if (this.raspiUpdateForm.valid) {
+    console.log(newValue);
+    if (this.machineUpdateForm.valid) {
       Swal.fire({
         title: '編集',
-        text: "RaspiberryPi情報を編集しますか？",
+        text: "設備情報を編集しますか？",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -46,25 +54,25 @@ export class DMachineEditComponent implements OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           this.appSubscription.push(
-            this.dialogService.updateRaspi(newValue).subscribe(
+            this.dialogService.updateMachine(newValue).subscribe(
               async ({ data }) => {
-                if (data?.updateRaspi === "success") {
+                if (data?.updateMachine === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'RaspiberryPi情報を編集しました！'
+                    text: '設備情報を編集しました！'
                   });
                   this.closeDialog();
-                } else if (data?.updateRaspi === "duplicate") {
+                } else if (data?.updateMachine === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "RaspiberryPiサーバーはすでに存在しています！",
+                    text: "設備情報はすでに存在しています！",
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.updateRaspi,
+                    text: "エラーがは発生しました！" + data?.updateMachine,
                     showConfirmButton: true
                   });
                 }
@@ -75,19 +83,19 @@ export class DMachineEditComponent implements OnDestroy {
       })
     }
   }
-  raspiNameErr(): string | null {
-    if (this.raspiUpdateForm.get('raspiName')!.hasError('required')) {
+  machineNameErr(): string | null {
+    if (this.machineUpdateForm.get('machineName')!.hasError('required')) {
       return '空白は禁止！';
-    } else if (this.raspiUpdateForm.get('raspiName')!.hasError('isCharValid')) {
+    } else if (this.machineUpdateForm.get('machineName')!.hasError('isCharValid')) {
       return '特殊文字は使用できません！';
     }
     return null;
   }
 
-  raspiServerErr(): string | null {
-    if (this.raspiUpdateForm.get('raspiServer')!.hasError('required')) {
+  machineModelErr(): string | null {
+    if (this.machineUpdateForm.get('machineModel')!.hasError('required')) {
       return '空白は禁止！';
-    } else if (this.raspiUpdateForm.get('raspiServer')!.hasError('isCharValid')) {
+    } else if (this.machineUpdateForm.get('machineModel')!.hasError('isCharValid')) {
       return '特殊文字は使用できません！';
     }
     return null;

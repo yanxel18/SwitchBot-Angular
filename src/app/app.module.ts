@@ -1,3 +1,4 @@
+import { DialogService } from './../components/c-home-dialog/s-dialog-service/dialog.service';
 import { Reducer } from './../store/reducer';
 import { CEventsService } from './../components/c-events/c-events.service';
 import { HttpErrorMessageboxService } from './../error-handler/http-error-messagebox.service';
@@ -36,6 +37,8 @@ import { DMachineRegComponent } from '../components/c-home-dialog/d-machine-reg/
 import { DAccountRegComponent } from '../components/c-home-dialog/d-account-reg/d-account-reg.component';
 import { DAccountViewComponent } from '../components/c-home-dialog/d-account-view/d-account-view.component';
 import { DAccountEditComponent } from '../components/c-home-dialog/d-account-edit/d-account-edit.component';
+import { CQrpageComponent } from '../components/c-qrpage/c-qrpage.component';
+
 registerLocaleData(localeJa);
 
 @NgModule({
@@ -55,7 +58,8 @@ registerLocaleData(localeJa);
     DMachineRegComponent,
     DAccountRegComponent,
     DAccountViewComponent,
-    DAccountEditComponent
+    DAccountEditComponent,
+    CQrpageComponent
   ],
   imports: [
     BrowserModule,
@@ -76,6 +80,7 @@ registerLocaleData(localeJa);
     HttpErrorHandlerService,
     HttpErrorMessageboxService,
     CEventsService,
+    DialogService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
     { provide: LOCALE_ID, useValue: "ja-JP" },
   ],
