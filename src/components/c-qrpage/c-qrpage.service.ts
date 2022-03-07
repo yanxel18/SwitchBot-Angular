@@ -38,8 +38,8 @@ export class CQrpageService {
     );
   }
 
-  getUserList(): QueryRef<Models.ResponsWorkerList> {
-    return this.apollo.watchQuery<Models.ResponsWorkerList>(
+  getUserList(): QueryRef<Models.ResponseWorkerList> {
+    return this.apollo.watchQuery<Models.ResponseWorkerList>(
       { query: GET_USER_LIST }
     );
   }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DSwitchbotRegComponent } from '../c-home-dialog/d-switchbot-reg/d-switchbot-reg.component';
 import { DSwitchbotViewComponent } from '../c-home-dialog/d-switchbot-view/d-switchbot-view.component';
 import { DRaspiViewComponent } from '../c-home-dialog/d-raspi-view/d-raspi-view.component';
 import { DMachineViewComponent } from '../c-home-dialog/d-machine-view/d-machine-view.component';
+import { DAccountViewComponent } from '../c-home-dialog/d-account-view/d-account-view.component';
 @Component({
   selector: 'app-c-home',
   templateUrl: './c-home.component.html',
@@ -24,10 +24,16 @@ export class CHomeComponent implements OnInit {
     minWidth: '320px',
     maxWidth: '825px',
   };
+
+  switchbotAccountDialog  = {
+    minWidth: '320px',
+    maxWidth: '825px',
+  };
   constructor(
     private sbViewDialog: MatDialog,
     private raspiViewDialog: MatDialog,
-    private machineViewDialog: MatDialog
+    private machineViewDialog: MatDialog,
+    private accountViewDialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +57,13 @@ export class CHomeComponent implements OnInit {
     const dialogRef = this.machineViewDialog.open(DMachineViewComponent, {
       disableClose: true,
       minWidth: this.switchbotMachineDialog.minWidth
+    });
+  }
+
+  openDialogAccountView(): void {
+    const dialogRef = this.machineViewDialog.open(DAccountViewComponent, {
+      disableClose: true,
+      minWidth: this.switchbotAccountDialog.minWidth
     });
   }
 }

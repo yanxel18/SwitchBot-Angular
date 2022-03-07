@@ -28,8 +28,9 @@
         <div class="qrcard-loop" *ngFor="let item of (qrFields$)">
           <mat-card class="generatedQR" [class.mat-elevation-z1]="true">
             <div fxLayout="row wrap" fxLayoutAlign="center">{{item.description}}</div>
-            <div fxLayout="row wrap" fxLayoutAlign="center center" class="qr-pic"
-              [innerHTML]="generatedQR(item.qrcode)"></div>
+            <button mat-button class="qr-pic" (click)="downloadImg(getLink(generatedQR(item.qrcode)),item.description)">
+              <div fxLayout="row wrap" fxLayoutAlign="center center" [innerHTML]="generatedQR(item.qrcode)"></div>
+            </button>
           </mat-card>
         </div>
       </div>

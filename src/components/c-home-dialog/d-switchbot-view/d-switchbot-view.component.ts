@@ -10,6 +10,7 @@ import { DialogService } from '../s-dialog-service/dialog.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DSwitchbotEditComponent } from '../d-switchbot-edit/d-switchbot-edit.component';
+
 @Component({
   selector: 'app-d-switchbot-view',
   templateUrl: './d-switchbot-view.component.html',

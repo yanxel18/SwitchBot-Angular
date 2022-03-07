@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export function SpecialCharValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const notallowed = /[!#%^&*()_+\-=\[\]{};'\\|,.<>\/?]+/;
@@ -21,4 +21,14 @@ export function UrlValidator(): ValidatorFn {
     const Valid = notallowed.test(control.value);
     return Valid ? { isCharValid: { value: control.value } } : null;
   };
+}
+
+export function noWhitespaceValidator(control: FormControl) {
+  if (control.value !== '') {
+    const notallowed = /\s/;
+    const isValid = !notallowed.test(control.value);
+    return isValid ? null : { 'whitespace': true };
+  } else {
+    return null;
+  }
 }

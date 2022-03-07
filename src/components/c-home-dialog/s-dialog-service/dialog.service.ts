@@ -100,6 +100,33 @@ const DELETE_MACHINE = gql`
   deleteMachine(input: $input)
 }
 `;
+
+const GET_ACCOUNT_LIST = gql`
+  query WorkerList {
+    WorkerList {
+      ID
+      FullName
+      AccLvl
+      GIDFull
+    }
+  }
+`;
+
+const GET_ACCOUNT_TYPE = gql`
+  query AccountType {
+    AccountType {
+      acclvlID
+      accType
+    }
+  }
+`;
+
+const CREATE_ACCOUNT = gql`
+  mutation Mutation($input: CreateAccount!) {
+  createAccount(input: $input)
+}
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -238,6 +265,33 @@ export class DialogService {
       variables: {
         input: {
           machineID: id,
+        }
+      }
+    });
+  }
+
+  getAccountList(): QueryRef<Models.ResponseWorkerList> {
+    return this.apollo.watchQuery<Models.ResponseWorkerList>(
+      { query: GET_ACCOUNT_LIST }
+    );
+  }
+
+  getAccountTypeList(): QueryRef<Models.ResponseAccountTypeList> {
+    return this.apollo.watchQuery<Models.ResponseAccountTypeList>(
+      { query: GET_ACCOUNT_TYPE }
+    );
+  }
+
+  createAccount(s: Models.WorkerInfoRegister):
+    Observable<FetchResult<Models.CreateAccountResponse>> {
+    return this.apollo.mutate({
+      mutation: CREATE_ACCOUNT,
+      variables: {
+        input: {
+          FullName: s.FullName,
+          AccLvl: s.AccLvl,
+          GIDFull: s.GIDFull,
+          Pass: s.pass
         }
       }
     });

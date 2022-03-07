@@ -8,7 +8,8 @@ import Swal from 'sweetalert2';
 import { CQrpageService } from './c-qrpage.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import * as qrcode from 'qrcode-generator'
+import * as qrcode from 'qrcode-generator';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-c-qrpage',
   templateUrl: './c-qrpage.component.html',
@@ -16,9 +17,10 @@ import * as qrcode from 'qrcode-generator'
 })
 export class CQrpageComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
-  qrFields$ : Models.QRFields [] = [];
+  qrFields$: Models.QRFields[] = [];
+  MACHINE_AUTOSELECT = "0";
   qrForm = new FormGroup({
-    qrList: new FormControl('0'),
+    qrList: new FormControl(this.MACHINE_AUTOSELECT),
 
   });
   constructor(
@@ -39,43 +41,66 @@ export class CQrpageComponent implements OnInit, OnDestroy {
       const myqrcode = qrcode(TYPE_NUMBER, ERROR_CORRECTION_LEVEL);
       myqrcode.addData(qrCode);
       myqrcode.make();
+      this.getLink(myqrcode.createImgTag());
       return myqrcode.createImgTag();
     }
     return null
   }
+
+  downloadImg(url: string | null, filename: string | undefined): void {
+    if (url) saveAs(url, filename + '.png');
+  }
+
+  getLink(qrlink: string | null): string | null {
+    let indices = [];
+    if (qrlink) {
+      for (var i = 0; i < qrlink.length; i++)
+        if (qrlink[i] === "\"" && indices.length < 2) indices.push(i);
+      if (indices.length > 0) {
+        const gotQRLink = qrlink.substring(indices[0] + 1, indices[1]);
+        return gotQRLink;
+      }
+    }
+    return null;
+
+  }
   async onChangeList(event: MatSelectChange): Promise<void> {
     const listValue = event.value;
     this.qrFields$ = [];
-    if (listValue === "0") {
+    const ISMACHINE_SELECTED = "0";
+    const ISUSER_SELECTED = "1";
+    if (listValue === ISMACHINE_SELECTED) {
       await this.initializedMachineList();
-    }else if(listValue === "1") {
+    } else if (listValue === ISUSER_SELECTED) {
       await this.initializedUserList();
     }
   }
-  async initializedMachineList(): Promise<void>   {
+  async initializedMachineList(): Promise<void> {
     await this.cQRScanService.getMachineList().refetch();
-     this.appSubscription.push(this.cQRScanService.getMachineList()
-      .valueChanges.subscribe(({data}) => {
+    this.appSubscription.push(this.cQRScanService.getMachineList()
+      .valueChanges.subscribe(({ data }) => {
         if (data.MachineList.length > 0) {
+          this.qrFields$ = [];
           for (let x of data.MachineList)
-          this.qrFields$.push({
-            description: x.machineName,
-            qrcode: x.machineQR
-          });
+            this.qrFields$.push({
+              description: x.machineName,
+              qrcode: x.machineQR
+            });
         }
       }));
   }
 
-  async initializedUserList(): Promise<void>   {
+  async initializedUserList(): Promise<void> {
     await this.cQRScanService.getUserList().refetch();
-     this.appSubscription.push(this.cQRScanService.getUserList()
-      .valueChanges.subscribe(({data}) => {
+    this.appSubscription.push(this.cQRScanService.getUserList()
+      .valueChanges.subscribe(({ data }) => {
         if (data.WorkerList.length > 0) {
+          this.qrFields$ = [];
           for (let x of data.WorkerList)
-          this.qrFields$.push({
-            description: x.FullName,
-            qrcode: x.UserQR
-          });
+            this.qrFields$.push({
+              description: x.FullName,
+              qrcode: x.UserQR
+            });
         }
       }));
   }

@@ -11,16 +11,23 @@ export interface WorkerInfo {
   ID: number,
   FullName: string,
   AccLvl: number,
-  UserQR: string,
+  UserQR?: string,
   GIDFull: string
 }
 
+export interface WorkerInfoRegister extends WorkerInfo {
+  pass: string
+}
 export interface MessageInfo {
   messages: [EMessages]
 }
 export interface EMessages {
   eventMSGID: number
   eventMSG: string
+}
+export interface AccountType {
+  acclvlID?: number,
+  accType?: string
 }
 
 export interface EventMessages {
@@ -120,6 +127,14 @@ export interface QRFields {
   qrcode: string | undefined
 }
 
-export interface ResponsWorkerList{
+export interface ResponseWorkerList{
   WorkerList: WorkerInfo[] | []
+}
+
+export interface ResponseAccountTypeList {
+  AccountType: AccountType[] | []
+}
+
+export interface CreateAccountResponse {
+  createAccount: string
 }
