@@ -4,9 +4,7 @@
       <h2>QRコード表</h2>
     </div>
     <mat-divider></mat-divider>
-
     <div fxLayout="col wrap" fxLayoutAlign="center center" class="menuArea">
-
       <form [formGroup]="qrForm" (keydown.enter)="$event.preventDefault()">
         <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
           <mat-form-field appearance="outline" class="fieldflex ">
@@ -19,7 +17,6 @@
         </div>
       </form>
     </div>
-
     <div class="qr-container" fxLayout="row wrap" fxLayoutAlign="center">
       <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="qrFields$.length === 0">
         <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
@@ -27,10 +24,13 @@
       <div class="qrloop-container" *ngIf="qrFields$" fxLayout="row wrap" fxLayoutAlign="center">
         <div class="qrcard-loop" *ngFor="let item of (qrFields$)">
           <mat-card class="generatedQR" [class.mat-elevation-z1]="true">
-            <div fxLayout="row wrap" fxLayoutAlign="center">{{item.description}}</div>
-            <button mat-button class="qr-pic" (click)="downloadImg(getLink(generatedQR(item.qrcode)),item.description)">
-              <div fxLayout="row wrap" fxLayoutAlign="center center" [innerHTML]="generatedQR(item.qrcode)"></div>
-            </button>
+            <div fxLayout="row wrap" fxLayoutAlign="center center">{{item.description}}</div>
+            <div fxLayout="row wrap" fxLayoutAlign="center center">
+              <button mat-button class="qr-pic"
+                (click)="downloadImg(getLink(generatedQR(item.qrcode)),item.description)">
+                <div fxLayout="row wrap" fxLayoutAlign="center center" [innerHTML]="generatedQR(item.qrcode)"></div>
+              </button>
+            </div>
           </mat-card>
         </div>
       </div>

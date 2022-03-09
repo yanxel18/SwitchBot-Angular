@@ -80,7 +80,6 @@ const DELETE_RASPI = gql`
   mutation DeleteRaspi($input: RaspiDeleteParam!) {
   deleteRaspi(input: $input)
 }
-
 `;
 
 const UPDATE_MACHINE = gql`
@@ -123,10 +122,21 @@ const GET_ACCOUNT_TYPE = gql`
 
 const CREATE_ACCOUNT = gql`
   mutation Mutation($input: CreateAccount!) {
-  createAccount(input: $input)
+    createAccount(input: $input)
 }
 `;
 
+const UPDATE_ACCOUNT = gql`
+  mutation UpdateAccount($input: UpdateAccount!) {
+    updateAccount(input: $input)
+}
+`;
+
+const UPDATE_PASS = gql`
+  mutation UpdatePass($input: UpdatePass!) {
+    updatePass(input: $input)
+}
+`;
 @Injectable({
   providedIn: 'root'
 })
@@ -291,6 +301,34 @@ export class DialogService {
           FullName: s.FullName,
           AccLvl: s.AccLvl,
           GIDFull: s.GIDFull,
+          Pass: s.pass
+        }
+      }
+    });
+  }
+
+  updateAccount(s: Models.WorkerInfo):
+    Observable<FetchResult<Models.UpdateAccountResponse>> {
+    return this.apollo.mutate({
+      mutation: UPDATE_ACCOUNT,
+      variables: {
+        input: {
+          FullName: s.FullName,
+          AccLvl: s.AccLvl,
+          ID: s.ID
+        }
+      }
+    });
+  }
+
+
+  updatePass(s: Models.WorkerInfoRegister):
+    Observable<FetchResult<Models.UpdatePassResponse>> {
+    return this.apollo.mutate({
+      mutation: UPDATE_PASS,
+      variables: {
+        input: {
+          ID: s.ID,
           Pass: s.pass
         }
       }

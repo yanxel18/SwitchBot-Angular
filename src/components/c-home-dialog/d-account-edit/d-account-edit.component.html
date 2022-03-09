@@ -1,1 +1,49 @@
-<p>d-account-edit works!</p>
+<div fxLayout="col wrap" fxLayoutAlign="center center">
+  <div>
+    <mat-icon class="header-icon">supervisor_account</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>アカウント編集</h2>
+  </div>
+</div>
+<form [formGroup]="accountRegForm" (ngSubmit)="submitAccountReg()" (keydown.enter)="$event.preventDefault()">
+  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!accountTypeList$">
+    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+  </div>
+  <div mat-dialog-content *ngIf="accountTypeList$">
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>GID</mat-label>
+        <input formControlName="GIDFull" maxlength="20" matInput trim="blur">
+        <mat-error *ngIf="accountRegForm.get('GIDFull')?.invalid">{{gidFullErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field class="fieldflex">
+        <mat-label>氏名</mat-label>
+        <input formControlName="FullName" maxlength="50" matInput trim="blur">
+        <mat-error *ngIf="accountRegForm.get('FullName')?.invalid">{{fullNameErr()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field appearance="outline" class="fieldflex ">
+        <mat-label>権限</mat-label>
+        <mat-select formControlName="AccLvl">
+          <mat-option *ngFor="let types of (accountTypeList$ | async)" [value]="types.acclvlID">
+            {{types.accType}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
+    <button type="submit" [disabled]="!accountTypeList$" mat-raised-button class="save-button">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</form>

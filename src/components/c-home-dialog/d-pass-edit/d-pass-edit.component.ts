@@ -7,58 +7,32 @@ import { SpecialCharValidator, noWhitespaceValidator } from '../../../validator/
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 
+
 @Component({
-  selector: 'app-d-account-reg',
-  templateUrl: './d-account-reg.component.html',
-  styleUrls: ['./d-account-reg.component.sass'],
+  selector: 'app-d-pass-edit',
+  templateUrl: './d-pass-edit.component.html',
+  styleUrls: ['./d-pass-edit.component.sass'],
   providers: [DialogService]
 })
-export class DAccountRegComponent implements OnInit, OnDestroy {
-  accountTypeList$!: Observable<Models.AccountType[]>;
+export class DPassEditComponent implements OnDestroy {
+
   appSubscription: Subscription[] = [];
   constructor(
-    public dialogRef: MatDialogRef<DAccountRegComponent>,
-    private dialogService: DialogService
+    public dialogRef: MatDialogRef<DPassEditComponent>,
+    private dialogService: DialogService,
+    @Inject(MAT_DIALOG_DATA) public data: Models.WorkerInfoRegister
   ) { }
   accountRegForm = new FormGroup({
-    GIDFull: new FormControl('', [Validators.required, SpecialCharValidator()]),
-    FullName: new FormControl('', [Validators.required, SpecialCharValidator()]),
-    AccLvl: new FormControl(null, [Validators.required]),
     pass: new FormControl('', [Validators.required, Validators.minLength(5), SpecialCharValidator(), noWhitespaceValidator]),
     passB: new FormControl('', [Validators.required, Validators.minLength(5), SpecialCharValidator(), noWhitespaceValidator]),
   }, {
     validators: [Validation.match('pass', 'passB')]
   });
-  async ngOnInit(): Promise<void> {
-    await this.dialogService.getAccountTypeList().refetch();
-    this.accountTypeList$ = this.dialogService.getAccountTypeList().valueChanges.pipe(map(({ data }) => {
-      return data.AccountType ? data.AccountType : [];
-    }));
-  }
+
   closeDialog(): void {
     this.dialogRef.close();
   }
 
-  gidFullErr(): string | null {
-    if (this.accountRegForm.get('GIDFull')!.hasError('required')) return '空白は禁止！';
-    else if (this.accountRegForm.get('GIDFull')!.hasError('isCharValid')) return '特殊文字は使用できません！';
-    return null;
-  }
-
-  fullNameErr(): string | null {
-    if (this.accountRegForm.get('FullName')!.hasError('required')) return '空白は禁止！';
-    else if (this.accountRegForm.get('FullName')!.hasError('isCharValid')) return '特殊文字は使用できません！';
-    return null;
-  }
-  accLvlErrorMsg(): string | null {
-    if (this.accountRegForm.get("AccLvl")?.hasError('required')) return '空白は禁止！'
-    return null;
-  }
-  machineModelErr(): string | null {
-    if (this.accountRegForm.get('machineModel')!.hasError('required')) return '空白は禁止！';
-    else if (this.accountRegForm.get('machineModel')!.hasError('isCharValid')) return '特殊文字は使用できません！';
-    return null;
-  }
 
   passwordAErrorMsg(): string | null {
     if (this.accountRegForm.get('pass')!.hasError('required')) return '空白は禁止！';
@@ -77,12 +51,14 @@ export class DAccountRegComponent implements OnInit, OnDestroy {
   }
 
   submitAccountReg(): void {
-    const registerInfo: Models.WorkerInfoRegister = this.accountRegForm.value;
-
+    const updatePassInfo: Models.WorkerInfoRegister =  {
+      ...this.accountRegForm.value,
+      ID: this.data.ID
+    }
     if (this.accountRegForm.valid) {
       Swal.fire({
-        title: 'アカウント登録',
-        text: "アカウントを登録しますか？",
+        title: "パスワード変更",
+        text: "パスワードを変更しますか？",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -92,25 +68,18 @@ export class DAccountRegComponent implements OnInit, OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           this.appSubscription.push(
-            this.dialogService.createAccount(registerInfo).subscribe(
+            this.dialogService.updatePass(updatePassInfo).subscribe(
               async ({ data }) => {
-                if (data?.createAccount === "success") {
+                if (data?.updatePass === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'アカウントを登録しました！'
+                    text: 'パスワードを変更しました！'
                   });
                   this.closeDialog();
-                } else if (data?.createAccount === "duplicate") {
+                }　else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "アカウントはすでに存在しています！",
-                    showConfirmButton: true
-                  });
-                }
-                else {
-                  await Swal.fire({
-                    icon: 'error',
-                    text: "エラーがは発生しました！" + data?.createAccount,
+                    text: "エラーがは発生しました！" + data?.updatePass,
                     showConfirmButton: true
                   });
                 }

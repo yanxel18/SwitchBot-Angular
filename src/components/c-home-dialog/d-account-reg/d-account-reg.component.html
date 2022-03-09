@@ -30,12 +30,11 @@
       <mat-form-field appearance="outline" class="fieldflex ">
         <mat-label>権限</mat-label>
         <mat-select formControlName="AccLvl">
-          <mat-option  [value]="null">
-          </mat-option>
           <mat-option *ngFor="let types of (accountTypeList$ | async)" [value]="types.acclvlID">
             {{types.accType}}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="accountRegForm.get('AccLvl')?.invalid">{{accLvlErrorMsg()}}</mat-error>
       </mat-form-field>
     </div>
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">

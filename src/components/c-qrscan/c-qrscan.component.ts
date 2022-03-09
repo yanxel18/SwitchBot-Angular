@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
   providers: [CQrscanService]
 })
 
-export class CQrscanComponent implements AfterViewInit , OnDestroy {
+export class CQrscanComponent implements AfterViewInit, OnDestroy {
   scannedQRData: string[] = [];
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
@@ -29,7 +29,7 @@ export class CQrscanComponent implements AfterViewInit , OnDestroy {
   }
   ngAfterViewInit(): void {
     this.scanTxt.nativeElement.focus();
-   }
+  }
   qrform = new FormGroup({
     qrscantxt: new FormControl('')
   })
@@ -50,43 +50,26 @@ export class CQrscanComponent implements AfterViewInit , OnDestroy {
 
     }
   }
-  onEnter(): void{
+  onEnter(): void {
     if (this.scannedQRData[1]) this.proceed();
   }
-  /**async proceed(): Promise<void> {
-    if (this.scannedQRData.length === this.MAX_SCAN) {
-      console.log(this.scannedQRData);
-      await this.cqrscanservice.validateQRScan(this.scannedQRData).refetch();
-      this.unsubscribeF();
-      this.querySubscription.push(this.cqrscanservice.validateQRScan(this.scannedQRData)
-        .valueChanges
-        .subscribe(({ data, loading }) => {
-          if (data.WorkerToken.Noket) {
-           this.setItems(data);
-            this.router.navigate(['control']);
-          } else this.removeItems();
-        })
-      );
-    }
-  } */
   async proceed(): Promise<void> {
     if (this.scannedQRData.length === this.MAX_SCAN) {
       console.log(this.scannedQRData);
       this.unsubscribeF();
       this.querySubscription.push(this.cqrscanservice.checkQRdata(this.scannedQRData)
-        .subscribe(({ data } ) => {
-          const w = data?.WorkerToken.ScanInfo?.UInfo;
-          if (data?.WorkerToken && w) {
-            console.log(w)
+        .subscribe(({ data }) => {
+          const userInfo = data?.WorkerToken.ScanInfo?.UInfo;
+          if (data?.WorkerToken && userInfo) {
             this.setItems(data);
-            this.store.dispatch(Actions.LoadWorkerInfo({payload: w}))
+            this.store.dispatch(Actions.LoadWorkerInfo({ payload: userInfo }))
             this.router.navigate(['control']);
           } else this.removeItems();
         })
       );
     }
   }
-  private setItems( data: Models.WorkerToken): void {
+  private setItems(data: Models.WorkerToken): void {
     console.log(data);
     if (data.WorkerToken.Noket) localStorage.setItem("UserNoket", data.WorkerToken.Noket);
     if (data.WorkerToken.ScanInfo) {
@@ -98,7 +81,7 @@ export class CQrscanComponent implements AfterViewInit , OnDestroy {
 
   }
   private removeItems(): void {
-    this.store.dispatch(Actions.LoadWorkerInfo({payload:[]}))
+    this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }))
     localStorage.removeItem("UserNoket");
     localStorage.removeItem("WName");
     localStorage.removeItem("GID");

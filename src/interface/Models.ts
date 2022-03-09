@@ -138,3 +138,11 @@ export interface ResponseAccountTypeList {
 export interface CreateAccountResponse {
   createAccount: string
 }
+
+export interface UpdateAccountResponse {
+  updateAccount: string
+}
+
+export interface UpdatePassResponse {
+  updatePass: string
+}

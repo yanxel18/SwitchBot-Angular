@@ -52,12 +52,21 @@ export class CQrpageComponent implements OnInit, OnDestroy {
   }
 
   getLink(qrlink: string | null): string | null {
-    let indices = [];
+    let quoteIndices = [];
+
+    const MAX_FOUND_QUOTE = 2;
+    const FIRST_QUOTE_INDEX = 0;
+    const SECOND_QUOTE_INDEX = 1;
+    const CHAR_TO_FIND = "\"";
+    const ADD_SUBSTRING_FIRSTINDEX = 1;
     if (qrlink) {
       for (var i = 0; i < qrlink.length; i++)
-        if (qrlink[i] === "\"" && indices.length < 2) indices.push(i);
-      if (indices.length > 0) {
-        const gotQRLink = qrlink.substring(indices[0] + 1, indices[1]);
+        if (qrlink[i] === CHAR_TO_FIND && quoteIndices.length < MAX_FOUND_QUOTE) quoteIndices.push(i);
+      if (quoteIndices.length > 0) {
+        const gotQRLink = qrlink.substring(
+                  quoteIndices[FIRST_QUOTE_INDEX] + ADD_SUBSTRING_FIRSTINDEX,
+                  quoteIndices[SECOND_QUOTE_INDEX]
+                  );
         return gotQRLink;
       }
     }

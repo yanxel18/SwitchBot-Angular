@@ -1,0 +1,34 @@
+<div fxLayout="col wrap" fxLayoutAlign="center center">
+  <div>
+    <mat-icon class="header-icon">key</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>パスワード変更</h2>
+  </div>
+</div>
+<form [formGroup]="accountRegForm" (ngSubmit)="submitAccountReg()" (keydown.enter)="$event.preventDefault()">
+
+  <div mat-dialog-content>
+    <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
+      <mat-form-field appearance="outline" class="fieldflex ">
+        <mat-label>*パスワード</mat-label>
+        <input type="password" maxlength="25" formControlName="pass" matInput trim="blur" autocomplete="on">
+        <mat-error *ngIf="accountRegForm.get('pass')?.invalid">{{passwordAErrorMsg()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="fieldflex ">
+        <mat-label>*パスワードを再入力</mat-label>
+        <input type="password" maxlength="25" formControlName="passB" matInput trim="blur" autocomplete="on">
+        <mat-error *ngIf="accountRegForm.get('passB')?.invalid">{{passwordBErrorMsg()}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
+    <button type="submit" mat-raised-button class="save-button">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</form>
