@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import * as Actions from '../store/actions';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as Selectors from '../store/selector';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from './app.service';
@@ -132,7 +132,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   private unAuthorizedUser(): void {
     this.dialogRef.closeAll();
-    this.router.navigate(['login']);
+    this.router.navigate(['scan']);
   }
   private removeItems(): void {
     this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }))
