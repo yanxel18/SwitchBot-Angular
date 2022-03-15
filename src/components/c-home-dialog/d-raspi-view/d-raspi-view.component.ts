@@ -1,33 +1,30 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../../interface/Models';
-import { MatDialogRef,MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { DRaspiEditComponent } from '../d-raspi-edit/d-raspi-edit.component';
 import { DRaspiRegComponent } from '../d-raspi-reg/d-raspi-reg.component';
+
 @Component({
   selector: 'app-d-raspi-view',
   templateUrl: './d-raspi-view.component.html',
   styleUrls: ['./d-raspi-view.component.sass'],
   providers: [DialogService]
 })
-export class DRaspiViewComponent implements  OnInit,OnDestroy {
+export class DRaspiViewComponent implements OnInit, OnDestroy {
 
   appSubscription: Subscription[] = [];
   raspiList$!: Observable<Models.Raspi[]>;
-  displayedColumns: string[] = ['名','URL','操作']; ;
+  displayedColumns: string[] = ['名', 'URL', '操作'];;
 
-  rRegDialog  = {
+  rRegDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  rEditDialog  = {
+  rEditDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
@@ -39,7 +36,7 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
   ) { }
 
   async ngOnInit(): Promise<void> {
-   await this.initializedRaspiList();
+    await this.initializedRaspiList();
 
   }
 
@@ -47,7 +44,7 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
     await this.dialogService.getRaspiList().refetch();
     this.raspiList$ = this.dialogService.getRaspiList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.RaspiList;
+        return data.RaspiList;
       }));
   }
   openDialogRaspiReg(): void {
@@ -73,7 +70,7 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
     });
   }
   deleteItem(p: Models.Raspi): void {
-    if (p){
+    if (p) {
       Swal.fire({
         title: '削除',
         text: "RaspberryPiを削除しますか？",
@@ -94,7 +91,7 @@ export class DRaspiViewComponent implements  OnInit,OnDestroy {
                     text: 'RaspberryPiを削除しました！'
                   });
                   this.initializedRaspiList();
-                }  else {
+                } else {
                   await Swal.fire({
                     icon: 'error',
                     text: "エラーがは発生しました！" + data?.deleteRaspi,

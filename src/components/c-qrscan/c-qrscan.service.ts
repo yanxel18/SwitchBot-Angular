@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchResult } from '@apollo/client/core';
-import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { Apollo, gql} from 'apollo-angular';
 import { Observable } from 'rxjs';
 import * as Models from '../../interface/Models'
 

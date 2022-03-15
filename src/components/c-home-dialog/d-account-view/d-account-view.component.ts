@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../../interface/Models';
-import { MatDialogRef,MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
@@ -13,22 +13,22 @@ import { DPassEditComponent } from '../d-pass-edit/d-pass-edit.component';
   styleUrls: ['./d-account-view.component.sass'],
   providers: [DialogService]
 })
-export class DAccountViewComponent implements OnInit,OnDestroy {
+export class DAccountViewComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
   accountList$!: Observable<Models.WorkerInfo[]>;
-  displayedColumns: string[] = ['GID','氏名','操作']; ;
+  displayedColumns: string[] = ['GID', '氏名', '操作'];;
 
-  regAccountDialog  = {
+  regAccountDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  editAccountDialog  = {
+  editAccountDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  editPassDialog  = {
+  editPassDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
@@ -41,7 +41,7 @@ export class DAccountViewComponent implements OnInit,OnDestroy {
   ) { }
 
   async ngOnInit(): Promise<void> {
-   await this.initializeAccountlist();
+    await this.initializeAccountlist();
 
   }
 
@@ -49,7 +49,7 @@ export class DAccountViewComponent implements OnInit,OnDestroy {
     await this.dialogService.getAccountList().refetch();
     this.accountList$ = this.dialogService.getAccountList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.WorkerViewList;
+        return data.WorkerViewList;
       }));
   }
   openDialogAccountReg(): void {
@@ -88,7 +88,7 @@ export class DAccountViewComponent implements OnInit,OnDestroy {
     });
   }
   deleteItem(p: Models.SwitchBot): void {
-    if (p){
+    if (p) {
       Swal.fire({
         title: '削除',
         text: "スウィッチボットを削除しますか？",
@@ -109,7 +109,7 @@ export class DAccountViewComponent implements OnInit,OnDestroy {
                     text: 'スウィッチボットを削除しました！'
                   });
                   this.initializeAccountlist();
-                }  else {
+                } else {
                   await Swal.fire({
                     icon: 'error',
                     text: "エラーがは発生しました！" + data?.deleteSwitchBot,

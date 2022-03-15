@@ -37,7 +37,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
 
   async checkScan(): Promise<void> {
     this.subscription.push(
-       this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
+      this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
         if (!data[0]) this.router.navigate(['scan']);
       })
     )

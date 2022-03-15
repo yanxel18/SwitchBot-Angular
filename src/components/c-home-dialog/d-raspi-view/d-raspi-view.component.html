@@ -6,7 +6,7 @@
     <h2>RaspberryPi</h2>
   </div>
   <span class="spacer"></span>
-  <button class="add-button"(click)="openDialogRaspiReg()" *ngIf="raspiList$" mat-icon-button>
+  <button class="add-button" (click)="openDialogRaspiReg()" *ngIf="raspiList$" mat-icon-button>
     <mat-icon class="add-button-icon">add</mat-icon>
   </button>
 </div>
@@ -25,7 +25,7 @@
         <td mat-cell *matCellDef="let element" class="element-data"> {{element.raspiServer}} </td>
       </ng-container>
       <ng-container matColumnDef="操作">
-        <th mat-header-cell *matHeaderCellDef  class="element-header">操作</th>
+        <th mat-header-cell *matHeaderCellDef class="element-header">操作</th>
         <td mat-cell *matCellDef="let element">
           <button (click)="openDialogRaspiEdit(element)" class="edit-button" mat-icon-button>
             <mat-icon>edit</mat-icon>

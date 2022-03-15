@@ -1,14 +1,10 @@
 import { DSwitchbotRegComponent } from './../d-switchbot-reg/d-switchbot-reg.component';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../../interface/Models';
-import { MatDialogRef,MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { DSwitchbotEditComponent } from '../d-switchbot-edit/d-switchbot-edit.component';
 
 @Component({
@@ -17,17 +13,17 @@ import { DSwitchbotEditComponent } from '../d-switchbot-edit/d-switchbot-edit.co
   styleUrls: ['./d-switchbot-view.component.sass'],
   providers: [DialogService]
 })
-export class DSwitchbotViewComponent implements OnInit,OnDestroy  {
+export class DSwitchbotViewComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
   switchbotList$!: Observable<Models.SwitchBot[]>;
-  displayedColumns: string[] = ['名','MACアドレス','操作']; ;
+  displayedColumns: string[] = ['名', 'MACアドレス', '操作'];;
 
-  switchbotRegDialog  = {
+  switchbotRegDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  switchbotEditDialog  = {
+  switchbotEditDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
@@ -39,7 +35,7 @@ export class DSwitchbotViewComponent implements OnInit,OnDestroy  {
   ) { }
 
   async ngOnInit(): Promise<void> {
-   await this.initializeSwitchBotlist();
+    await this.initializeSwitchBotlist();
 
   }
 
@@ -47,7 +43,7 @@ export class DSwitchbotViewComponent implements OnInit,OnDestroy  {
     await this.dialogService.getSwitchbotList().refetch();
     this.switchbotList$ = this.dialogService.getSwitchbotList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.SwitchBot;
+        return data.SwitchBot;
       }));
   }
   openDialogSwitchReg(): void {
@@ -73,7 +69,7 @@ export class DSwitchbotViewComponent implements OnInit,OnDestroy  {
     });
   }
   deleteItem(p: Models.SwitchBot): void {
-    if (p){
+    if (p) {
       Swal.fire({
         title: '削除',
         text: "スウィッチボットを削除しますか？",
@@ -94,7 +90,7 @@ export class DSwitchbotViewComponent implements OnInit,OnDestroy  {
                     text: 'スウィッチボットを削除しました！'
                   });
                   this.initializeSwitchBotlist();
-                }  else {
+                } else {
                   await Swal.fire({
                     icon: 'error',
                     text: "エラーがは発生しました！" + data?.deleteSwitchBot,

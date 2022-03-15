@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FetchResult } from '@apollo/client/link/core';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
-import { Observable } from 'rxjs';
 import * as Models from '../../interface/Models'
 
 const GET_MACHINE_LIST = gql`

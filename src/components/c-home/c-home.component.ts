@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as Models from '../../interface/Models';
 import { DSwitchbotViewComponent } from '../c-home-dialog/d-switchbot-view/d-switchbot-view.component';
@@ -6,8 +6,6 @@ import { DRaspiViewComponent } from '../c-home-dialog/d-raspi-view/d-raspi-view.
 import { DMachineViewComponent } from '../c-home-dialog/d-machine-view/d-machine-view.component';
 import { DAccountViewComponent } from '../c-home-dialog/d-account-view/d-account-view.component';
 import { Router } from '@angular/router';
-import * as Selectors from '../../store/selector';
-import * as Actions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/app.service';
@@ -18,22 +16,22 @@ import { AppService } from 'src/app/app.service';
 })
 export class CHomeComponent implements OnDestroy {
   querySubscription: Subscription[] = [];
-  switchbotViewDialog  = {
+  switchbotViewDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  switchbotRaspiDialog  = {
+  switchbotRaspiDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  switchbotMachineDialog  = {
+  switchbotMachineDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  switchbotAccountDialog  = {
+  switchbotAccountDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
@@ -48,7 +46,7 @@ export class CHomeComponent implements OnDestroy {
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-   }
+  }
 
   openDialogSwitchbotView(): void {
     const dialogRef = this.sbViewDialog.open(DSwitchbotViewComponent, {

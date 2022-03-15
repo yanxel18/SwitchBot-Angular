@@ -3,7 +3,7 @@ import { map, Observable, Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MachineSpecialCharValidator,UrlValidator } from '../../../validator/formvalidator';
+import { MachineSpecialCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 
@@ -13,7 +13,7 @@ import { DialogService } from '../s-dialog-service/dialog.service';
   styleUrls: ['./d-machine-edit.component.sass'],
   providers: [DialogService]
 })
-export class DMachineEditComponent implements OnInit,OnDestroy {
+export class DMachineEditComponent implements OnInit, OnDestroy {
   switchbotList$!: Observable<Models.SwitchBot[]>;
   appSubscription: Subscription[] = [];
   constructor(

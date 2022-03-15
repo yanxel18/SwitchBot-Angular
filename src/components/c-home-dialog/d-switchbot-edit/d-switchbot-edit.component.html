@@ -11,7 +11,6 @@
     <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
   </div>
   <div mat-dialog-content *ngIf="raspiList$">
-
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
       <mat-form-field class="fieldflex">
         <mat-label>MACアドレス</mat-label>
@@ -30,7 +29,7 @@
       <mat-form-field appearance="outline" class="fieldflex ">
         <mat-label>RaspberryPi</mat-label>
         <mat-select formControlName="switchbotRaspiID">
-          <mat-option  [value]="null">
+          <mat-option [value]="null">
           </mat-option>
           <mat-option *ngFor="let raspi of (raspiList$ | async)" [value]="raspi.raspiID">
             {{raspi.raspiName}}

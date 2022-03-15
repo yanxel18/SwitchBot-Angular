@@ -25,7 +25,6 @@
         <mat-error *ngIf="accountRegForm.get('FullName')?.invalid">{{fullNameErr()}}</mat-error>
       </mat-form-field>
     </div>
-
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
       <mat-form-field appearance="outline" class="fieldflex ">
         <mat-label>権限</mat-label>
@@ -50,7 +49,6 @@
       </mat-form-field>
     </div>
   </div>
-
   <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
     <button type="submit" [disabled]="!accountTypeList$" mat-raised-button class="save-button">
       <mat-icon>save</mat-icon>

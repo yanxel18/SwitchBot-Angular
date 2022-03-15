@@ -1,15 +1,9 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../../interface/Models';
-import { MatDialogRef,MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { DRaspiEditComponent } from '../d-raspi-edit/d-raspi-edit.component';
-import { DRaspiRegComponent } from '../d-raspi-reg/d-raspi-reg.component';
 import { DMachineRegComponent } from '../d-machine-reg/d-machine-reg.component';
 import { DMachineEditComponent } from '../d-machine-edit/d-machine-edit.component';
 @Component({
@@ -18,17 +12,17 @@ import { DMachineEditComponent } from '../d-machine-edit/d-machine-edit.componen
   styleUrls: ['./d-machine-view.component.sass'],
   providers: [DialogService]
 })
-export class DMachineViewComponent implements  OnInit,OnDestroy {
+export class DMachineViewComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
   machineList$!: Observable<Models.MachineListView[]>;
-  displayedColumns: string[] = ['名','URL','操作']; ;
+  displayedColumns: string[] = ['名', 'URL', '操作'];;
 
-  machineRegisterDialog  = {
+  machineRegisterDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
 
-  machineEditDialog  = {
+  machineEditDialog = {
     minWidth: '320px',
     maxWidth: '825px',
   };
@@ -40,7 +34,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
   ) { }
 
   async ngOnInit(): Promise<void> {
-   await this.intializedMachineList();
+    await this.intializedMachineList();
 
   }
 
@@ -48,7 +42,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
     await this.dialogService.getMachineList().refetch();
     this.machineList$ = this.dialogService.getMachineList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.MachineViewList;
+        return data.MachineViewList;
       }));
   }
   openDialogRegMachine(): void {
@@ -74,7 +68,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
     });
   }
   deleteItem(p: Models.MachineListView): void {
-    if (p){
+    if (p) {
       Swal.fire({
         title: '削除',
         text: "設備情報を削除しますか？",
@@ -95,7 +89,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
                     text: '設備情報を削除しました！'
                   });
                   this.intializedMachineList();
-                }  else {
+                } else {
                   await Swal.fire({
                     icon: 'error',
                     text: "エラーがは発生しました！" + data?.deleteMachine,

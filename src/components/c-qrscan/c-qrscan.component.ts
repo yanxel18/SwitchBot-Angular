@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CQrscanService } from './c-qrscan.service';
 import { Subscription } from 'rxjs/internal/Subscription';

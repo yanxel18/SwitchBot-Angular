@@ -1,12 +1,8 @@
-
 <div class="scanner-container" fxLayout="col wrap" fxLayoutAlign="center">
-
   <div class="qr-header-text" fxLayout="col wrap" fxLayoutAlign="center center">
     <h1>QR コードスキャン</h1>
   </div>
-
   <div class="qr-container" fxLayout="col wrap" fxLayoutAlign="center">
-
     <div id="container" class="mat-elevation-z6">
       <div class="item">
         <img src="../assets/images/qrcode.png" />
@@ -17,19 +13,18 @@
       <div class="circle" style="animation-delay: 3s"></div>
     </div>
   </div>
-
   <form [formGroup]="qrform">
     <div class="qr-button-containers" fxLayout="col wrap" fxLayoutAlign="center">
-
       <div class="qr-scan-buttons" fxLayout="col wrap" fxLayoutAlign="center center">
         <button class="worker-machine-button" mat-flat-button>
           <span *ngIf="scannedQRData[0]" class="material-icons worker-machine-icon-success">check_circle</span>
-          <span *ngIf="!scannedQRData[0]" class="material-icons-outlined worker-machine-icon-blank">radio_button_unchecked</span>
+          <span *ngIf="!scannedQRData[0]"
+            class="material-icons-outlined worker-machine-icon-blank">radio_button_unchecked</span>
           作業者のQR</button>
-
         <button class="worker-machine-button" mat-flat-button>
           <span *ngIf="scannedQRData[1]" class="material-icons worker-machine-icon-success">check_circle</span>
-          <span *ngIf="!scannedQRData[1]" class="material-icons-outlined worker-machine-icon-blank">radio_button_unchecked</span>
+          <span *ngIf="!scannedQRData[1]"
+            class="material-icons-outlined worker-machine-icon-blank">radio_button_unchecked</span>
           設備のQR</button>
       </div>
       <div *ngIf="scannedQRData.length" class="qr-footer-refresh" fxLayout="col wrap" fxLayoutAlign="center center">
@@ -39,10 +34,9 @@
       </div>
       <div class="qr-footer-submit" fxLayout="col wrap" fxLayoutAlign="center center">
         <button [disabled]="!processBtn" (click)="proceed()" class="submit-button" mat-flat-button>操作開始</button>
-
       </div>
-      <input hideKeyboard formControlName="qrscantxt"
-      class="scan-text" #qrscan type="text" onblur="this.focus()" (keyup)="onScan($event)" (keyup.enter)="onEnter()" (keyup.escape)="resetScan()">
+      <input hideKeyboard formControlName="qrscantxt" class="scan-text" #qrscan type="text" onblur="this.focus()"
+        (keyup)="onScan($event)" (keyup.enter)="onEnter()" (keyup.escape)="resetScan()">
       {{ qrscan.focus() }}
     </div>
   </form>

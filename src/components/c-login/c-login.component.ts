@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription, Observable, map } from 'rxjs';
+import { Component, OnDestroy} from '@angular/core';
+import { Subscription} from 'rxjs';
 import * as Models from '../../interface/Models';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CLoginService } from './c-login.service';
 import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
-import * as Selectors from '../../store/selector';
 import { Store } from '@ngrx/store';
 import { AppService } from '../../app/app.service';
 @Component({
@@ -27,10 +26,10 @@ export class CLoginComponent implements OnDestroy {
     this.initialized();
   }
   async initialized(): Promise<void> {
-        await this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }));
-        await this.store.dispatch(Actions.SetSignin({ payload: false }));
-        this.isLoggedIn = false;
-        this.removeItems();
+    await this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }));
+    await this.store.dispatch(Actions.SetSignin({ payload: false }));
+    this.isLoggedIn = false;
+    this.removeItems();
 
   }
 

@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../interface/Models';
-import { Subscription, Observable, map } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as Selectors from '../../store/selector';
-import Swal from 'sweetalert2';
 import { CQrpageService } from './c-qrpage.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup} from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import * as qrcode from 'qrcode-generator';
 import { saveAs } from 'file-saver';
@@ -32,7 +31,7 @@ export class CQrpageComponent implements OnInit, OnDestroy {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
   async ngOnInit(): Promise<void> {
-    this.appSubscription.push(this.store.select(Selectors.getSignIn).subscribe((userSignin: boolean) =>{
+    this.appSubscription.push(this.store.select(Selectors.getSignIn).subscribe((userSignin: boolean) => {
       if (!userSignin) {
         this.router.navigate(['panel']);
       }
@@ -72,9 +71,9 @@ export class CQrpageComponent implements OnInit, OnDestroy {
         if (qrlink[i] === CHAR_TO_FIND && quoteIndices.length < MAX_FOUND_QUOTE) quoteIndices.push(i);
       if (quoteIndices.length > 0) {
         const gotQRLink = qrlink.substring(
-                  quoteIndices[FIRST_QUOTE_INDEX] + ADD_SUBSTRING_FIRSTINDEX,
-                  quoteIndices[SECOND_QUOTE_INDEX]
-                  );
+          quoteIndices[FIRST_QUOTE_INDEX] + ADD_SUBSTRING_FIRSTINDEX,
+          quoteIndices[SECOND_QUOTE_INDEX]
+        );
         return gotQRLink;
       }
     }

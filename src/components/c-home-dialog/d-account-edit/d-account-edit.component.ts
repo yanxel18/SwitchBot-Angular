@@ -3,7 +3,7 @@ import { map, Observable, Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, noWhitespaceValidator } from '../../../validator/formvalidator';
+import { SpecialCharValidator } from '../../../validator/formvalidator';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 
@@ -58,7 +58,7 @@ export class DAccountEditComponent implements OnInit, OnDestroy {
 
 
   submitAccountReg(): void {
-    const registerInfo: Models.WorkerInfo =  {
+    const registerInfo: Models.WorkerInfo = {
       ...this.accountRegForm.value,
       ID: this.data.ID
     }
@@ -115,11 +115,9 @@ export default class Validation {
     return (controls: AbstractControl) => {
       const control = controls.get(controlName);
       const checkControl = controls.get(checkControlName);
-
       if (checkControl!.errors && !checkControl!.errors['matching']) {
         return null;
       }
-
       if (control!.value !== checkControl!.value) {
         controls.get(checkControlName)!.setErrors({ matching: true });
         return { matching: true };

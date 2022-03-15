@@ -118,11 +118,11 @@ export interface ReponseDeleteRaspi {
   deleteRaspi: string
 }
 
-export interface ResponseMachineViewList{
+export interface ResponseMachineViewList {
   MachineViewList: MachineListView[] | []
 }
 
-export interface ResponseMachineList{
+export interface ResponseMachineList {
   MachineList: MachineListView[] | []
 }
 
@@ -143,11 +143,11 @@ export interface QRFields {
   qrcode: string | undefined
 }
 
-export interface ResponseWorkerList{
+export interface ResponseWorkerList {
   WorkerList: WorkerInfo[] | []
 }
 
-export interface ResponseWorkerViewList{
+export interface ResponseWorkerViewList {
   WorkerViewList: WorkerInfo[] | []
 }
 export interface ResponseAccountTypeList {
@@ -167,5 +167,5 @@ export interface UpdatePassResponse {
 }
 
 export interface AccountInfoResponse {
-  AccountInfo:WorkerInfo[]
+  AccountInfo: WorkerInfo[]
 }

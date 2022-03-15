@@ -1,5 +1,5 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { map, Observable, Subscription } from 'rxjs';
+import { Component, Inject, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
@@ -51,7 +51,7 @@ export class DPassEditComponent implements OnDestroy {
   }
 
   submitAccountReg(): void {
-    const updatePassInfo: Models.WorkerInfoRegister =  {
+    const updatePassInfo: Models.WorkerInfoRegister = {
       ...this.accountRegForm.value,
       ID: this.data.ID
     }
@@ -76,7 +76,7 @@ export class DPassEditComponent implements OnDestroy {
                     text: 'パスワードを変更しました！'
                   });
                   this.closeDialog();
-                }　else {
+                } else {
                   await Swal.fire({
                     icon: 'error',
                     text: "エラーがは発生しました！" + data?.updatePass,

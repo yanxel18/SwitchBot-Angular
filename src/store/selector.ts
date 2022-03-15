@@ -5,4 +5,4 @@ export const SwitchbotState = createFeatureSelector<Models.SwitchbotState>('Swit
 
 export const getWorkerInfo = createSelector(SwitchbotState, (state: Models.SwitchbotState) => state.WorkerInfo);
 
-export const getSignIn = createSelector(SwitchbotState, (state:  Models.SwitchbotState) => state.UserSignIn);
+export const getSignIn = createSelector(SwitchbotState, (state: Models.SwitchbotState) => state.UserSignIn);

@@ -9,12 +9,12 @@ export const initialState: Models.SwitchbotState = {
 
 export const Reducer = createReducer(
   initialState,
-  on(Actions.LoadWorkerInfo, (state, {payload }) => ({
+  on(Actions.LoadWorkerInfo, (state, { payload }) => ({
     ...state,
     WorkerInfo: payload
   })),
 
-  on(Actions.SetSignin, (state, {payload}) =>({
+  on(Actions.SetSignin, (state, { payload }) => ({
     ...state,
     UserSignIn: payload
   }))

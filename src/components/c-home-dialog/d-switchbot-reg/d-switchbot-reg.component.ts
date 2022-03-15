@@ -1,9 +1,8 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
+import { MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 

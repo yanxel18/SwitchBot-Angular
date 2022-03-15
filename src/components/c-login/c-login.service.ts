@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchResult } from '@apollo/client/link/core';
-import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { Apollo, gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import * as Models from '../../interface/Models'
 
@@ -29,7 +29,7 @@ export class CLoginService {
     return this.apollo.mutate({
       mutation: SIGN_IN,
       variables: {
-        input:{
+        input: {
           GIDFull: userinfo.GIDFull,
           Pass: userinfo.Pass
         }
