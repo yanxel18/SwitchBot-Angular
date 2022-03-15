@@ -6,7 +6,7 @@ import * as Models from '../../interface/Models'
 
 const GET_MACHINE_LIST = gql`
   query MachineList {
-    MachineList {
+    MachineViewList {
       machineName
       machineModel
       machineQR
@@ -16,7 +16,7 @@ const GET_MACHINE_LIST = gql`
 
 const GET_USER_LIST = gql`
   query WorkerList {
-    WorkerList {
+    WorkerViewList {
       FullName
       UserQR
     }
@@ -32,14 +32,14 @@ export class CQrpageService {
     private apollo: Apollo
   ) { }
 
-  getMachineList(): QueryRef<Models.ResponseMachineList> {
-    return this.apollo.watchQuery<Models.ResponseMachineList>(
+  getMachineList(): QueryRef<Models.ResponseMachineViewList> {
+    return this.apollo.watchQuery<Models.ResponseMachineViewList>(
       { query: GET_MACHINE_LIST }
     );
   }
 
-  getUserList(): QueryRef<Models.ResponseWorkerList> {
-    return this.apollo.watchQuery<Models.ResponseWorkerList>(
+  getUserList(): QueryRef<Models.ResponseWorkerViewList> {
+    return this.apollo.watchQuery<Models.ResponseWorkerViewList>(
       { query: GET_USER_LIST }
     );
   }

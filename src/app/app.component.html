@@ -10,7 +10,7 @@
     <span class="spacer"></span>
     <button  *ngIf="this.WorkerInfo[0]" class="button-acc-menu" mat-button [matMenuTriggerFor]="account_menu">
       <mat-icon>account_circle</mat-icon>
-      {{ this.WorkerInfo[0]?.GIDFull}}
+      {{ this.WorkerInfo[0]?.FullName}}
     </button>
     <mat-menu #account_menu="matMenu">
     <button mat-menu-item (click)="backButton()">

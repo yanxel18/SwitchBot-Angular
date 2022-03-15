@@ -39,6 +39,7 @@ import { DAccountViewComponent } from '../components/c-home-dialog/d-account-vie
 import { DAccountEditComponent } from '../components/c-home-dialog/d-account-edit/d-account-edit.component';
 import { CQrpageComponent } from '../components/c-qrpage/c-qrpage.component';
 import { DPassEditComponent } from '../components/c-home-dialog/d-pass-edit/d-pass-edit.component';
+import { CLoginComponent } from '../components/c-login/c-login.component';
 
 registerLocaleData(localeJa);
 
@@ -61,7 +62,8 @@ registerLocaleData(localeJa);
     DAccountViewComponent,
     DAccountEditComponent,
     CQrpageComponent,
-    DPassEditComponent
+    DPassEditComponent,
+    CLoginComponent
   ],
   imports: [
     BrowserModule,

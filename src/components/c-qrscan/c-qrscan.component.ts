@@ -55,7 +55,6 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   }
   async proceed(): Promise<void> {
     if (this.scannedQRData.length === this.MAX_SCAN) {
-      console.log(this.scannedQRData);
       this.unsubscribeF();
       this.querySubscription.push(this.cqrscanservice.checkQRdata(this.scannedQRData)
         .subscribe(({ data }) => {
@@ -70,7 +69,6 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
     }
   }
   private setItems(data: Models.WorkerToken): void {
-    console.log(data);
     if (data.WorkerToken.Noket) localStorage.setItem("UserNoket", data.WorkerToken.Noket);
     if (data.WorkerToken.ScanInfo) {
       localStorage.setItem("Machine", data.WorkerToken.ScanInfo.machineName);
@@ -80,6 +78,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
 
 
   }
+
   private removeItems(): void {
     this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }))
     localStorage.removeItem("UserNoket");

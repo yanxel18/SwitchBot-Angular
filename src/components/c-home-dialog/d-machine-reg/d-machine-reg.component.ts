@@ -3,7 +3,7 @@ import { map, Observable, Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator,UrlValidator } from '../../../validator/formvalidator';
+import { SpecialCharValidator, MachineSpecialCharValidator,UrlValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 
@@ -20,8 +20,8 @@ export class DMachineRegComponent implements OnDestroy {
     private dialogService: DialogService,
   ) { }
   machineRegisterForm = new FormGroup({
-    machineName: new FormControl('', [Validators.required, SpecialCharValidator()]),
-    machineModel: new FormControl('', [Validators.required, SpecialCharValidator()])
+    machineName: new FormControl('', [Validators.required, MachineSpecialCharValidator()]),
+    machineModel: new FormControl('', [Validators.required, MachineSpecialCharValidator()])
   });
 
   closeDialog(): void {
@@ -31,7 +31,6 @@ export class DMachineRegComponent implements OnDestroy {
     const newValue: Models.MachineListView = {
       ...this.machineRegisterForm.value
     }
-    console.log(newValue);
     if (this.machineRegisterForm.valid) {
       Swal.fire({
         title: '登録',

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator } from '../../../validator/formvalidator';
+import { SpecialCharValidator, MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 
@@ -20,8 +20,8 @@ export class DSwitchbotRegComponent implements OnDestroy {
     private dialogService: DialogService
   ) { }
   switchbotRegForm = new FormGroup({
-    macAddressTxt: new FormControl('', [Validators.required, SpecialCharValidator(), MacAddressValidator()]),
-    switchbotTxt: new FormControl('', [Validators.required, SpecialCharValidator()]),
+    macAddressTxt: new FormControl('', [Validators.required, MacAddressValidator()]),
+    switchbotTxt: new FormControl('', [Validators.required, SwitchbotCharValidator()]),
   });
 
   closeDialog(): void {

@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpLink } from 'apollo-angular/http';
 import { ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
@@ -14,23 +14,26 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as Selectors from '../store/selector';
 import { MatDialog } from '@angular/material/dialog';
+import { AppService } from './app.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  styleUrls: ['./app.component.sass'],
+  providers: [AppService]
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, OnInit {
   currentTime = new Date();
   year = this.currentTime.getFullYear();
   title = 'switchbot-angular';
   mobileQuery: MediaQueryList;
   WorkerInfo: Models.WorkerInfo[] = [];
-  subscription: Subscription[] = [];
+  userSignedIn$: boolean | undefined;
   private _mobileQueryListener: () => void;
-
+  querySubscription: Subscription[] = [];
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     private dialogRef: MatDialog,
+    private appService: AppService,
     media: MediaMatcher,
     apollo: Apollo,
     httpLink: HttpLink,
@@ -51,10 +54,6 @@ export class AppComponent implements OnDestroy {
       return forward(operation);
     });
     const Mainlink = middleware.concat(http);
-    this.subscription.push(
-      this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
-        data ? this.WorkerInfo = data : this.WorkerInfo = [];
-      }));
     apollo.create({
       cache: new InMemoryCache(),
       link: this.errorlink().concat(Mainlink),
@@ -65,7 +64,40 @@ export class AppComponent implements OnDestroy {
       }
     });
   }
-  backButton(): void {
+
+  ngOnInit(): void {
+    this.initializedState();
+  }
+
+  async initializedState(): Promise<void> {
+
+    this.querySubscription.push(this.store.select(Selectors.getSignIn).subscribe(async (data) => {
+      this.userSignedIn$ = data;
+      await this.appService.getAccountInfo().refetch();
+      this.querySubscription.push(this.appService.getAccountInfo().valueChanges.subscribe(({ data }) => {
+        const { AccountInfo } = data;
+        if (data?.AccountInfo) {
+          if (AccountInfo.length > 0) {
+            this.store.dispatch(Actions.LoadWorkerInfo({ payload: AccountInfo }));
+            this.store.dispatch(Actions.SetSignin({ payload: true }));
+            this.router.navigate(['panel']);
+          }
+        }
+      }));
+      this.querySubscription.push(this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
+        this.WorkerInfo = data;
+      }));
+    }));
+
+
+  }
+  async backButton(): Promise<void> {
+    this.querySubscription.push(this.store.select(Selectors.getSignIn).subscribe(data => {
+      this.userSignedIn$ = data;
+    }));
+    this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }));
+    this.store.dispatch(Actions.SetSignin({ payload: false }));
+    this.removeItems();
     this.router.navigate(['scan']);
   }
   public errorlink(): ApolloLink {
@@ -78,6 +110,7 @@ export class AppComponent implements OnDestroy {
   private errorMSG(msg: string): void {
     const m = msg.includes('failure') ? 'サーバー接続問題が発生しました！' : msg;
     const u = msg.includes('401') ? true : false;
+    const c = msg.includes('Permission Denied');
     const Toast = Swal.mixin({
       toast: true,
       position: 'bottom',
@@ -90,13 +123,26 @@ export class AppComponent implements OnDestroy {
       text: m
     });
     if (u) this.unAuthorized();
+    else if (c) this.unAuthorizedUser();
   }
   private unAuthorized(): void {
     this.dialogRef.closeAll();
     this.router.navigate(['scan']);
   }
+
+  private unAuthorizedUser(): void {
+    this.dialogRef.closeAll();
+    this.router.navigate(['login']);
+  }
+  private removeItems(): void {
+    this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }))
+    localStorage.removeItem("UserNoket");
+    localStorage.removeItem("WName");
+    localStorage.removeItem("GID");
+    localStorage.removeItem("Machine");
+  }
   ngOnDestroy(): void {
-    this.subscription.forEach(x => x.unsubscribe());
     this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.querySubscription.forEach(x => x.unsubscribe());
   }
 }

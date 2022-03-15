@@ -14,7 +14,21 @@ export function MacAddressValidator(): ValidatorFn {
   };
 }
 
+export function MachineSpecialCharValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const notallowed = /[!#%^&*()+\-=\[\]{};'\\|,.<>?]+/;
+    const Valid = notallowed.test(control.value);
+    return Valid ? { isCharValid: { value: control.value } } : null;
+  };
+}
 
+export function SwitchbotCharValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const notallowed = /[!#%^&*()+\-=\[\]{};'\\|,.<>?]+/;
+    const Valid = notallowed.test(control.value);
+    return Valid ? { isCharValid: { value: control.value } } : null;
+  };
+}
 export function UrlValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const notallowed = /[!#%^&*()_+\-=\[\]{};'|,<>?]+/;

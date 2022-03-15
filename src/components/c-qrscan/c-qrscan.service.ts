@@ -39,29 +39,4 @@ export class CQrscanService {
       }
     })
   }
-/*
-  validateQRScan(QRData: string[]): QueryRef<Models.WorkerToken> {
-    return this.apollo.watchQuery<Models.WorkerToken>(
-      {
-        query: GET_WORKERTOKEN,
-        variables: {
-          machineQrScan: QRData[0],
-          userQrScan: QRData[1]
-        }
-      }
-    )
-  }
-
-  checkQR(QRData: string[]): QueryRef<Models.WorkerToken> {
-
-    return this.apollo.watchQuery<Models.WorkerToken>(
-      {
-        query: GET_WORKERTOKEN,
-        variables: {
-          machineQrScan: QRData[0],
-          userQrScan: QRData[1]
-        }
-      }
-    )
-  }*/
 }

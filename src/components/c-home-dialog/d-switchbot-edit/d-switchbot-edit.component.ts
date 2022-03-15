@@ -3,7 +3,7 @@ import { map, Observable, Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator } from '../../../validator/formvalidator';
+import { SpecialCharValidator, MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 @Component({
@@ -22,8 +22,8 @@ export class DSwitchbotEditComponent implements OnDestroy, OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Models.SwitchBot
   ) { }
   switchbotUpdateForm = new FormGroup({
-    switchbotMac: new FormControl(this.data.switchbotMac, [Validators.required, SpecialCharValidator(), MacAddressValidator()]),
-    switchbotName: new FormControl(this.data.switchbotName, [Validators.required, SpecialCharValidator()]),
+    switchbotMac: new FormControl(this.data.switchbotMac, [Validators.required,  MacAddressValidator()]),
+    switchbotName: new FormControl(this.data.switchbotName, [Validators.required, SwitchbotCharValidator()]),
     switchbotRaspiID: new FormControl(this.data.switchbotRaspiID)
   });
 

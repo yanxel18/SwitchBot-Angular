@@ -49,7 +49,7 @@ export class DAccountViewComponent implements OnInit,OnDestroy {
     await this.dialogService.getAccountList().refetch();
     this.accountList$ = this.dialogService.getAccountList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.WorkerList;
+          return  data.WorkerViewList;
       }));
   }
   openDialogAccountReg(): void {

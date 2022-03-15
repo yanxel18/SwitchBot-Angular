@@ -66,7 +66,7 @@ const GET_RASPI_LIST = gql`
 
 const GET_MACHINE_LIST = gql`
   query MachineList {
-    MachineList {
+    MachineViewList {
       machineID
       machineName
       machineModel
@@ -102,7 +102,7 @@ const DELETE_MACHINE = gql`
 
 const GET_ACCOUNT_LIST = gql`
   query WorkerList {
-    WorkerList {
+    WorkerViewList {
       ID
       FullName
       AccLvl
@@ -222,8 +222,8 @@ export class DialogService {
     });
   }
 
-  getMachineList(): QueryRef<Models.ResponseMachineList> {
-    return this.apollo.watchQuery<Models.ResponseMachineList>(
+  getMachineList(): QueryRef<Models.ResponseMachineViewList> {
+    return this.apollo.watchQuery<Models.ResponseMachineViewList>(
       { query: GET_MACHINE_LIST }
     );
   }
@@ -280,8 +280,8 @@ export class DialogService {
     });
   }
 
-  getAccountList(): QueryRef<Models.ResponseWorkerList> {
-    return this.apollo.watchQuery<Models.ResponseWorkerList>(
+  getAccountList(): QueryRef<Models.ResponseWorkerViewList> {
+    return this.apollo.watchQuery<Models.ResponseWorkerViewList>(
       { query: GET_ACCOUNT_LIST }
     );
   }

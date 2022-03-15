@@ -13,7 +13,8 @@ import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-c-qrpage',
   templateUrl: './c-qrpage.component.html',
-  styleUrls: ['./c-qrpage.component.sass']
+  styleUrls: ['./c-qrpage.component.sass'],
+  providers: [CQrpageService]
 })
 export class CQrpageComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
@@ -31,9 +32,16 @@ export class CQrpageComponent implements OnInit, OnDestroy {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
   async ngOnInit(): Promise<void> {
+    this.appSubscription.push(this.store.select(Selectors.getSignIn).subscribe((userSignin: boolean) =>{
+      if (!userSignin) {
+        this.router.navigate(['panel']);
+      }
+    }));
     await this.initializedMachineList();
   }
-
+  backButton(): void {
+    this.router.navigate(['panel']);
+  }
   generatedQR(qrCode: string | undefined): string | null {
     if (qrCode) {
       const TYPE_NUMBER = 4;
@@ -88,9 +96,9 @@ export class CQrpageComponent implements OnInit, OnDestroy {
     await this.cQRScanService.getMachineList().refetch();
     this.appSubscription.push(this.cQRScanService.getMachineList()
       .valueChanges.subscribe(({ data }) => {
-        if (data.MachineList.length > 0) {
+        if (data.MachineViewList.length > 0) {
           this.qrFields$ = [];
-          for (let x of data.MachineList)
+          for (let x of data.MachineViewList)
             this.qrFields$.push({
               description: x.machineName,
               qrcode: x.machineQR
@@ -103,9 +111,9 @@ export class CQrpageComponent implements OnInit, OnDestroy {
     await this.cQRScanService.getUserList().refetch();
     this.appSubscription.push(this.cQRScanService.getUserList()
       .valueChanges.subscribe(({ data }) => {
-        if (data.WorkerList.length > 0) {
+        if (data.WorkerViewList.length > 0) {
           this.qrFields$ = [];
-          for (let x of data.WorkerList)
+          for (let x of data.WorkerViewList)
             this.qrFields$.push({
               description: x.FullName,
               qrcode: x.UserQR

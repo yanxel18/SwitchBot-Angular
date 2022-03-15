@@ -14,6 +14,17 @@ export interface WorkerInfo {
   UserQR?: string,
   GIDFull: string
 }
+export interface LoginInfo {
+  GIDFull: string,
+  Pass: string
+}
+
+export interface AccessInfo {
+  accessInfo: {
+    UserInfo?: WorkerInfo,
+    Noket?: string | null
+  }
+}
 
 export interface WorkerInfoRegister extends WorkerInfo {
   pass: string
@@ -73,7 +84,8 @@ export interface CreateEventLogs {
 
 
 export interface SwitchbotState {
-  WorkerInfo: WorkerInfo[] | []
+  WorkerInfo: WorkerInfo[] | [],
+  UserSignIn: boolean
 }
 
 export interface CreateSwitchBotForm {
@@ -106,6 +118,10 @@ export interface ReponseDeleteRaspi {
   deleteRaspi: string
 }
 
+export interface ResponseMachineViewList{
+  MachineViewList: MachineListView[] | []
+}
+
 export interface ResponseMachineList{
   MachineList: MachineListView[] | []
 }
@@ -131,6 +147,9 @@ export interface ResponseWorkerList{
   WorkerList: WorkerInfo[] | []
 }
 
+export interface ResponseWorkerViewList{
+  WorkerViewList: WorkerInfo[] | []
+}
 export interface ResponseAccountTypeList {
   AccountType: AccountType[] | []
 }
@@ -145,4 +164,8 @@ export interface UpdateAccountResponse {
 
 export interface UpdatePassResponse {
   updatePass: string
+}
+
+export interface AccountInfoResponse {
+  AccountInfo:WorkerInfo[]
 }

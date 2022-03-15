@@ -3,7 +3,7 @@ import { map, Observable, Subscription } from 'rxjs';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { SpecialCharValidator, MacAddressValidator,UrlValidator } from '../../../validator/formvalidator';
+import { SpecialCharValidator, MachineSpecialCharValidator,UrlValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 
@@ -22,8 +22,8 @@ export class DMachineEditComponent implements OnInit,OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: Models.MachineListView
   ) { }
   machineUpdateForm = new FormGroup({
-    machineName: new FormControl(this.data.machineName, [Validators.required, SpecialCharValidator()]),
-    machineModel: new FormControl(this.data.machineModel, [Validators.required, SpecialCharValidator()]),
+    machineName: new FormControl(this.data.machineName, [Validators.required, MachineSpecialCharValidator()]),
+    machineModel: new FormControl(this.data.machineModel, [Validators.required, MachineSpecialCharValidator()]),
     machineSwitchbotID: new FormControl(this.data.machineSwitchbotID)
   });
   async ngOnInit(): Promise<void> {
@@ -40,7 +40,6 @@ export class DMachineEditComponent implements OnInit,OnDestroy {
       ...this.machineUpdateForm.value,
       machineID: this.data.machineID
     }
-    console.log(newValue);
     if (this.machineUpdateForm.valid) {
       Swal.fire({
         title: '編集',

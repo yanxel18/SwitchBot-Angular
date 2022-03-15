@@ -48,7 +48,7 @@ export class DMachineViewComponent implements  OnInit,OnDestroy {
     await this.dialogService.getMachineList().refetch();
     this.machineList$ = this.dialogService.getMachineList()
       .valueChanges.pipe(map(({ data }) => {
-          return  data.MachineList;
+          return  data.MachineViewList;
       }));
   }
   openDialogRegMachine(): void {

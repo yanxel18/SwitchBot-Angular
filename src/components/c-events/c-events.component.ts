@@ -63,7 +63,6 @@ export class CEventsComponent implements OnInit, OnDestroy {
         });
         this.subscription.push(this.ceventservice.sendEvent(d.eventMSGID)
           .subscribe(async ({ data }) => {
-            console.log(data);
             if (data?.createEventLogs === "success") {
               await this.executeToast.fire({
                 icon: 'success',
