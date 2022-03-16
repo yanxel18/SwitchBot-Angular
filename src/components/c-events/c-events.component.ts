@@ -64,6 +64,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
         this.subscription.push(this.ceventservice.sendEvent(d.eventMSGID)
           .subscribe(async ({ data }) => {
             if (data?.createEventLogs === "success") {
+              this.confirmSound();
               await this.executeToast.fire({
                 icon: 'success',
                 text: '設備起動が完了しました！',
@@ -82,7 +83,12 @@ export class CEventsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  private confirmSound(): void{
+    const audio = new Audio();
+    audio.src = "../../assets/sound/success.mp3";
+    audio.load();
+    audio.play();
+  }
   backButton(): void {
     this.router.navigate(['scan']);
   }

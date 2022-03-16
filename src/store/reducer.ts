@@ -4,7 +4,8 @@ import { createReducer, on } from '@ngrx/store';
 
 export const initialState: Models.SwitchbotState = {
   WorkerInfo: [],
-  UserSignIn: false
+  UserSignIn: false,
+  ScanComplete: true,
 }
 
 export const Reducer = createReducer(
@@ -17,5 +18,10 @@ export const Reducer = createReducer(
   on(Actions.SetSignin, (state, { payload }) => ({
     ...state,
     UserSignIn: payload
+  })),
+
+  on(Actions.SetScan, (state, { payload }) => ({
+    ...state,
+    ScanComplete: payload
   }))
 )

@@ -85,7 +85,8 @@ export interface CreateEventLogs {
 
 export interface SwitchbotState {
   WorkerInfo: WorkerInfo[] | [],
-  UserSignIn: boolean
+  UserSignIn: boolean,
+  ScanComplete: boolean
 }
 
 export interface CreateSwitchBotForm {

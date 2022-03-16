@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import * as Models from '../../interface/Models';
 import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
+import * as Selectors from '../../store/selector';
 import { Store } from '@ngrx/store';
 @Component({
   selector: 'app-c-qrscan',
@@ -38,18 +39,33 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
     this.processBtn = false;
     this.unsubscribeF();
   }
-  onScan(event: Event): void {
-    const t = (event.target as HTMLInputElement).value;
-    if (this.scannedQRData.length < this.MAX_SCAN && t) {
-      this.scannedQRData.push(t);
+  async onScan(event: Event): Promise<void> {
+    const getScanValue = (event.target as HTMLInputElement).value;
+    if (this.scannedQRData.length < this.MAX_SCAN && getScanValue) {
+      this.scanSound();
+      this.scannedQRData.push(getScanValue);
       if (this.scannedQRData[1]) {
         this.processBtn = true;
-        this.proceed();
+        await this.proceed();
       }
       this.qrform.get("qrscantxt")!.setValue("");
-
+    } else if (getScanValue) {
+      this.querySubscription.push(
+        this.store.select(Selectors.getScanState).subscribe(data => {
+          if (!data) this.resetScan();
+        })
+      );
     }
+
   }
+
+  scanSound(): void{
+    const audio = new Audio();
+    audio.src = "../../assets/sound/scan.mp3";
+    audio.load();
+    audio.play();
+  }
+
   onEnter(): void {
     if (this.scannedQRData[1]) this.proceed();
   }
@@ -62,6 +78,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
           if (data?.WorkerToken && userInfo) {
             this.setItems(data);
             this.store.dispatch(Actions.LoadWorkerInfo({ payload: userInfo }))
+            this.store.dispatch(Actions.SetScan({ payload: true }));
             this.router.navigate(['control']);
           } else this.removeItems();
         })

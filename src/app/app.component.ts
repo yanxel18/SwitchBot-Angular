@@ -110,12 +110,15 @@ export class AppComponent implements OnDestroy, OnInit {
   private errorMSG(msg: string): void {
     const m = msg.includes('failure') ? 'サーバー接続問題が発生しました！' : msg;
     const u = msg.includes('401') ? true : false;
+    const p = msg.includes('400') ? true : false;
     const c = msg.includes('Permission Denied');
+    const a = msg.includes('QRスキャン');
     const Toast = Swal.mixin({
       toast: true,
       position: 'bottom',
       showCloseButton: true,
       showConfirmButton: false,
+      backdrop: true,
       timer: 5000
     });
     Toast.fire({
@@ -124,13 +127,30 @@ export class AppComponent implements OnDestroy, OnInit {
     });
     if (u) this.unAuthorized();
     else if (c) this.unAuthorizedUser();
+    else if(a) this.scanError();
+    else if(p) this.switchBotError();
+  }
+  private switchBotError(): void {
+    this.errorSound();
   }
   private unAuthorized(): void {
+    this.errorSound();
     this.dialogRef.closeAll();
     this.router.navigate(['scan']);
   }
+  private errorSound(): void{
+    const audio = new Audio();
+    audio.src = "../assets/sound/error.mp3";
+    audio.load();
+    audio.play();
+  }
+  private scanError(): void {
+    this.errorSound();
+    this.store.dispatch(Actions.SetScan({ payload: false }));
+  }
 
   private unAuthorizedUser(): void {
+    this.errorSound();
     this.dialogRef.closeAll();
     this.router.navigate(['scan']);
   }
