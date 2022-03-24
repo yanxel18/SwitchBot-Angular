@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../../interface/Models';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, map } from 'rxjs';
-import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DAccountRegComponent } from '../d-account-reg/d-account-reg.component';
 import { DAccountEditComponent } from '../d-account-edit/d-account-edit.component';
@@ -69,8 +68,6 @@ export class DAccountViewComponent implements OnInit, OnDestroy {
       minWidth: this.editAccountDialog.minWidth,
       data: param
     });
-
-    console.log(param);
     dialogRef.afterClosed().subscribe(d => {
       this.initializeAccountlist();
     });
@@ -82,47 +79,11 @@ export class DAccountViewComponent implements OnInit, OnDestroy {
       data: param
     });
 
-    console.log(param);
     dialogRef.afterClosed().subscribe(d => {
       this.initializeAccountlist();
     });
   }
-  deleteItem(p: Models.SwitchBot): void {
-    if (p) {
-      Swal.fire({
-        title: '削除',
-        text: "スウィッチボットを削除しますか？",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonText: 'いいえ',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'はい'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.appSubscription.push(
-            this.dialogService.deleteSwitchbot(p.switchbotID).subscribe(
-              async ({ data }) => {
-                if (data?.deleteSwitchBot === "success") {
-                  await Swal.fire({
-                    icon: 'success',
-                    text: 'スウィッチボットを削除しました！'
-                  });
-                  this.initializeAccountlist();
-                } else {
-                  await Swal.fire({
-                    icon: 'error',
-                    text: "エラーがは発生しました！" + data?.deleteSwitchBot,
-                    showConfirmButton: true
-                  });
-                }
-              }
-            )
-          )
-        }
-      })
-    }
-  }
+
   closeDialog(): void {
     this.dialogRef.close();
   }

@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { SpecialCharValidator, UrlValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DRaspiEditMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-raspi-edit',
   templateUrl: './d-raspi-edit.component.html',
@@ -36,8 +36,8 @@ export class DRaspiEditComponent implements OnDestroy {
     }
     if (this.raspiUpdateForm.valid) {
       Swal.fire({
-        title: '編集',
-        text: "RaspiberryPi情報を編集しますか？",
+        title: DRaspiEditMsg.updateRaspiTitle,
+        text: DRaspiEditMsg.askRaspiUpdate,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -52,20 +52,20 @@ export class DRaspiEditComponent implements OnDestroy {
                 if (data?.updateRaspi === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'RaspiberryPi情報を編集しました！'
+                    text: DRaspiEditMsg.raspiUpdated
                   });
                   this.closeDialog();
                 } else if (data?.updateRaspi === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "RaspiberryPiサーバーはすでに存在しています！",
+                    text: DRaspiEditMsg.raspiExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.updateRaspi,
+                    text: DRaspiEditMsg.error + data?.updateRaspi,
                     showConfirmButton: true
                   });
                 }

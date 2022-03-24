@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { SpecialCharValidator, noWhitespaceValidator } from '../../../validator/formvalidator';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DAccountRegisterMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-account-reg',
   templateUrl: './d-account-reg.component.html',
@@ -33,6 +33,10 @@ export class DAccountRegComponent implements OnInit, OnDestroy {
     await this.dialogService.getAccountTypeList().refetch();
     this.accountTypeList$ = this.dialogService.getAccountTypeList().valueChanges.pipe(map(({ data }) => {
       return data.AccountType ? data.AccountType : [];
+    }));
+
+    this.appSubscription.push(this.accountRegForm.get('GIDFull')!.valueChanges.subscribe((event) => {
+      this.accountRegForm.get('GIDFull')!.setValue(event.toLowerCase(), { emitEvent: false });
     }));
   }
   closeDialog(): void {
@@ -81,8 +85,8 @@ export class DAccountRegComponent implements OnInit, OnDestroy {
 
     if (this.accountRegForm.valid) {
       Swal.fire({
-        title: 'アカウント登録',
-        text: "アカウントを登録しますか？",
+        title: DAccountRegisterMsg.registerAccountTitle,
+        text: DAccountRegisterMsg.askAccountRegister,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -97,20 +101,20 @@ export class DAccountRegComponent implements OnInit, OnDestroy {
                 if (data?.createAccount === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'アカウントを登録しました！'
+                    text: DAccountRegisterMsg.accountRegistered
                   });
                   this.closeDialog();
                 } else if (data?.createAccount === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "アカウントはすでに存在しています！",
+                    text: DAccountRegisterMsg.accountExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.createAccount,
+                    text: DAccountRegisterMsg.error + data?.createAccount,
                     showConfirmButton: true
                   });
                 }

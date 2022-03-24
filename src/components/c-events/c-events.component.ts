@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as Selectors from '../../store/selector';
 import Swal from 'sweetalert2';
+import { CEventsMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-c-events',
   templateUrl: './c-events.component.html',
@@ -45,7 +46,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
   async errorSelect(d: Models.EMessages): Promise<void> {
     Swal.fire({
       title: "「" + d.eventMSG + "」",
-      text: "設備を開始しますか？",
+      text: CEventsMsg.askTostartMachine,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -55,7 +56,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.executeToast.fire({
-          text: '設備を起動しますので、しばらくお待ちください。',
+          text: CEventsMsg.machineStarting,
           timerProgressBar: true,
           didOpen: () => {
             Swal.showLoading();
@@ -67,7 +68,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
               this.confirmSound();
               await this.executeToast.fire({
                 icon: 'success',
-                text: '設備起動が完了しました！',
+                text: CEventsMsg.machineStarted,
                 timer: 2500,
                 timerProgressBar: true
               });
@@ -75,7 +76,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
             } else {
               this.executeToast.fire({
                 icon: 'error',
-                text: "エラーがは発生しました！" + data?.createEventLogs,
+                text: CEventsMsg.error + data?.createEventLogs,
                 showConfirmButton: true
               });
             }

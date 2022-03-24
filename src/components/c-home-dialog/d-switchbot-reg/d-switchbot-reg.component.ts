@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DSwitchbotRegisterMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-switchbot-reg',
   templateUrl: './d-switchbot-reg.component.html',
@@ -29,8 +29,8 @@ export class DSwitchbotRegComponent implements OnDestroy {
   submitCreateSB(): void {
     if (this.switchbotRegForm.valid) {
       Swal.fire({
-        title: '登録',
-        text: "スウィッチボットを登録しますか？",
+        title: DSwitchbotRegisterMsg.registerSwitchbotTitle,
+        text: DSwitchbotRegisterMsg.askSwitchbotRegister,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -45,20 +45,20 @@ export class DSwitchbotRegComponent implements OnDestroy {
                 if (data?.createSwitchBot === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'スウィッチボットを登録しました！'
+                    text: DSwitchbotRegisterMsg.switchbotRegistered
                   });
                   this.closeDialog();
                 } else if (data?.createSwitchBot === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "スウィッチボット情報はすでに存在しています！",
+                    text: DSwitchbotRegisterMsg.switchbotExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.createSwitchBot,
+                    text: DSwitchbotRegisterMsg.error + data?.createSwitchBot,
                     showConfirmButton: true
                   });
                 }

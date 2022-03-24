@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { SpecialCharValidator } from '../../../validator/formvalidator';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DAccountEditMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-account-edit',
   templateUrl: './d-account-edit.component.html',
@@ -65,8 +65,8 @@ export class DAccountEditComponent implements OnInit, OnDestroy {
 
     if (this.accountRegForm.valid) {
       Swal.fire({
-        title: 'アカウント報告更新',
-        text: "アカウントを更新しますか？",
+        title: DAccountEditMsg.updateAccountTitle,
+        text:DAccountEditMsg.askAccountUpdate,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -81,20 +81,20 @@ export class DAccountEditComponent implements OnInit, OnDestroy {
                 if (data?.updateAccount === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'アカウントを更新しました！'
+                    text: DAccountEditMsg.accountUpdated
                   });
                   this.closeDialog();
                 } else if (data?.updateAccount === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "アカウントはすでに存在しています！",
+                    text: DAccountEditMsg.accountExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.updateAccount,
+                    text: DAccountEditMsg.error + data?.updateAccount,
                     showConfirmButton: true
                   });
                 }

@@ -6,7 +6,7 @@ import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DSwitchbotEditComponent } from '../d-switchbot-edit/d-switchbot-edit.component';
-
+import { DSwitchbotViewMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-switchbot-view',
   templateUrl: './d-switchbot-view.component.html',
@@ -71,8 +71,8 @@ export class DSwitchbotViewComponent implements OnInit, OnDestroy {
   deleteItem(p: Models.SwitchBot): void {
     if (p) {
       Swal.fire({
-        title: '削除',
-        text: "スウィッチボットを削除しますか？",
+        title: DSwitchbotViewMsg.deleteSwitchbotTitle,
+        text: DSwitchbotViewMsg.askSwitchbotDelete,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -87,13 +87,13 @@ export class DSwitchbotViewComponent implements OnInit, OnDestroy {
                 if (data?.deleteSwitchBot === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'スウィッチボットを削除しました！'
+                    text: DSwitchbotViewMsg.switchbotDeleted
                   });
                   this.initializeSwitchBotlist();
                 } else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.deleteSwitchBot,
+                    text: DSwitchbotViewMsg.error+ data?.deleteSwitchBot,
                     showConfirmButton: true
                   });
                 }

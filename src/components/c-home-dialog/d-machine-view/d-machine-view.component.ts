@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DMachineRegComponent } from '../d-machine-reg/d-machine-reg.component';
 import { DMachineEditComponent } from '../d-machine-edit/d-machine-edit.component';
+import { DMachineViewMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-machine-view',
   templateUrl: './d-machine-view.component.html',
@@ -70,8 +71,8 @@ export class DMachineViewComponent implements OnInit, OnDestroy {
   deleteItem(p: Models.MachineListView): void {
     if (p) {
       Swal.fire({
-        title: '削除',
-        text: "設備情報を削除しますか？",
+        title: DMachineViewMsg.deleteMachineTitle,
+        text: DMachineViewMsg.askMachineDelete,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -86,13 +87,13 @@ export class DMachineViewComponent implements OnInit, OnDestroy {
                 if (data?.deleteMachine === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: '設備情報を削除しました！'
+                    text:  DMachineViewMsg.machineDeleted
                   });
                   this.intializedMachineList();
                 } else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.deleteMachine,
+                    text: DMachineViewMsg.error + data?.deleteMachine,
                     showConfirmButton: true
                   });
                 }

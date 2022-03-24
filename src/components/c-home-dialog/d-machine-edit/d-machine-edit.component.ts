@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { MachineSpecialCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DUpdateMachineMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-machine-edit',
   templateUrl: './d-machine-edit.component.html',
@@ -42,8 +42,8 @@ export class DMachineEditComponent implements OnInit, OnDestroy {
     }
     if (this.machineUpdateForm.valid) {
       Swal.fire({
-        title: '編集',
-        text: "設備情報を編集しますか？",
+        title: DUpdateMachineMsg.updateMachineTitle,
+        text: DUpdateMachineMsg.askMachineUpdate,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -58,20 +58,20 @@ export class DMachineEditComponent implements OnInit, OnDestroy {
                 if (data?.updateMachine === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: '設備情報を編集しました！'
+                    text: DUpdateMachineMsg.machineExisting
                   });
                   this.closeDialog();
                 } else if (data?.updateMachine === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "設備情報はすでに存在しています！",
+                    text: DUpdateMachineMsg.machineExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.updateMachine,
+                    text: DUpdateMachineMsg.error + data?.updateMachine,
                     showConfirmButton: true
                   });
                 }

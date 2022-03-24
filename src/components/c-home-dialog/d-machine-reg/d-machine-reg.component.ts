@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { MachineSpecialCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DRegisterMachineMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-machine-reg',
   templateUrl: './d-machine-reg.component.html',
@@ -33,8 +33,8 @@ export class DMachineRegComponent implements OnDestroy {
     }
     if (this.machineRegisterForm.valid) {
       Swal.fire({
-        title: '登録',
-        text: "設備情報を登録しますか？",
+        title: DRegisterMachineMsg.registerMachineTitle,
+        text: DRegisterMachineMsg.askMachineRegister,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -49,20 +49,20 @@ export class DMachineRegComponent implements OnDestroy {
                 if (data?.createMachine === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: '設備情報を登録しました！'
+                    text: DRegisterMachineMsg.machineRegistered
                   });
                   this.closeDialog();
                 } else if (data?.createMachine === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "設備情報はすでに存在しています！",
+                    text: DRegisterMachineMsg.machineExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.createMachine,
+                    text: DRegisterMachineMsg.error + data?.createMachine,
                     showConfirmButton: true
                   });
                 }

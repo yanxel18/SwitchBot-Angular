@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DRaspiEditComponent } from '../d-raspi-edit/d-raspi-edit.component';
 import { DRaspiRegComponent } from '../d-raspi-reg/d-raspi-reg.component';
-
+import { DRaspiViewMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-raspi-view',
   templateUrl: './d-raspi-view.component.html',
@@ -72,8 +72,8 @@ export class DRaspiViewComponent implements OnInit, OnDestroy {
   deleteItem(p: Models.Raspi): void {
     if (p) {
       Swal.fire({
-        title: '削除',
-        text: "RaspberryPiを削除しますか？",
+        title: DRaspiViewMsg.deleteRaspiTitle,
+        text: DRaspiViewMsg.askRaspiDelete,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -88,13 +88,13 @@ export class DRaspiViewComponent implements OnInit, OnDestroy {
                 if (data?.deleteRaspi === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'RaspberryPiを削除しました！'
+                    text: DRaspiViewMsg.raspiDeleted
                   });
                   this.initializedRaspiList();
                 } else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.deleteRaspi,
+                    text: DRaspiViewMsg.error + data?.deleteRaspi,
                     showConfirmButton: true
                   });
                 }

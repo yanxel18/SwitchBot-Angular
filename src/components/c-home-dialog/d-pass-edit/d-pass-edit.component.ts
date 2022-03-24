@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { SpecialCharValidator, noWhitespaceValidator } from '../../../validator/formvalidator';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
-
+import { DPasswordUpdateMsg } from 'src/utility/messages';
 
 @Component({
   selector: 'app-d-pass-edit',
@@ -57,8 +57,8 @@ export class DPassEditComponent implements OnDestroy {
     }
     if (this.accountRegForm.valid) {
       Swal.fire({
-        title: "パスワード変更",
-        text: "パスワードを変更しますか？",
+        title: DPasswordUpdateMsg.updatePasswordTitle,
+        text: DPasswordUpdateMsg.askPasswordUpdate,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -73,13 +73,13 @@ export class DPassEditComponent implements OnDestroy {
                 if (data?.updatePass === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'パスワードを変更しました！'
+                    text: DPasswordUpdateMsg.passwordUpdated
                   });
                   this.closeDialog();
                 } else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.updatePass,
+                    text: DPasswordUpdateMsg.error + data?.updatePass,
                     showConfirmButton: true
                   });
                 }

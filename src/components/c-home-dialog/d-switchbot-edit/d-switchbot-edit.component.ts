@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
+import { DSwitchbotEditMsg } from 'src/utility/messages';
 @Component({
   selector: 'app-d-switchbot-edit',
   templateUrl: './d-switchbot-edit.component.html',
@@ -43,8 +44,8 @@ export class DSwitchbotEditComponent implements OnDestroy, OnInit {
     }
     if (this.switchbotUpdateForm.valid) {
       Swal.fire({
-        title: '編集',
-        text: "スウィッチボットを編集しますか？",
+        title: DSwitchbotEditMsg.updateSwitchbotTitle,
+        text: DSwitchbotEditMsg.askSwitchbotUpdate,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -59,20 +60,20 @@ export class DSwitchbotEditComponent implements OnDestroy, OnInit {
                 if (data?.updateSwitchBot === "success") {
                   await Swal.fire({
                     icon: 'success',
-                    text: 'スウィッチボットを編集しました！'
+                    text: DSwitchbotEditMsg.switchbotUpdated
                   });
                   this.closeDialog();
                 } else if (data?.updateSwitchBot === "duplicate") {
                   await Swal.fire({
                     icon: 'error',
-                    text: "スウィッチボット情報はすでに存在しています！",
+                    text: DSwitchbotEditMsg.switchbotExisting,
                     showConfirmButton: true
                   });
                 }
                 else {
                   await Swal.fire({
                     icon: 'error',
-                    text: "エラーがは発生しました！" + data?.updateSwitchBot,
+                    text: DSwitchbotEditMsg.error + data?.updateSwitchBot,
                     showConfirmButton: true
                   });
                 }

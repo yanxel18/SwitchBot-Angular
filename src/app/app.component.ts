@@ -118,7 +118,6 @@ export class AppComponent implements OnDestroy, OnInit {
       position: 'bottom',
       showCloseButton: true,
       showConfirmButton: false,
-      backdrop: true,
       timer: 5000
     });
     Toast.fire({
