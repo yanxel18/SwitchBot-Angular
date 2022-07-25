@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import * as Models from '../../interface/Models';
 import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
-import * as Selectors from '../../store/selector';
 import { Store } from '@ngrx/store';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-c-qrscan',
   templateUrl: './c-qrscan.component.html',
@@ -19,6 +19,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
   MAX_SCAN = 2;
+  MAX_QRCODE_LENGTH = 36;
   @ViewChild('qrscan') scanTxt!: ElementRef;
   constructor(
     private router: Router,
@@ -37,35 +38,44 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   resetScan(): void {
     this.scannedQRData = [];
     this.processBtn = false;
+    this.qrform.get("qrscantxt")!.setValue("");
     this.unsubscribeF();
   }
   async onScan(event: Event): Promise<void> {
-    const getScanValue = (event.target as HTMLInputElement).value;
-    if (this.scannedQRData.length < this.MAX_SCAN && getScanValue) {
-      this.scanSound();
-      this.scannedQRData.push(getScanValue);
-      if (this.scannedQRData[1]) {
-        this.processBtn = true;
-        await this.proceed();
-      }
-      this.qrform.get("qrscantxt")!.setValue("");
-    } else if (getScanValue) {
-      this.querySubscription.push(
-        this.store.select(Selectors.getScanState).subscribe(data => {
-          if (!data) this.resetScan();
-        })
-      );
+    const getScanValue: string = (event.target as HTMLInputElement).value;
+    if (getScanValue) this.scanSound();
+    if (getScanValue.length >= this.MAX_QRCODE_LENGTH) {
+      if (this.scannedQRData.length == 2) this.resetScan();
+      if (this.scannedQRData.length < this.MAX_SCAN && getScanValue) {
+
+        this.scannedQRData.push(getScanValue);
+        if (this.scannedQRData[1]) {
+          this.processBtn = true;
+          await this.proceed();
+        }
+        this.qrform.get("qrscantxt")!.setValue("");
+      } else this.resetScan();
+    } else {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      Toast.fire({
+        icon: 'error',
+        text: "QRコードが処理ができませんでした！"
+      });
     }
 
   }
-
-  scanSound(): void{
+  scanSound(): void {
     const audio = new Audio();
     audio.src = "../../assets/sound/scan.mp3";
     audio.load();
     audio.play();
   }
-
   onEnter(): void {
     if (this.scannedQRData[1]) this.proceed();
   }
@@ -83,6 +93,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
           } else this.removeItems();
         })
       );
+
     }
   }
   private setItems(data: Models.WorkerToken): void {

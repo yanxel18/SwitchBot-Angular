@@ -36,7 +36,7 @@
         <button [disabled]="!processBtn" (click)="proceed()" class="submit-button" mat-flat-button>操作開始</button>
       </div>
       <input hideKeyboard formControlName="qrscantxt" class="scan-text" #qrscan type="text" onblur="this.focus()"
-        (keyup)="onScan($event)" (keyup.enter)="onEnter()" (keyup.escape)="resetScan()">
+        (change)="onScan($event)" (keyup.enter)="onEnter()" (keyup.escape)="resetScan()">
       {{ qrscan.focus() }}
     </div>
   </form>

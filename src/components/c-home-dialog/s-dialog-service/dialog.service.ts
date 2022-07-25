@@ -18,6 +18,22 @@ const GET_SWITCHBOT_LIST = gql`
 }
 `;
 
+const GET_EVENTMSG_LIST = gql`
+    query EventMsgList {
+      EventMsgList {
+        eventMSGID
+        eventMSG
+      }
+    }
+`;
+const GET_TERMINAL_LIST = gql`
+  query TerminalList {
+    TerminalList {
+      terminalID
+      terminalName
+    }
+  }
+`;
 const GET_SWITCHBOT_FOR_MACHINELIST = gql`
   query SwitchBot($filter: SwitchbotFilter) {
     SwitchBot(filter: $filter) {
@@ -137,6 +153,7 @@ const UPDATE_PASS = gql`
     updatePass(input: $input)
 }
 `;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -190,6 +207,12 @@ export class DialogService {
   getSwitchbotList(): QueryRef<Models.ResponseSwitchbotList> {
     return this.apollo.watchQuery<Models.ResponseSwitchbotList>(
       { query: GET_SWITCHBOT_LIST }
+    );
+  }
+
+  getTerminalList(): QueryRef<Models.ResponseTerminalList> {
+    return this.apollo.watchQuery<Models.ResponseTerminalList>(
+      { query: GET_TERMINAL_LIST }
     );
   }
   createRaspi(s: Models.Raspi):
@@ -254,7 +277,11 @@ export class DialogService {
       }
     });
   }
-
+  getEventmsgList(): QueryRef<Models.ResponseEventMsgList> {
+    return this.apollo.watchQuery<Models.ResponseEventMsgList>(
+      { query: GET_EVENTMSG_LIST }
+    );
+  }
   createMachine(s: Models.MachineListView):
     Observable<FetchResult<Models.ResponseCreateMachine>> {
     return this.apollo.mutate({

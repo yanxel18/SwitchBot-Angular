@@ -73,7 +73,10 @@ export interface Raspi {
   raspiName: string,
   raspiServer: string
 }
-
+export interface Terminal {
+  terminalID: number,
+  terminalName: string
+}
 export interface EventParam {
   msgID: number
 }
@@ -105,6 +108,12 @@ export interface ReponseUpdateSwitchbot {
 }
 export interface ResponseSwitchbotList {
   SwitchBot: SwitchBot[] | []
+}
+export interface ResponseEventMsgList {
+  EventMsgList: EMessages[]
+}
+export interface ResponseTerminalList {
+  TerminalList: Terminal[] | [];
 }
 export interface ReponseUpdateRaspi {
   updateRaspi: string
