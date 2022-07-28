@@ -6,23 +6,30 @@
     <h2>イベントメッセージ管理</h2>
   </div>
 </div>
-<form [formGroup]="terminalForm" (keydown.enter)="$event.preventDefault()">
-  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!terminalList$ && !eventList$">
-    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
-  </div>
-
-  <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="terminalList$ && eventList$">
+<div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!terminalList$">
+  <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+</div>
+<form [formGroup]="terminalForm" (ngSubmit)="submitData()" (keydown.enter)="$event.preventDefault()" *ngIf="terminalList$">
+  <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
     <mat-form-field appearance="outline" class="fieldflex ">
-      <mat-label>スウィッチボット</mat-label>
-      <mat-select formControlName="terminalList" (selectionChange)="onChangeList($event)">
-        <mat-option value="0" *ngFor="let item of (terminalList$ | async)">{{item.terminalName}}</mat-option>
+      <mat-label>タブレット</mat-label>
+      <mat-select formControlName="terminalID" (selectionChange)="onChangeList($event)">
+        <mat-option [value]="item.terminalID" *ngFor="let item of terminalList$ |async">{{item.terminalName}}
+        </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-  <div mat-dialog-content *ngIf="eventList$ && eventList$">
+  <div mat-dialog-content>
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center">
-      <mat-selection-list class="fieldflex ">
-        <mat-list-option *ngFor="let item of (eventList$ | async)">
+      <mat-selection-list #eventlist2 class="event-list " multiple="false" *ngIf="!allowMultiple">
+        <mat-list-option *ngFor="let item of eventList$ | async" [value]="item.eventMSGID"
+          [selected]="checkItem(item.eventMSGID)">
+          {{item.eventMSG}}
+        </mat-list-option>
+      </mat-selection-list>
+      <mat-selection-list #eventlist class="event-list" formControlName="eventMSG" *ngIf="allowMultiple">
+        <mat-list-option *ngFor="let item of eventList$ | async" [value]="item.eventMSGID"
+          [selected]="checkItem(item.eventMSGID)">
           {{item.eventMSG}}
         </mat-list-option>
       </mat-selection-list>

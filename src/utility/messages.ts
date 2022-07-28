@@ -60,6 +60,12 @@ interface IDRaspiEditMsg {
   error: string
 }
 
+interface IDTerminalEventMsg {
+  updateTerminalTitle: string,
+  askTerminalUpdate: string,
+  TerminalUpdated: string,
+  error: string
+}
 interface IDRaspiRegisterMsg {
   registerRaspiTitle: string,
   askRaspiRegister: string,
@@ -193,5 +199,12 @@ export const DSwitchbotViewMsg: IDSwitchbotViewMsg = {
   deleteSwitchbotTitle: "スウィッチボット削除",
   askSwitchbotDelete: "スウィッチボットを削除してよろしいですか？",
   switchbotDeleted: "スウィッチボットを削除済みです！",
+  error: "エラー発生！"
+}
+
+export const DTerminalEventMsg: IDTerminalEventMsg = {
+  updateTerminalTitle: "端末イベント表示更新",
+  askTerminalUpdate: "イベントを更新してよろしいですか？",
+  TerminalUpdated: "イベント更新を更新済みです",
   error: "エラー発生！"
 }

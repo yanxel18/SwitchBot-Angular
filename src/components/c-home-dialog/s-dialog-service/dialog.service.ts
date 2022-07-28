@@ -18,6 +18,8 @@ const GET_SWITCHBOT_LIST = gql`
 }
 `;
 
+
+
 const GET_EVENTMSG_LIST = gql`
     query EventMsgList {
       EventMsgList {
@@ -41,6 +43,16 @@ const GET_SWITCHBOT_FOR_MACHINELIST = gql`
       switchbotID
     }
   }
+`;
+
+const GET_TERMINAL_EVENT = gql`
+query TerminalEvents($filter: TerminalMsgIDFilter) {
+  TerminalEvents(filter: $filter) {
+    termID
+    termMsgID
+    termEventMsg
+  }
+}
 `;
 const CREATE_SWITCHBOT = gql`
   mutation Mutation($input: SwitchbotParam!) {
@@ -69,6 +81,11 @@ const CREATE_RASPI = gql`
   mutation Mutation($input: RaspiCreateParam!) {
     createRaspi(input: $input)
 }
+`;
+const CREATE_TABLET_EVENT = gql`
+  mutation CreateTabletEvent($input: TabletEventsParam!) {
+    createTabletEvent(input: $input)
+  }
 `;
 const GET_RASPI_LIST = gql`
   query RaspiList {
@@ -250,6 +267,21 @@ export class DialogService {
       { query: GET_MACHINE_LIST }
     );
   }
+
+  getTerminalEvent(terminalID: number): QueryRef<Models.ResponseTerminalEvent> {
+    return this.apollo.watchQuery<Models.ResponseTerminalEvent>(
+      {
+        query: GET_TERMINAL_EVENT ,
+        variables: {
+          filter: {
+            termID: terminalID
+          }
+        }
+      }
+    );
+  }
+
+
   getMachineSwitchbotList(): QueryRef<Models.ResponseSwitchbotList> {
     return this.apollo.watchQuery<Models.ResponseSwitchbotList>(
       {
@@ -262,7 +294,6 @@ export class DialogService {
       }
     );
   }
-
   updateMachine(input: Models.MachineListView):
     Observable<FetchResult<Models.ResponseUpdateMachine>> {
     return this.apollo.mutate({
@@ -347,7 +378,18 @@ export class DialogService {
       }
     });
   }
-
+  createTabletEvent(s: Models.createTabletEvent):
+    Observable<FetchResult<Models.ResponseCreateTabletEvent>> {
+    return this.apollo.mutate({
+      mutation: CREATE_TABLET_EVENT,
+      variables: {
+        input: {
+          terminalID: s.terminalID,
+          eventMSG: s.eventMSG
+        }
+      }
+    });
+  }
 
   updatePass(s: Models.WorkerInfoRegister):
     Observable<FetchResult<Models.UpdatePassResponse>> {

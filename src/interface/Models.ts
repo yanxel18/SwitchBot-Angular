@@ -80,11 +80,22 @@ export interface Terminal {
 export interface EventParam {
   msgID: number
 }
+export interface createTabletEvent {
+  terminalID: number,
+  eventMSG: number[]
+}
 
+export interface eventMsgs {
+  eventMSGID: number
+}
 export interface CreateEventLogs {
   createEventLogs: string
 }
-
+export interface TerminalEvents {
+  termID: number,
+  termMsgID: number,
+  termEventMsg: string,
+}
 
 export interface SwitchbotState {
   WorkerInfo: WorkerInfo[] | [],
@@ -109,6 +120,9 @@ export interface ReponseUpdateSwitchbot {
 export interface ResponseSwitchbotList {
   SwitchBot: SwitchBot[] | []
 }
+export interface ResponseTerminalEvent{
+  TerminalEvents: TerminalEvents[] | []
+}
 export interface ResponseEventMsgList {
   EventMsgList: EMessages[]
 }
@@ -127,7 +141,9 @@ export interface ResponseCreateRaspi {
 export interface ReponseDeleteRaspi {
   deleteRaspi: string
 }
-
+export interface ResponseCreateTabletEvent {
+  createTabletEvent: string
+}
 export interface ResponseMachineViewList {
   MachineViewList: MachineListView[] | []
 }
