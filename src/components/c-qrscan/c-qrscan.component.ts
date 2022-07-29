@@ -19,7 +19,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
   MAX_SCAN = 2;
-  MAX_QRCODE_LENGTH = 36;
+  MAX_QRCODE_LENGTH = 3; //36
   @ViewChild('qrscan') scanTxt!: ElementRef;
   constructor(
     private router: Router,

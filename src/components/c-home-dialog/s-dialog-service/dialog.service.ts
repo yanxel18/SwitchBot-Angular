@@ -36,6 +36,14 @@ const GET_TERMINAL_LIST = gql`
     }
   }
 `;
+const GET_TERMINAL_LIST_VIEW = gql`
+  query TerminalListView {
+    TerminalListView {
+      terminalID
+      terminalName
+    }
+  }
+`;
 const GET_SWITCHBOT_FOR_MACHINELIST = gql`
   query SwitchBot($filter: SwitchbotFilter) {
     SwitchBot(filter: $filter) {
@@ -48,6 +56,15 @@ const GET_SWITCHBOT_FOR_MACHINELIST = gql`
 const GET_TERMINAL_EVENT = gql`
 query TerminalEvents($filter: TerminalMsgIDFilter) {
   TerminalEvents(filter: $filter) {
+    termID
+    termMsgID
+    termEventMsg
+  }
+}
+`;
+const GET_TERMINAL_LIST_EVENT = gql`
+query TerminalListEvents($filter: TerminalMsgIDFilter) {
+  TerminalListEvents(filter: $filter) {
     termID
     termMsgID
     termEventMsg
@@ -232,6 +249,12 @@ export class DialogService {
       { query: GET_TERMINAL_LIST }
     );
   }
+
+  getTerminalListView(): QueryRef<Models.ResponseTerminalListView> {
+    return this.apollo.watchQuery<Models.ResponseTerminalListView>(
+      { query: GET_TERMINAL_LIST_VIEW }
+    );
+  }
   createRaspi(s: Models.Raspi):
     Observable<FetchResult<Models.ResponseCreateRaspi>> {
     return this.apollo.mutate({
@@ -272,6 +295,18 @@ export class DialogService {
     return this.apollo.watchQuery<Models.ResponseTerminalEvent>(
       {
         query: GET_TERMINAL_EVENT ,
+        variables: {
+          filter: {
+            termID: terminalID
+          }
+        }
+      }
+    );
+  }
+  getTerminalListEvent(terminalID: number): QueryRef<Models.ResponseTerminalListEvent> {
+    return this.apollo.watchQuery<Models.ResponseTerminalListEvent>(
+      {
+        query: GET_TERMINAL_LIST_EVENT ,
         variables: {
           filter: {
             termID: terminalID

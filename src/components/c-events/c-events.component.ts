@@ -1,5 +1,5 @@
 import { CEventsService } from './c-events.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../interface/Models';
 import { Subscription, Observable, map } from 'rxjs';
 import { Router } from '@angular/router';
@@ -7,45 +7,93 @@ import { Store } from '@ngrx/store';
 import * as Selectors from '../../store/selector';
 import Swal from 'sweetalert2';
 import { CEventsMsg } from 'src/utility/messages';
+import { DTabletselectViewComponent } from 'src/components/c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogService } from '../c-home-dialog/s-dialog-service/dialog.service';
 @Component({
   selector: 'app-c-events',
   templateUrl: './c-events.component.html',
   styleUrls: ['./c-events.component.sass'],
   providers: [CEventsService]
 })
-export class CEventsComponent implements OnInit, OnDestroy {
-
+export class CEventsComponent implements OnInit, OnDestroy  {
+  terminaViewDialog = {
+    minWidth: '320px',
+    maxWidth: '825px',
+  };
   executeToast = Swal.mixin({
     showConfirmButton: false,
     allowEscapeKey: false,
     allowOutsideClick: false
   });
+  terminalEvent$!: Observable<Models.TerminalEvents[]>;
   subscription: Subscription[] = [];
   eventMsgs$?: Observable<Models.EMessages[]>;
   machineName = localStorage.getItem("Machine");
+  terminalID: string | null = "";
+  selectedTerminal: string | null ="";
   constructor(
     private ceventservice: CEventsService,
     private router: Router,
-    private store: Store<Models.SwitchbotState>
+    private store: Store<Models.SwitchbotState>,
+    private terminalViewDialog: MatDialog,
+    private dialogService: DialogService
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
   }
   selected?: number;
   async ngOnInit(): Promise<void> {
-    await this.checkScan()
+    await this.validateWorkerLogin();
+    this.terminalID = localStorage?.getItem("Terminal");
+    this.selectedTerminal = localStorage?.getItem("TerminalName");
+
     this.initializeMessages();
+    if (!this.terminalID && !this.selectedTerminal ) {
+      this.openDialogTerminalSelectView();
+    } else if (this.terminalID && this.selectedTerminal ){
+      this.initializedTerminalListEvent(parseInt(this.terminalID));
+    }
   }
 
-  async checkScan(): Promise<void> {
+  async initializedTerminalListEvent(termID: number): Promise<void> {
+    await this.dialogService.getTerminalListEvent(termID).refetch();
+    this.terminalEvent$ = this.dialogService
+      .getTerminalListEvent(termID)
+      .valueChanges.pipe(
+        map(({ data }) => {
+          return data.TerminalListEvents;
+        })
+      );
+  }
+  reselectTerminal(): void {
+    this.openDialogTerminalSelectView();
+  }
+  openDialogTerminalSelectView(): void {
+    localStorage.removeItem("Terminal");
+    localStorage.removeItem("TerminalName");
+   const dialogRef = this.terminalViewDialog.open(DTabletselectViewComponent, {
+      disableClose: true,
+      minWidth: this.terminaViewDialog.minWidth,
+    });
+
+    dialogRef.afterClosed().subscribe((value: Models.Terminal) => {
+      this.initializedTerminalListEvent(value.terminalID);
+      this.selectedTerminal = value.terminalName;
+     localStorage.setItem("Terminal", (value.terminalID).toString());
+     localStorage.setItem("TerminalName", value.terminalName);
+    });
+  }
+  async validateWorkerLogin(): Promise<void> {
     this.subscription.push(
       this.store.select(Selectors.getWorkerInfo).subscribe((data) => {
         if (!data[0]) this.router.navigate(['scan']);
       })
     )
   }
-  async errorSelect(d: Models.EMessages): Promise<void> {
+  async errorSelect(d: Models.TerminalEvents): Promise<void> {
     Swal.fire({
-      title: "「" + d.eventMSG + "」",
+      title: "「" + d.termEventMsg + "」",
       text: CEventsMsg.askTostartMachine,
       icon: 'question',
       showCancelButton: true,
@@ -62,7 +110,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
             Swal.showLoading();
           }
         });
-        this.subscription.push(this.ceventservice.sendEvent(d.eventMSGID)
+        this.subscription.push(this.ceventservice.sendEvent(d.termMsgID)
           .subscribe(async ({ data }) => {
             if (data?.createEventLogs === "success") {
               this.confirmSound();

@@ -41,6 +41,7 @@ import { CQrpageComponent } from '../components/c-qrpage/c-qrpage.component';
 import { DPassEditComponent } from '../components/c-home-dialog/d-pass-edit/d-pass-edit.component';
 import { CLoginComponent } from '../components/c-login/c-login.component';
 import { DTabletmsgViewComponent } from '../components/c-home-dialog/d-tabletmsg-view/d-tabletmsg-view.component';
+import { DTabletselectViewComponent } from '../components/c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
 
 registerLocaleData(localeJa);
 
@@ -65,7 +66,8 @@ registerLocaleData(localeJa);
     CQrpageComponent,
     DPassEditComponent,
     CLoginComponent,
-    DTabletmsgViewComponent
+    DTabletmsgViewComponent,
+    DTabletselectViewComponent
   ],
   imports: [
     BrowserModule,

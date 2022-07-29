@@ -123,11 +123,18 @@ export interface ResponseSwitchbotList {
 export interface ResponseTerminalEvent{
   TerminalEvents: TerminalEvents[] | []
 }
+export interface ResponseTerminalListEvent{
+  TerminalListEvents: TerminalEvents[] | []
+}
 export interface ResponseEventMsgList {
   EventMsgList: EMessages[]
 }
 export interface ResponseTerminalList {
   TerminalList: Terminal[] | [];
+}
+
+export interface ResponseTerminalListView {
+  TerminalListView: Terminal[] | [];
 }
 export interface ReponseUpdateRaspi {
   updateRaspi: string
