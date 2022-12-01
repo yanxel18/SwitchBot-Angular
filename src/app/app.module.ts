@@ -42,6 +42,8 @@ import { DPassEditComponent } from '../components/c-home-dialog/d-pass-edit/d-pa
 import { CLoginComponent } from '../components/c-login/c-login.component';
 import { DTabletmsgViewComponent } from '../components/c-home-dialog/d-tabletmsg-view/d-tabletmsg-view.component';
 import { DTabletselectViewComponent } from '../components/c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
+import { CWorkerselectComponent } from '../components/c-workerselect/c-workerselect.component';
+import { CWorkerselectService } from 'src/components/c-workerselect/c-workerselect.service';
 
 registerLocaleData(localeJa);
 
@@ -67,7 +69,8 @@ registerLocaleData(localeJa);
     DPassEditComponent,
     CLoginComponent,
     DTabletmsgViewComponent,
-    DTabletselectViewComponent
+    DTabletselectViewComponent,
+    CWorkerselectComponent
   ],
   imports: [
     BrowserModule,
@@ -89,6 +92,7 @@ registerLocaleData(localeJa);
     HttpErrorMessageboxService,
     CEventsService,
     DialogService,
+    CWorkerselectService,
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
     { provide: LOCALE_ID, useValue: "ja-JP" },
   ],

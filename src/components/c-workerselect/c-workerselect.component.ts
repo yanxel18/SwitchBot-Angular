@@ -1,6 +1,6 @@
 import { Component, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CQrscanService } from './c-qrscan.service';
+import { CWorkerselectService } from './c-workerselect.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import * as Models from '../../interface/Models';
 import { Router } from '@angular/router';
@@ -8,13 +8,12 @@ import * as Actions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-c-qrscan',
-  templateUrl: './c-qrscan.component.html',
-  styleUrls: ['./c-qrscan.component.sass'],
-  providers: [CQrscanService]
+  selector: 'app-c-workerselect',
+  templateUrl: './c-workerselect.component.html',
+  styleUrls: ['./c-workerselect.component.sass'],
+  providers: [CWorkerselectService]
 })
-
-export class CQrscanComponent implements AfterViewInit, OnDestroy {
+export class CWorkerselectComponent implements  AfterViewInit, OnDestroy  {
   scannedQRData: string[] = [];
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
@@ -23,7 +22,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   @ViewChild('qrscan') scanTxt!: ElementRef;
   constructor(
     private router: Router,
-    private cqrscanservice: CQrscanService,
+    private cworkerselectservice: CWorkerselectService,
     private store: Store<Models.SwitchbotState>
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -82,7 +81,7 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   async proceed(): Promise<void> {
     if (this.scannedQRData.length === this.MAX_SCAN) {
       this.unsubscribeF();
-      this.querySubscription.push(this.cqrscanservice.checkQRdata(this.scannedQRData)
+      this.querySubscription.push(this.cworkerselectservice.checkQRdata(this.scannedQRData)
         .subscribe(({ data }) => {
           const userInfo = data?.WorkerToken.ScanInfo?.UInfo;
           if (data?.WorkerToken && userInfo) {
