@@ -7,9 +7,9 @@ import { Store } from '@ngrx/store';
 import * as Selectors from '../../store/selector';
 import Swal from 'sweetalert2';
 import { CEventsMsg } from 'src/utility/messages';
-import { DTabletselectViewComponent } from 'src/components/c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../c-home-dialog/s-dialog-service/dialog.service';
+import { DTabletselectViewComponent } from '../c-workerselect-dialog/d-tabletselect-view/d-tabletselect-view.component';
 @Component({
   selector: 'app-c-events',
   templateUrl: './c-events.component.html',

@@ -1,35 +1,73 @@
-import { Component, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CWorkerselectService } from './c-workerselect.service';
-import { Subscription } from 'rxjs/internal/Subscription';
+import { Subscription,Observable, map } from 'rxjs';
 import * as Models from '../../interface/Models';
 import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import Swal from 'sweetalert2';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DTabletselectViewComponent } from '../c-workerselect-dialog/d-tabletselect-view/d-tabletselect-view.component';
 @Component({
   selector: 'app-c-workerselect',
   templateUrl: './c-workerselect.component.html',
   styleUrls: ['./c-workerselect.component.sass'],
   providers: [CWorkerselectService]
 })
-export class CWorkerselectComponent implements  AfterViewInit, OnDestroy  {
-  scannedQRData: string[] = [];
+export class CWorkerselectComponent implements OnInit, OnDestroy  {
+  terminaViewDialog = {
+    minWidth: '320px',
+    maxWidth: '825px',
+  };
+  terminalEvent$!: Observable<Models.TerminalEvents[]>;
+  terminalID: string | null = "";
+  machineName = localStorage.getItem("Machine");
+  scannedQRData: string[] = []; 
+  selectedTerminal: string | null ="";
+
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
+  workerList$?: Observable<Models.WorkerSelect[]>;
+  selected?: number;
   MAX_SCAN = 2;
   MAX_QRCODE_LENGTH = 1;
   @ViewChild('qrscan') scanTxt!: ElementRef;
   constructor(
     private router: Router,
     private cworkerselectservice: CWorkerselectService,
-    private store: Store<Models.SwitchbotState>
+    private store: Store<Models.SwitchbotState>,
+    private terminalViewDialog: MatDialog
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.removeItems();
   }
-  ngAfterViewInit(): void {
-    this.scanTxt.nativeElement.focus();
+  async ngOnInit(): Promise<void> {
+    await this.initializeWorkerList();
+    this.terminalID = localStorage?.getItem("Terminal");
+    this.selectedTerminal = localStorage?.getItem("TerminalName");
+    if (!this.terminalID && !this.selectedTerminal ) {
+      this.openDialogTerminalSelectView();
+    } 
+  }
+  reselectTerminal(): void {
+    this.openDialogTerminalSelectView();
+  }
+  openDialogTerminalSelectView(): void {
+    localStorage.removeItem("Terminal");
+    localStorage.removeItem("TerminalName");
+   const dialogRef = this.terminalViewDialog.open(DTabletselectViewComponent, {
+      disableClose: true,
+      minWidth: this.terminaViewDialog.minWidth,
+    });
+
+    dialogRef.afterClosed().subscribe((value: Models.Terminal) => {
+      if (value){
+        this.selectedTerminal = value.terminalName;
+     localStorage.setItem("Terminal", (value.terminalID).toString());
+     localStorage.setItem("TerminalName", value.terminalName);
+      }
+    });
   }
   qrform = new FormGroup({
     qrscantxt: new FormControl('')
@@ -39,6 +77,18 @@ export class CWorkerselectComponent implements  AfterViewInit, OnDestroy  {
     this.processBtn = false;
     this.qrform.get("qrscantxt")!.setValue("");
     this.unsubscribeF();
+  }
+
+  async initializeWorkerList(): Promise<void>{
+    await this.cworkerselectservice.getworkerSelect().refetch();
+    this.workerList$ = this.cworkerselectservice.getworkerSelect()
+      .valueChanges.pipe(map (({data}) => {
+          return data.WorkerSelect;
+      }));
+  }
+
+  selectedWorker(value: Models.WorkerSelect){
+
   }
   async onScan(event: Event): Promise<void> {
     const getScanValue: string = (event.target as HTMLInputElement).value;

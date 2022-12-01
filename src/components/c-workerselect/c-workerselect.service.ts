@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FetchResult } from '@apollo/client/core';
-import { Apollo, gql} from 'apollo-angular';
+import { Apollo, gql, QueryRef} from 'apollo-angular';
 import { Observable } from 'rxjs';
 import * as Models from '../../interface/Models'
-
 
 const GET_WORKERTOKEN = gql`
   mutation WorkerToken($machineQrScan: String!, $userQrScan: String!) {
@@ -23,6 +22,14 @@ const GET_WORKERTOKEN = gql`
 }
 `;
 
+const GET_WORKERSELECT = gql`
+    query WorkerSelect {
+      WorkerSelect {
+        FullName
+        UserQR
+      }
+    }
+`;
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +45,12 @@ export class CWorkerselectService {
         userQrScan: QRData[0],
         machineQrScan: QRData[1]
       }
+    })
+  }
+
+  getworkerSelect(): QueryRef<Models.ResponseWorkerSelect>{
+    return this.apollo.watchQuery<Models.ResponseWorkerSelect>({
+      query: GET_WORKERSELECT
     })
   }
 }

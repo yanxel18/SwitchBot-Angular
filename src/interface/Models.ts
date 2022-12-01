@@ -18,7 +18,13 @@ export interface LoginInfo {
   GIDFull: string,
   Pass: string
 }
-
+export interface WorkerSelect{ 
+  FullName?: string,
+  UserQR?: string, 
+}
+export interface ResponseWorkerSelect{
+  WorkerSelect: WorkerSelect[] | []
+}
 export interface AccessInfo {
   accessInfo: {
     UserInfo?: WorkerInfo,

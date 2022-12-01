@@ -1,44 +1,18 @@
-<div class="scanner-container" fxLayout="col wrap" fxLayoutAlign="center">
-    <div class="qr-header-text" fxLayout="col wrap" fxLayoutAlign="center center">
-      <h1>QR コードスキャン</h1>
-    </div>
-    <div class="qr-container" fxLayout="col wrap" fxLayoutAlign="center">
-      <div id="container" class="mat-elevation-z6">
-        <div class="item">
-          <img src="../assets/images/qrcode.png" />
+<mat-card class="message-container"> 
+      <div class="selected-terminal-div" fxLayout="row wrap" fxLayoutAlign="center">
+        <a (click)="reselectTerminal()" class="selected-terminal-link"><h1>{{selectedTerminal}}</h1></a>
+      </div> 
+      <mat-divider></mat-divider>
+      <div class="message-sub-container">  
+      <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!workerList$">
+        <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+      </div>
+      <div class="button-container" *ngIf="workerList$" fxLayout="row wrap" fxLayoutAlign="center">
+        <div class="buttons-loop" *ngFor="let item of (workerList$ | async);let i=index">
+          <button  [ngClass]="selected === i ? 'error-message-button-red' : 'error-message-button'"
+            (click)="selectedWorker(item);selected = i" mat-button [class.mat-elevation-z1]="true">{{item.FullName}}</button>
         </div>
-        <div class="circle" style="animation-delay: 0s"></div>
-        <div class="circle" style="animation-delay: 1s"></div>
-        <div class="circle" style="animation-delay: 2s"></div>
-        <div class="circle" style="animation-delay: 3s"></div>
       </div>
     </div>
-    <form [formGroup]="qrform">
-      <div class="qr-button-containers" fxLayout="col wrap" fxLayoutAlign="center">
-        <div class="qr-scan-buttons" fxLayout="col wrap" fxLayoutAlign="center center">
-          <button class="worker-machine-button" mat-flat-button>
-            <span *ngIf="scannedQRData[0]" class="material-icons worker-machine-icon-success">check_circle</span>
-            <span *ngIf="!scannedQRData[0]"
-              class="material-icons-outlined worker-machine-icon-blank">radio_button_unchecked</span>
-            作業者のQR</button>
-          <button class="worker-machine-button" mat-flat-button>
-            <span *ngIf="scannedQRData[1]" class="material-icons worker-machine-icon-success">check_circle</span>
-            <span *ngIf="!scannedQRData[1]"
-              class="material-icons-outlined worker-machine-icon-blank">radio_button_unchecked</span>
-            設備のQR</button>
-        </div>
-        <div *ngIf="scannedQRData.length" class="qr-footer-refresh" fxLayout="col wrap" fxLayoutAlign="center center">
-          <button (click)="resetScan()" class="mat-elevation-z0 qr-refresh-button" mat-mini-fab>
-            <span class="material-icons-outlined qr-refresh-button-icon">refresh</span>
-          </button>
-        </div>
-        <div class="qr-footer-submit" fxLayout="col wrap" fxLayoutAlign="center center">
-          <button [disabled]="!processBtn" (click)="proceed()" class="submit-button" mat-flat-button>操作開始</button>
-        </div>
-        <input hideKeyboard formControlName="qrscantxt" class="scan-text" #qrscan type="text" onblur="this.focus()"
-          (change)="onScan($event)" (keyup.enter)="onEnter()" (keyup.escape)="resetScan()">
-        {{ qrscan.focus() }}
-      </div>
-    </form>
-  </div>
   
+  </mat-card>
