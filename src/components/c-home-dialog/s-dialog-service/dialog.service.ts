@@ -126,6 +126,15 @@ const GET_MACHINE_LIST = gql`
   }
 `;
 
+const GET_MACHINE_SELECT = gql`
+  query MachineSelect {
+    MachineSelect { 
+      machineName 
+      machineQR
+    }
+  }
+`;
+
 const DELETE_RASPI = gql`
   mutation DeleteRaspi($input: RaspiDeleteParam!) {
   deleteRaspi(input: $input)
@@ -291,6 +300,12 @@ export class DialogService {
     );
   }
 
+  getMachineSelect(): QueryRef<Models.ResponseMachineSelect> {
+    return this.apollo.watchQuery<Models.ResponseMachineSelect>(
+      { query: GET_MACHINE_SELECT}
+    );
+  }
+
   getTerminalEvent(terminalID: number): QueryRef<Models.ResponseTerminalEvent> {
     return this.apollo.watchQuery<Models.ResponseTerminalEvent>(
       {
@@ -303,13 +318,14 @@ export class DialogService {
       }
     );
   }
-  getTerminalListEvent(terminalID: number): QueryRef<Models.ResponseTerminalListEvent> {
+  getTerminalListEvent(terminalID: number,termAction: number): QueryRef<Models.ResponseTerminalListEvent> {
     return this.apollo.watchQuery<Models.ResponseTerminalListEvent>(
       {
         query: GET_TERMINAL_LIST_EVENT ,
         variables: {
           filter: {
-            termID: terminalID
+            termID: terminalID,
+            termAction: termAction
           }
         }
       }

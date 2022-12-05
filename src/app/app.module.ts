@@ -41,9 +41,10 @@ import { CQrpageComponent } from '../components/c-qrpage/c-qrpage.component';
 import { DPassEditComponent } from '../components/c-home-dialog/d-pass-edit/d-pass-edit.component';
 import { CLoginComponent } from '../components/c-login/c-login.component';
 import { DTabletmsgViewComponent } from '../components/c-home-dialog/d-tabletmsg-view/d-tabletmsg-view.component';
-import { DTabletselectViewComponent } from '../components/c-workerselect-dialog/d-tabletselect-view/d-tabletselect-view.component';
+import { DTabletselectViewComponent } from '../components/c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
 import { CWorkerselectComponent } from '../components/c-workerselect/c-workerselect.component';
 import { CWorkerselectService } from 'src/components/c-workerselect/c-workerselect.service';
+import { DMachineselectDialogComponent } from '../components/c-home-dialog/d-machineselect/d-machineselect-dialog.component';
 
 
 registerLocaleData(localeJa);
@@ -71,7 +72,8 @@ registerLocaleData(localeJa);
     CLoginComponent,
     DTabletmsgViewComponent,
     DTabletselectViewComponent,
-    CWorkerselectComponent
+    CWorkerselectComponent,
+    DMachineselectDialogComponent
   ],
   imports: [
     BrowserModule,

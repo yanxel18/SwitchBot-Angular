@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import { CEventsMsg } from 'src/utility/messages';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../c-home-dialog/s-dialog-service/dialog.service';
-import { DTabletselectViewComponent } from '../c-workerselect-dialog/d-tabletselect-view/d-tabletselect-view.component';
+import { DTabletselectViewComponent } from '../c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
 @Component({
   selector: 'app-c-events',
   templateUrl: './c-events.component.html',
@@ -52,14 +52,14 @@ export class CEventsComponent implements OnInit, OnDestroy  {
     if (!this.terminalID && !this.selectedTerminal ) {
       this.openDialogTerminalSelectView();
     } else if (this.terminalID && this.selectedTerminal ){
-      this.initializedTerminalListEvent(parseInt(this.terminalID));
+      this.initializedTerminalListEvent(parseInt(this.terminalID),0);
     }
   }
 
-  async initializedTerminalListEvent(termID: number): Promise<void> {
-    await this.dialogService.getTerminalListEvent(termID).refetch();
+  async initializedTerminalListEvent(termID: number, termAction: number): Promise<void> {
+    await this.dialogService.getTerminalListEvent(termID,0).refetch();
     this.terminalEvent$ = this.dialogService
-      .getTerminalListEvent(termID)
+      .getTerminalListEvent(termID,termAction)
       .valueChanges.pipe(
         map(({ data }) => {
           return data.TerminalListEvents;
@@ -78,7 +78,7 @@ export class CEventsComponent implements OnInit, OnDestroy  {
     });
 
     dialogRef.afterClosed().subscribe((value: Models.Terminal) => {
-      this.initializedTerminalListEvent(value.terminalID);
+      this.initializedTerminalListEvent(value.terminalID,0);
       this.selectedTerminal = value.terminalName;
      localStorage.setItem("Terminal", (value.terminalID).toString());
      localStorage.setItem("TerminalName", value.terminalName);

@@ -7,8 +7,9 @@ import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import Swal from 'sweetalert2';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DTabletselectViewComponent } from '../c-workerselect-dialog/d-tabletselect-view/d-tabletselect-view.component';
+import { DMachineselectDialogComponent } from '../c-home-dialog/d-machineselect/d-machineselect-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+ 
 @Component({
   selector: 'app-c-workerselect',
   templateUrl: './c-workerselect.component.html',
@@ -16,16 +17,15 @@ import { DTabletselectViewComponent } from '../c-workerselect-dialog/d-tabletsel
   providers: [CWorkerselectService]
 })
 export class CWorkerselectComponent implements OnInit, OnDestroy  {
-  terminaViewDialog = {
+  terminalViewDialogSize = {
     minWidth: '320px',
     maxWidth: '825px',
   };
-  terminalEvent$!: Observable<Models.TerminalEvents[]>;
-  terminalID: string | null = "";
+  terminalEvent$!: Observable<Models.TerminalEvents[]>; 
   machineName = localStorage.getItem("Machine");
   scannedQRData: string[] = []; 
-  selectedTerminal: string | null ="";
-
+  selectedMachine: string | null = "";
+  selectedMachineQR: string | null = "";
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
   workerList$?: Observable<Models.WorkerSelect[]>;
@@ -37,35 +37,36 @@ export class CWorkerselectComponent implements OnInit, OnDestroy  {
     private router: Router,
     private cworkerselectservice: CWorkerselectService,
     private store: Store<Models.SwitchbotState>,
-    private terminalViewDialog: MatDialog
+    private machineSelectDialog: MatDialog
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.removeItems();
   }
   async ngOnInit(): Promise<void> {
-    await this.initializeWorkerList();
-    this.terminalID = localStorage?.getItem("Terminal");
-    this.selectedTerminal = localStorage?.getItem("TerminalName");
-    if (!this.terminalID && !this.selectedTerminal ) {
-      this.openDialogTerminalSelectView();
+    await this.initializeWorkerList(); 
+    this.selectedMachine = localStorage?.getItem("MachineName");
+    this.selectedMachineQR = localStorage?.getItem("MachineQR");
+    if (!this.selectedMachine || !this.selectedMachineQR ) {
+      this.openMachineSelect();
     } 
   }
   reselectTerminal(): void {
-    this.openDialogTerminalSelectView();
+    this.openMachineSelect();
   }
-  openDialogTerminalSelectView(): void {
-    localStorage.removeItem("Terminal");
-    localStorage.removeItem("TerminalName");
-   const dialogRef = this.terminalViewDialog.open(DTabletselectViewComponent, {
+  openMachineSelect(): void { 
+    localStorage.removeItem("MachineName");
+    localStorage.removeItem("MachineQR");
+   const dialogRef = this.machineSelectDialog.open(DMachineselectDialogComponent, {
       disableClose: true,
-      minWidth: this.terminaViewDialog.minWidth,
+      minWidth: this.terminalViewDialogSize.minWidth,
     });
 
-    dialogRef.afterClosed().subscribe((value: Models.Terminal) => {
-      if (value){
-        this.selectedTerminal = value.terminalName;
-     localStorage.setItem("Terminal", (value.terminalID).toString());
-     localStorage.setItem("TerminalName", value.terminalName);
+    dialogRef.afterClosed().subscribe((value: Models.MachineSelect) => {
+      if (value.machineQR && value.machineName){
+        this.selectedMachine = value.machineName;
+        this.selectedMachineQR  = value.machineQR;
+        localStorage.setItem("MachineName",value.machineName)
+        localStorage.setItem("MachineQR", value.machineQR);
       }
     });
   }
@@ -88,7 +89,12 @@ export class CWorkerselectComponent implements OnInit, OnDestroy  {
   }
 
   selectedWorker(value: Models.WorkerSelect){
-
+     if (value.UserQR && this.selectedMachineQR) {
+      this.scannedQRData[0] = value.UserQR;
+      this.scannedQRData[1] = this.selectedMachineQR
+      this.proceed();
+     }
+ 
   }
   async onScan(event: Event): Promise<void> {
     const getScanValue: string = (event.target as HTMLInputElement).value;
@@ -124,10 +130,7 @@ export class CWorkerselectComponent implements OnInit, OnDestroy  {
     audio.src = "../../assets/sound/scan.mp3";
     audio.load();
     audio.play();
-  }
-  onEnter(): void {
-    if (this.scannedQRData[1]) this.proceed();
-  }
+  } 
   async proceed(): Promise<void> {
     if (this.scannedQRData.length === this.MAX_SCAN) {
       this.unsubscribeF();

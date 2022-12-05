@@ -67,6 +67,11 @@ export interface MachineListView {
   machineSwitchbotID?: number
   machineQR?: string
 }
+
+export interface MachineSelect { 
+  machineName?: string, 
+  machineQR?: string
+}
 export interface SwitchBot {
   switchbotID?: number,
   switchbotName?: string,
@@ -101,6 +106,7 @@ export interface TerminalEvents {
   termID: number,
   termMsgID: number,
   termEventMsg: string,
+  termAction: number
 }
 
 export interface SwitchbotState {
@@ -160,7 +166,9 @@ export interface ResponseCreateTabletEvent {
 export interface ResponseMachineViewList {
   MachineViewList: MachineListView[] | []
 }
-
+export interface ResponseMachineSelect {
+  MachineSelect: MachineSelect[] | []
+}
 export interface ResponseMachineList {
   MachineList: MachineListView[] | []
 }
