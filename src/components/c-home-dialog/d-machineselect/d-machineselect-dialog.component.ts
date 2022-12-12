@@ -12,7 +12,7 @@ import { DialogService } from '../s-dialog-service/dialog.service';
 })
 export class DMachineselectDialogComponent implements OnInit,OnDestroy {
   subscription: Subscription[] = [];
-  terminalList$!: Observable<Models.MachineSelect[]>;
+  machineList$!: Observable<Models.MachineSelect[]>;
   selected?: number;
 
   executeToast = Swal.mixin({
@@ -32,13 +32,13 @@ export class DMachineselectDialogComponent implements OnInit,OnDestroy {
 
   async initializedMachineList(): Promise<void> {
     await this.dialogService.getMachineSelect().refetch();
-    this.terminalList$ = this.dialogService.getMachineSelect().valueChanges.pipe(
+    this.machineList$ = this.dialogService.getMachineSelect().valueChanges.pipe(
       map(({ data }) => {
         return data.MachineSelect;
       })
     );
   }
-  async terminalSelect(selectedItem: Models.MachineSelect): Promise<void> {
+  async machineSelect(selectedItem: Models.MachineSelect): Promise<void> {
     this.dialogRef.close(selectedItem);
   }
   ngOnDestroy(): void {

@@ -1,18 +1,39 @@
-<mat-card class="message-container"> 
-      <div class="selected-terminal-div" fxLayout="row wrap" fxLayoutAlign="center">
-        <a (click)="reselectTerminal()" class="selected-terminal-link"><h1>{{selectedMachine}}</h1></a>
-      </div> 
-      <mat-divider></mat-divider>
-      <div class="message-sub-container">  
-      <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!workerList$">
-        <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
-      </div>
-      <div class="button-container" *ngIf="workerList$" fxLayout="row wrap" fxLayoutAlign="center">
-        <div class="buttons-loop" *ngFor="let item of (workerList$ | async);let i=index">
-          <button  [ngClass]="selected === i ? 'error-message-button-red' : 'error-message-button'"
-            (click)="selectedWorker(item);selected = i" mat-button [class.mat-elevation-z1]="true">{{item.FullName}}</button>
-        </div>
+<mat-card class="message-container">
+  <div class="selected-terminal-div" fxLayout="row wrap" fxLayoutAlign="center">
+    <a (click)="reselectTerminal()" class="selected-terminal-link"
+      ><h1>{{ selectedMachine }}</h1></a
+    >
+  </div>
+  <mat-divider></mat-divider>
+  <div class="message-sub-container">
+    <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!workerList$">
+      <mat-spinner
+        [diameter]="50"
+        [strokeWidth]="120"
+        class="spinner"
+      ></mat-spinner>
+    </div>
+    <div
+      class="button-container"
+      *ngIf="workerList$"
+      fxLayout="row wrap"
+      fxLayoutAlign="center"
+    >
+      <div
+        class="buttons-loop"
+        *ngFor="let item of workerList$ | async; let i = index"
+      >
+        <button
+          [ngClass]="
+            selected === i ? 'error-message-button-red' : 'error-message-button'
+          "
+          (click)="selectedWorker(item); selected = i"
+          mat-button
+          [class.mat-elevation-z1]="true"
+        >
+          {{ item.FullName }}
+        </button>
       </div>
     </div>
-  
-  </mat-card>
+  </div>
+</mat-card>

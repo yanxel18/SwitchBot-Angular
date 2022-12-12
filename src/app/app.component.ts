@@ -141,7 +141,7 @@ export class AppComponent implements OnDestroy, OnInit {
     const audio = new Audio();
     audio.src = "../assets/sound/error.mp3";
     audio.load();
-    audio.play();
+    //audio.play();
   }
   private scanError(): void {
     this.errorSound();

@@ -6,54 +6,103 @@
     <h2>アカウント登録</h2>
   </div>
 </div>
-<form [formGroup]="accountRegForm" (ngSubmit)="submitAccountReg()" (keydown.enter)="$event.preventDefault()">
-  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!accountTypeList$">
-    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+<form
+  [formGroup]="accountRegForm"
+  (ngSubmit)="submitAccountReg()"
+  (keydown.enter)="$event.preventDefault()"
+>
+  <div
+    fxLayout="col wrap"
+    fxLayoutAlign="center center"
+    *ngIf="!accountTypeList$"
+  >
+    <mat-spinner
+      [diameter]="50"
+      [strokeWidth]="120"
+      class="spinner"
+    ></mat-spinner>
   </div>
   <div mat-dialog-content *ngIf="accountTypeList$">
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
       <mat-form-field class="fieldflex">
         <mat-label>GID</mat-label>
-        <input formControlName="GIDFull" maxlength="20" matInput trim="blur">
-        <mat-error *ngIf="accountRegForm.get('GIDFull')?.invalid">{{gidFullErr()}}</mat-error>
+        <input formControlName="GIDFull" maxlength="20" matInput trim="blur" />
+        <mat-error *ngIf="accountRegForm.get('GIDFull')?.invalid">{{
+          gidFullErr()
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
       <mat-form-field class="fieldflex">
         <mat-label>氏名</mat-label>
-        <input formControlName="FullName" maxlength="50" matInput trim="blur">
-        <mat-error *ngIf="accountRegForm.get('FullName')?.invalid">{{fullNameErr()}}</mat-error>
+        <input formControlName="FullName" maxlength="50" matInput trim="blur" />
+        <mat-error *ngIf="accountRegForm.get('FullName')?.invalid">{{
+          fullNameErr()
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
-      <mat-form-field appearance="outline" class="fieldflex ">
+      <mat-form-field appearance="outline" class="fieldflex">
         <mat-label>権限</mat-label>
         <mat-select formControlName="AccLvl">
-          <mat-option *ngFor="let types of (accountTypeList$ | async)" [value]="types.acclvlID">
-            {{types.accType}}
+          <mat-option
+            *ngFor="let types of accountTypeList$ | async"
+            [value]="types.acclvlID"
+          >
+            {{ types.accType }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="accountRegForm.get('AccLvl')?.invalid">{{accLvlErrorMsg()}}</mat-error>
+        <mat-error *ngIf="accountRegForm.get('AccLvl')?.invalid">{{
+          accLvlErrorMsg()
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div class="form-group" fxLayout="col wrap" fxLayoutAlign="center center">
-      <mat-form-field appearance="outline" class="fieldflex ">
+      <mat-form-field appearance="outline" class="fieldflex">
         <mat-label>*パスワード</mat-label>
-        <input type="password" maxlength="25" formControlName="pass" matInput trim="blur" autocomplete="on">
-        <mat-error *ngIf="accountRegForm.get('pass')?.invalid">{{passwordAErrorMsg()}}</mat-error>
+        <input
+          type="password"
+          maxlength="25"
+          formControlName="pass"
+          matInput
+          trim="blur"
+          autocomplete="on"
+        />
+        <mat-error *ngIf="accountRegForm.get('pass')?.invalid">{{
+          passwordAErrorMsg()
+        }}</mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" class="fieldflex ">
+      <mat-form-field appearance="outline" class="fieldflex">
         <mat-label>*パスワードを再入力</mat-label>
-        <input type="password" maxlength="25" formControlName="passB" matInput trim="blur" autocomplete="on">
-        <mat-error *ngIf="accountRegForm.get('passB')?.invalid">{{passwordBErrorMsg()}}</mat-error>
+        <input
+          type="password"
+          maxlength="25"
+          formControlName="passB"
+          matInput
+          trim="blur"
+          autocomplete="on"
+        />
+        <mat-error *ngIf="accountRegForm.get('passB')?.invalid">{{
+          passwordBErrorMsg()
+        }}</mat-error>
       </mat-form-field>
     </div>
   </div>
   <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
-    <button type="submit" [disabled]="!accountTypeList$" mat-raised-button class="save-button">
+    <button
+      type="submit"
+      [disabled]="!accountTypeList$"
+      mat-raised-button
+      class="save-button"
+    >
       <mat-icon>save</mat-icon>
     </button>
-    <button type="button" (click)="closeDialog()" mat-stroked-button class="closebutton">
+    <button
+      type="button"
+      (click)="closeDialog()"
+      mat-stroked-button
+      class="closebutton"
+    >
       <mat-icon>cancel</mat-icon>
     </button>
   </div>

@@ -1,7 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CWorkerselectService } from './c-workerselect.service';
-import { Subscription,Observable, map } from 'rxjs';
+import { Subscription, Observable, map } from 'rxjs';
 import * as Models from '../../interface/Models';
 import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
@@ -9,23 +15,23 @@ import { Store } from '@ngrx/store';
 import Swal from 'sweetalert2';
 import { DMachineselectDialogComponent } from '../c-home-dialog/d-machineselect/d-machineselect-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
- 
+
 @Component({
   selector: 'app-c-workerselect',
   templateUrl: './c-workerselect.component.html',
   styleUrls: ['./c-workerselect.component.sass'],
-  providers: [CWorkerselectService]
+  providers: [CWorkerselectService],
 })
-export class CWorkerselectComponent implements OnInit, OnDestroy  {
+export class CWorkerselectComponent implements OnInit, OnDestroy {
   terminalViewDialogSize = {
     minWidth: '320px',
     maxWidth: '825px',
   };
-  terminalEvent$!: Observable<Models.TerminalEvents[]>; 
-  machineName = localStorage.getItem("Machine");
-  scannedQRData: string[] = []; 
-  selectedMachine: string | null = "";
-  selectedMachineQR: string | null = "";
+  terminalEvent$!: Observable<Models.TerminalEvents[]>;
+  machineName = localStorage.getItem('Machine');
+  scannedQRData: string[] = [];
+  selectedMachine: string | null = '';
+  selectedMachineQR: string | null = '';
   processBtn: boolean = false;
   querySubscription: Subscription[] = [];
   workerList$?: Observable<Models.WorkerSelect[]>;
@@ -43,58 +49,63 @@ export class CWorkerselectComponent implements OnInit, OnDestroy  {
     this.removeItems();
   }
   async ngOnInit(): Promise<void> {
-    await this.initializeWorkerList(); 
-    this.selectedMachine = localStorage?.getItem("MachineName");
-    this.selectedMachineQR = localStorage?.getItem("MachineQR");
-    if (!this.selectedMachine || !this.selectedMachineQR ) {
+    await this.initializeWorkerList();
+    this.selectedMachine = localStorage?.getItem('MachineName');
+    this.selectedMachineQR = localStorage?.getItem('MachineQR');
+    if (!this.selectedMachine || !this.selectedMachineQR) {
       this.openMachineSelect();
-    } 
+    }
   }
   reselectTerminal(): void {
     this.openMachineSelect();
   }
-  openMachineSelect(): void { 
-    localStorage.removeItem("MachineName");
-    localStorage.removeItem("MachineQR");
-   const dialogRef = this.machineSelectDialog.open(DMachineselectDialogComponent, {
-      disableClose: true,
-      minWidth: this.terminalViewDialogSize.minWidth,
-    });
+  openMachineSelect(): void {
+    localStorage.removeItem('MachineName');
+    localStorage.removeItem('MachineQR');
+    const dialogRef = this.machineSelectDialog.open(
+      DMachineselectDialogComponent,
+      {
+        disableClose: true,
+        minWidth: this.terminalViewDialogSize.minWidth,
+      }
+    );
 
     dialogRef.afterClosed().subscribe((value: Models.MachineSelect) => {
-      if (value.machineQR && value.machineName){
+      if (value.machineQR && value.machineName) {
         this.selectedMachine = value.machineName;
-        this.selectedMachineQR  = value.machineQR;
-        localStorage.setItem("MachineName",value.machineName)
-        localStorage.setItem("MachineQR", value.machineQR);
+        this.selectedMachineQR = value.machineQR;
+        localStorage.setItem('MachineName', value.machineName);
+        localStorage.setItem('MachineQR', value.machineQR);
       }
     });
   }
   qrform = new FormGroup({
-    qrscantxt: new FormControl('')
-  })
+    qrscantxt: new FormControl(''),
+  });
   resetScan(): void {
     this.scannedQRData = [];
     this.processBtn = false;
-    this.qrform.get("qrscantxt")!.setValue("");
+    this.qrform.get('qrscantxt')!.setValue('');
     this.unsubscribeF();
   }
 
-  async initializeWorkerList(): Promise<void>{
+  async initializeWorkerList(): Promise<void> {
     await this.cworkerselectservice.getworkerSelect().refetch();
-    this.workerList$ = this.cworkerselectservice.getworkerSelect()
-      .valueChanges.pipe(map (({data}) => {
+    this.workerList$ = this.cworkerselectservice
+      .getworkerSelect()
+      .valueChanges.pipe(
+        map(({ data }) => {
           return data.WorkerSelect;
-      }));
+        })
+      );
   }
 
-  selectedWorker(value: Models.WorkerSelect){
-     if (value.UserQR && this.selectedMachineQR) {
+  selectedWorker(value: Models.WorkerSelect) {
+    if (value.UserQR && this.selectedMachineQR) {
       this.scannedQRData[0] = value.UserQR;
-      this.scannedQRData[1] = this.selectedMachineQR
+      this.scannedQRData[1] = this.selectedMachineQR;
       this.proceed();
-     }
- 
+    }
   }
   async onScan(event: Event): Promise<void> {
     const getScanValue: string = (event.target as HTMLInputElement).value;
@@ -102,13 +113,12 @@ export class CWorkerselectComponent implements OnInit, OnDestroy  {
     if (getScanValue.length >= this.MAX_QRCODE_LENGTH) {
       if (this.scannedQRData.length == 2) this.resetScan();
       if (this.scannedQRData.length < this.MAX_SCAN && getScanValue) {
-
         this.scannedQRData.push(getScanValue);
         if (this.scannedQRData[1]) {
           this.processBtn = true;
           await this.proceed();
         }
-        this.qrform.get("qrscantxt")!.setValue("");
+        this.qrform.get('qrscantxt')!.setValue('');
       } else this.resetScan();
     } else {
       const Toast = Swal.mixin({
@@ -116,61 +126,64 @@ export class CWorkerselectComponent implements OnInit, OnDestroy  {
         position: 'bottom',
         showCloseButton: true,
         showConfirmButton: false,
-        timer: 5000
+        timer: 5000,
       });
       Toast.fire({
         icon: 'error',
-        text: "QRコードが処理ができませんでした！"
+        text: 'QRコードが処理ができませんでした！',
       });
     }
-
   }
   scanSound(): void {
     const audio = new Audio();
-    audio.src = "../../assets/sound/scan.mp3";
+    audio.src = '../../assets/sound/scan.mp3';
     audio.load();
     audio.play();
-  } 
+  }
   async proceed(): Promise<void> {
     if (this.scannedQRData.length === this.MAX_SCAN) {
       this.unsubscribeF();
-      this.querySubscription.push(this.cworkerselectservice.checkQRdata(this.scannedQRData)
-        .subscribe(({ data }) => {
-          const userInfo = data?.WorkerToken.ScanInfo?.UInfo;
-          if (data?.WorkerToken && userInfo) {
-            this.setItems(data);
-            this.store.dispatch(Actions.LoadWorkerInfo({ payload: userInfo }))
-            this.store.dispatch(Actions.SetScan({ payload: true }));
-            this.router.navigate(['control']);
-          } else this.removeItems();
-        })
+      this.querySubscription.push(
+        this.cworkerselectservice
+          .checkQRdata(this.scannedQRData)
+          .subscribe(({ data }) => {
+            const userInfo = data?.WorkerToken.ScanInfo?.UInfo;
+            if (data?.WorkerToken && userInfo) {
+              this.setItems(data);
+              this.store.dispatch(
+                Actions.LoadWorkerInfo({ payload: userInfo })
+              );
+              this.store.dispatch(Actions.SetScan({ payload: true }));
+              this.router.navigate(['control']);
+            } else this.removeItems();
+          })
       );
-
     }
   }
   private setItems(data: Models.WorkerToken): void {
-    if (data.WorkerToken.Noket) localStorage.setItem("UserNoket", data.WorkerToken.Noket);
+    if (data.WorkerToken.Noket)
+      localStorage.setItem('UserNoket', data.WorkerToken.Noket);
     if (data.WorkerToken.ScanInfo) {
-      localStorage.setItem("Machine", data.WorkerToken.ScanInfo.machineName);
-      localStorage.setItem("WName", data.WorkerToken.ScanInfo.UInfo[0].FullName);
-      localStorage.setItem("GID", data.WorkerToken.ScanInfo.UInfo[0].GIDFull);
+      localStorage.setItem('Machine', data.WorkerToken.ScanInfo.machineName);
+      localStorage.setItem(
+        'WName',
+        data.WorkerToken.ScanInfo.UInfo[0].FullName
+      );
+      localStorage.setItem('GID', data.WorkerToken.ScanInfo.UInfo[0].GIDFull);
     }
-
-
   }
 
   private removeItems(): void {
-    this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }))
-    localStorage.removeItem("UserNoket");
-    localStorage.removeItem("WName");
-    localStorage.removeItem("GID");
-    localStorage.removeItem("Machine");
+    this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }));
+    localStorage.removeItem('UserNoket');
+    localStorage.removeItem('WName');
+    localStorage.removeItem('GID');
+    localStorage.removeItem('Machine');
   }
   unsubscribeF(): void {
-    this.querySubscription.forEach(x => x.unsubscribe());
+    this.querySubscription.forEach((x) => x.unsubscribe());
   }
   ngOnDestroy(): void {
     this.unsubscribeF();
   }
-
 }

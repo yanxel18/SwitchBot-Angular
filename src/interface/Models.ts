@@ -102,11 +102,19 @@ export interface eventMsgs {
 export interface CreateEventLogs {
   createEventLogs: string
 }
+export interface CreateEventLogsHold {
+  createEventLogsHold: string
+}
 export interface TerminalEvents {
   termID: number,
   termMsgID: number,
   termEventMsg: string,
   termAction: number
+}
+export interface TerminalListEventParam {
+  terminalID: number,
+  termAction?: number,
+  lang: string | null
 }
 
 export interface SwitchbotState {

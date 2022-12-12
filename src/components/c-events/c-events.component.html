@@ -1,27 +1,65 @@
 <mat-card class="message-container">
   <div class="header-wrapper" fxLayout="row wrap" fxLayoutAlign="center">
-    <button (click)="backButton()" class="back-button" mat-icon-button color="primary">
+    <button
+      (click)="backButton()"
+      class="back-button"
+      mat-icon-button
+      color="primary"
+    >
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h2>号機: {{machineName}} </h2>
+    <h2>号機: {{ machineName }}</h2>
+    <div class="language-button" fxLayout="row wrap" fxLayoutAlign="center">
+      <button class="button-language" (click)="activateLang('jp')" mat-button> 
+        日本語
+      </button>
+      <button class="button-language" (click)="activateLang('en')"  mat-button> 
+      　英語
+      </button>
+    </div>
+
   </div>
+
   <div class="selected-terminal-div" fxLayout="row wrap" fxLayoutAlign="center">
-    <a (click)="reselectTerminal()" class="selected-terminal-link">{{selectedTerminal}}</a>
+    <a (click)="reselectTerminal()" class="selected-terminal-link">{{
+      selectedTerminal
+    }}</a>
   </div>
 
   <mat-divider></mat-divider>
   <div class="message-sub-container">
-
-
-    <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!terminalEvent$">
-      <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
+    <div
+      fxLayout="col wrap"
+      fxLayoutAlign="center center"
+      *ngIf="!terminalEvent$"
+    >
+      <mat-spinner
+        [diameter]="50"
+        [strokeWidth]="120"
+        class="spinner"
+      ></mat-spinner>
     </div>
-    <div class="button-container" *ngIf="terminalEvent$" fxLayout="row wrap" fxLayoutAlign="center">
-      <div class="buttons-loop" *ngFor="let item of (terminalEvent$ | async);let i=index">
-        <button  [ngClass]="selected === i ? 'error-message-button-red' : 'error-message-button'"
-          (click)="errorSelect(item);selected = i" mat-button [class.mat-elevation-z1]="true">{{item.termEventMsg}}</button>
+    <div
+      class="button-container"
+      *ngIf="terminalEvent$"
+      fxLayout="row wrap"
+      fxLayoutAlign="center"
+    >
+      <div
+        class="buttons-loop"
+        *ngFor="let item of terminalEvent$ | async; let i = index"
+      >
+        <button
+          [ngClass]="
+            selected === i ? 'error-message-button-red' : 'error-message-button'
+          "
+          (click)="errorSelect(item); selected = i"
+          mat-button
+          [class.mat-elevation-z1]="true"
+        >
+          {{ item.termEventMsg }}
+        </button>
       </div>
     </div>
   </div>
-
 </mat-card>

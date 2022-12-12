@@ -45,6 +45,7 @@ import { DTabletselectViewComponent } from '../components/c-home-dialog/d-tablet
 import { CWorkerselectComponent } from '../components/c-workerselect/c-workerselect.component';
 import { CWorkerselectService } from 'src/components/c-workerselect/c-workerselect.service';
 import { DMachineselectDialogComponent } from '../components/c-home-dialog/d-machineselect/d-machineselect-dialog.component';
+import { DActionComponent } from '../components/c-home-dialog/d-action/d-action.component';
 
 
 registerLocaleData(localeJa);
@@ -73,7 +74,8 @@ registerLocaleData(localeJa);
     DTabletmsgViewComponent,
     DTabletselectViewComponent,
     CWorkerselectComponent,
-    DMachineselectDialogComponent
+    DMachineselectDialogComponent,
+    DActionComponent
   ],
   imports: [
     BrowserModule,

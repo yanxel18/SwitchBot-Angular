@@ -10,12 +10,12 @@ import { DPassEditComponent } from '../d-pass-edit/d-pass-edit.component';
   selector: 'app-d-account-view',
   templateUrl: './d-account-view.component.html',
   styleUrls: ['./d-account-view.component.sass'],
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class DAccountViewComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
   accountList$!: Observable<Models.WorkerInfo[]>;
-  displayedColumns: string[] = ['GID', '氏名', '操作'];;
+  displayedColumns: string[] = ['GID', '氏名', '操作'];
 
   regAccountDialog = {
     minWidth: '320px',
@@ -37,27 +37,27 @@ export class DAccountViewComponent implements OnInit, OnDestroy {
     private AccountEditDialog: MatDialog,
     private PassEditDialog: MatDialog,
     private dialogService: DialogService
-  ) { }
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.initializeAccountlist();
-
   }
 
   async initializeAccountlist(): Promise<void> {
     await this.dialogService.getAccountList().refetch();
-    this.accountList$ = this.dialogService.getAccountList()
-      .valueChanges.pipe(map(({ data }) => {
+    this.accountList$ = this.dialogService.getAccountList().valueChanges.pipe(
+      map(({ data }) => {
         return data.WorkerViewList;
-      }));
+      })
+    );
   }
   openDialogAccountReg(): void {
     const dialogRef = this.AccountRegDialog.open(DAccountRegComponent, {
       disableClose: true,
-      minWidth: this.regAccountDialog.minWidth
+      minWidth: this.regAccountDialog.minWidth,
     });
 
-    dialogRef.afterClosed().subscribe(d => {
+    dialogRef.afterClosed().subscribe((d) => {
       this.initializeAccountlist();
     });
   }
@@ -66,9 +66,9 @@ export class DAccountViewComponent implements OnInit, OnDestroy {
     const dialogRef = this.AccountEditDialog.open(DAccountEditComponent, {
       disableClose: true,
       minWidth: this.editAccountDialog.minWidth,
-      data: param
+      data: param,
     });
-    dialogRef.afterClosed().subscribe(d => {
+    dialogRef.afterClosed().subscribe((d) => {
       this.initializeAccountlist();
     });
   }
@@ -76,10 +76,10 @@ export class DAccountViewComponent implements OnInit, OnDestroy {
     const dialogRef = this.PassEditDialog.open(DPassEditComponent, {
       disableClose: true,
       minWidth: this.editPassDialog.minWidth,
-      data: param
+      data: param,
     });
 
-    dialogRef.afterClosed().subscribe(d => {
+    dialogRef.afterClosed().subscribe((d) => {
       this.initializeAccountlist();
     });
   }
@@ -88,6 +88,6 @@ export class DAccountViewComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
   ngOnDestroy(): void {
-    this.appSubscription.forEach(s => s.unsubscribe());
+    this.appSubscription.forEach((s) => s.unsubscribe());
   }
 }

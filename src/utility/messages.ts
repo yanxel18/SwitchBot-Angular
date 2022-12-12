@@ -4,8 +4,7 @@ interface ICEventsMsg {
   machineStarting: string,
   machineStarted: string
   error: string
-}
-
+} 
 interface IDAccountEditMsg {
   updateAccountTitle: string,
   askAccountUpdate: string,
@@ -103,13 +102,25 @@ interface IDSwitchbotViewMsg {
   switchbotDeleted: string,
   error: string
 }
+
+interface ISelectedActionMsg {
+  selectedActionTitle: string,　　
+  selectedActionHold: string,
+  error: string
+}
+
+export const DSelectedActionMsg: ISelectedActionMsg = {
+  selectedActionTitle: "を選択してよろしいですか？",　　
+  selectedActionHold: "設備イベントを待機済みです。",
+  error: "エラー発生！"
+}
+
 export const CEventsMsg: ICEventsMsg = {
   askTostartMachine: "設備を開始してよろしいですか？",
   machineStarting: "設備を起動しますので、しばらくお待ちください。",
   machineStarted: "設備起動が完了です！",
   error: "エラー発生！"
 }
-
 export const DAccountEditMsg: IDAccountEditMsg = {
   updateAccountTitle: "アカウント報告更新",
   askAccountUpdate: "アカウントを更新してよろしいですか？",

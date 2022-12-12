@@ -20,7 +20,11 @@ const SEND_EVENT = gql`
   createEventLogs(input: $input)
 }
 `;
-
+const SEND_EVENT_HOLD = gql`
+  mutation createEventLogsHold($input: EventParam!) {
+    createEventLogsHold(input: $input)
+}
+`;
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +42,16 @@ export class CEventsService {
   sendEvent(msgID: number): Observable<FetchResult<Models.CreateEventLogs>> {
     return this.apollo.mutate({
       mutation: SEND_EVENT,
+      variables: {
+        input: {
+          msgID
+        }
+      }
+    })
+  }
+  sendEventHold(msgID: number): Observable<FetchResult<Models.CreateEventLogsHold>> {
+    return this.apollo.mutate({
+      mutation: SEND_EVENT_HOLD,
       variables: {
         input: {
           msgID

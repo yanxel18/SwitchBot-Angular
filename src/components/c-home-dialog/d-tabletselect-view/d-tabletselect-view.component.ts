@@ -1,15 +1,10 @@
-import { DSwitchbotRegComponent } from '../d-switchbot-reg/d-switchbot-reg.component';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Models from '../../../interface/Models';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
-import { MatSelectChange } from '@angular/material/select';
-import { FormControl, FormGroup } from '@angular/forms';
-import { MatSelectionList } from '@angular/material/list';
-import { CEventsMsg, DTerminalEventMsg } from 'src/utility/messages';
-
+ 
 @Component({
   selector: 'app-d-tabletselect-view',
   templateUrl: './d-tabletselect-view.component.html',

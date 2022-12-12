@@ -306,26 +306,30 @@ export class DialogService {
     );
   }
 
-  getTerminalEvent(terminalID: number): QueryRef<Models.ResponseTerminalEvent> {
+  getTerminalEvent(param: Models.TerminalListEventParam): QueryRef<Models.ResponseTerminalEvent> {
     return this.apollo.watchQuery<Models.ResponseTerminalEvent>(
       {
         query: GET_TERMINAL_EVENT ,
         variables: {
           filter: {
-            termID: terminalID
+            termID: param.terminalID,
+            termAction: param.termAction,
+            lang: param.lang
           }
         }
       }
     );
   }
-  getTerminalListEvent(terminalID: number,termAction: number): QueryRef<Models.ResponseTerminalListEvent> {
+  getTerminalListEvent(param: Models.TerminalListEventParam): QueryRef<Models.ResponseTerminalListEvent> {
     return this.apollo.watchQuery<Models.ResponseTerminalListEvent>(
       {
         query: GET_TERMINAL_LIST_EVENT ,
         variables: {
           filter: {
-            termID: terminalID,
-            termAction: termAction
+            termID: param.terminalID,
+            termAction: param.termAction,
+            lang: param.lang
+              
           }
         }
       }

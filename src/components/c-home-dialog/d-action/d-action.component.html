@@ -1,0 +1,55 @@
+
+<div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!terminalEvent$">
+  <mat-spinner
+    [diameter]="50"
+    [strokeWidth]="120"
+    class="spinner"
+  ></mat-spinner>
+</div>
+
+<div mat-dialog-content>
+  <div
+    class="button-container"
+    *ngIf="terminalEvent$"
+    fxLayout="row wrap"
+    fxLayoutAlign="center"
+  >
+    <div
+      class="buttons-loop"
+      *ngFor="let item of terminalEvent$ | async; let i = index"
+    >
+      <button
+        [ngClass]="
+          selected === i ? 'error-message-button-red' : 'error-message-button'
+        "
+        (click)="terminalSelect(item); selected = i"
+        mat-button
+        [class.mat-elevation-z1]="true"
+      >
+        {{ item.termEventMsg }}
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions fxLayout="col center" fxLayoutAlign="center ">
+  <div fxLayout="row wrap" fxLayoutAlign="center ">
+    <button
+      type="button"
+      (click)="closeDialog()"
+      mat-stroked-button
+      class="closebutton"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="center ">
+    <button
+      type="button"
+      (click)="startMachine()"
+      mat-stroked-button
+      class="button-action"
+    >
+      設備スタート
+    </button>
+  </div> 
+</div>

@@ -1,26 +1,40 @@
 <div fxLayout="col wrap" fxLayoutAlign="center center">
-    <div>
-      <mat-icon class="header-icon">list_alt</mat-icon>
-    </div>
-    <div class="dialog-header">
-      <h2>タブレット選択</h2>
+  <div>
+    <mat-icon class="header-icon">list_alt</mat-icon>
+  </div>
+  <div class="dialog-header">
+    <h2>設備選択</h2>
+  </div>
+</div>
+<div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!machineList$">
+  <mat-spinner
+    [diameter]="50"
+    [strokeWidth]="120"
+    class="spinner"
+  ></mat-spinner>
+</div>
+<div mat-dialog-content>
+  <div
+    class="button-container"
+    *ngIf="machineList$"
+    fxLayout="row wrap"
+    fxLayoutAlign="center"
+  >
+    <div
+      class="buttons-loop"
+      *ngFor="let item of machineList$ | async; let i = index"
+    >
+      <button
+        [ngClass]="
+          selected === i ? 'error-message-button-red' : 'error-message-button'
+        "
+        (click)="machineSelect(item); selected = i"
+        mat-button
+        [class.mat-elevation-z1]="true"
+      >
+        <mat-icon>tablet_android</mat-icon>{{ item.machineName }}
+      </button>
     </div>
   </div>
-  <div fxLayout="col wrap" fxLayoutAlign="center center" *ngIf="!terminalList$">
-    <mat-spinner [diameter]="50" [strokeWidth]="120" class="spinner"></mat-spinner>
-  </div>
-  
-    <div mat-dialog-content>
-  
-  
-      <div class="button-container" *ngIf="terminalList$" fxLayout="row wrap" fxLayoutAlign="center">
-        <div class="buttons-loop" *ngFor="let item of (terminalList$ | async);let i=index">
-          <button  [ngClass]="selected === i ? 'error-message-button-red' : 'error-message-button'"
-            (click)="terminalSelect(item);selected = i" mat-button [class.mat-elevation-z1]="true"><mat-icon>tablet_android</mat-icon>{{item.machineName}}</button>
-        </div>
-      </div>
-    </div>
-    <div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center">
-  
-    </div>
-  
+</div>
+<div mat-dialog-actions fxLayout="col wrap" fxLayoutAlign="center center"></div>

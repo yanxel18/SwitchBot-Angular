@@ -22,6 +22,8 @@ export class DTabletmsgViewComponent implements OnInit, OnDestroy {
   filteredEvents: Models.TerminalEvents[] = [];
   allowMultiple: boolean = false;
   TERMINAL_AUTOSELECT = '0';
+  terminalID: string | null = "";
+  defaultLang: string | null = '';
   @ViewChild('eventlist') eventList: MatSelectionList | undefined;
 
   constructor(
@@ -34,6 +36,8 @@ export class DTabletmsgViewComponent implements OnInit, OnDestroy {
   });
 
   async ngOnInit(): Promise<void> {
+    this.terminalID = localStorage?.getItem("Terminal"); 
+    if (!localStorage?.getItem('lang')) localStorage.setItem('lang','jp');
     await this.initializedTerminalList();
     await this.initializedMessageList();
   }
@@ -56,9 +60,15 @@ export class DTabletmsgViewComponent implements OnInit, OnDestroy {
   }
 
   async initializedTerminal(termID: number): Promise<void> {
-    await this.dialogService.getTerminalEvent(termID).refetch();
+    const defaulTermAction = 0;
+    const paramval : Models.TerminalListEventParam  ={
+      terminalID: termID,
+      termAction: defaulTermAction,
+      lang: this.defaultLang 
+  }
+    await this.dialogService.getTerminalEvent(paramval).refetch();
     this.terminalEvent$ = this.dialogService
-      .getTerminalEvent(termID)
+      .getTerminalEvent(paramval)
       .valueChanges.pipe(
         map(({ data }) => {
           return data.TerminalEvents;
