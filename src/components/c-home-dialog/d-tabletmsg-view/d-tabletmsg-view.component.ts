@@ -6,7 +6,7 @@ import { Subscription, Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { MatSelectChange } from '@angular/material/select';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSelectionList } from '@angular/material/list';
 import { DTerminalEventMsg } from 'src/utility/messages';
 @Component({
@@ -30,9 +30,9 @@ export class DTabletmsgViewComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<DTabletmsgViewComponent>,
     private dialogService: DialogService
   ) {}
-  terminalForm = new FormGroup({
-    terminalID: new FormControl(this.TERMINAL_AUTOSELECT),
-    eventMSG: new FormControl()
+  terminalForm = new UntypedFormGroup({
+    terminalID: new UntypedFormControl(this.TERMINAL_AUTOSELECT),
+    eventMSG: new UntypedFormControl()
   });
 
   async ngOnInit(): Promise<void> {

@@ -4,7 +4,7 @@ import * as Models from '../../../interface/Models';
 import { MatDialogRef } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { SpecialCharValidator, UrlValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DRaspiRegisterMsg } from 'src/utility/messages';
 @Component({
@@ -19,9 +19,9 @@ export class DRaspiRegComponent implements OnDestroy {
     public dialogRef: MatDialogRef<DRaspiRegComponent>,
     private dialogService: DialogService
   ) { }
-  raspiRegForm = new FormGroup({
-    raspiName: new FormControl('', [Validators.required, SpecialCharValidator()]),
-    raspiServer: new FormControl('', [Validators.required, UrlValidator()]),
+  raspiRegForm = new UntypedFormGroup({
+    raspiName: new UntypedFormControl('', [Validators.required, SpecialCharValidator()]),
+    raspiServer: new UntypedFormControl('', [Validators.required, UrlValidator()]),
   });
 
 

@@ -4,7 +4,7 @@ import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { MacAddressValidator, SwitchbotCharValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DSwitchbotEditMsg } from 'src/utility/messages';
 @Component({
@@ -22,10 +22,10 @@ export class DSwitchbotEditComponent implements OnDestroy, OnInit {
     private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: Models.SwitchBot
   ) { }
-  switchbotUpdateForm = new FormGroup({
-    switchbotMac: new FormControl(this.data.switchbotMac, [Validators.required, MacAddressValidator()]),
-    switchbotName: new FormControl(this.data.switchbotName, [Validators.required, SwitchbotCharValidator()]),
-    switchbotRaspiID: new FormControl(this.data.switchbotRaspiID)
+  switchbotUpdateForm = new UntypedFormGroup({
+    switchbotMac: new UntypedFormControl(this.data.switchbotMac, [Validators.required, MacAddressValidator()]),
+    switchbotName: new UntypedFormControl(this.data.switchbotName, [Validators.required, SwitchbotCharValidator()]),
+    switchbotRaspiID: new UntypedFormControl(this.data.switchbotRaspiID)
   });
 
   async ngOnInit(): Promise<void> {

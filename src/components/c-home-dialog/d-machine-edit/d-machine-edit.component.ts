@@ -4,7 +4,7 @@ import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { MachineSpecialCharValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DUpdateMachineMsg } from 'src/utility/messages';
 @Component({
@@ -21,10 +21,10 @@ export class DMachineEditComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: Models.MachineListView
   ) { }
-  machineUpdateForm = new FormGroup({
-    machineName: new FormControl(this.data.machineName, [Validators.required, MachineSpecialCharValidator()]),
-    machineModel: new FormControl(this.data.machineModel, [Validators.required, MachineSpecialCharValidator()]),
-    machineSwitchbotID: new FormControl(this.data.machineSwitchbotID)
+  machineUpdateForm = new UntypedFormGroup({
+    machineName: new UntypedFormControl(this.data.machineName, [Validators.required, MachineSpecialCharValidator()]),
+    machineModel: new UntypedFormControl(this.data.machineModel, [Validators.required, MachineSpecialCharValidator()]),
+    machineSwitchbotID: new UntypedFormControl(this.data.machineSwitchbotID)
   });
   async ngOnInit(): Promise<void> {
     await this.dialogService.getMachineSwitchbotList().refetch();

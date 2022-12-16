@@ -1,7 +1,7 @@
 import { Component, OnDestroy} from '@angular/core';
 import { Subscription} from 'rxjs';
 import * as Models from '../../interface/Models';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { CLoginService } from './c-login.service';
 import { Router } from '@angular/router';
 import * as Actions from '../../store/actions';
@@ -33,9 +33,9 @@ export class CLoginComponent implements OnDestroy {
 
   }
 
-  loginForm = new FormGroup({
-    GIDFull: new FormControl('', [Validators.required]),
-    Pass: new FormControl('', [Validators.required]),
+  loginForm = new UntypedFormGroup({
+    GIDFull: new UntypedFormControl('', [Validators.required]),
+    Pass: new UntypedFormControl('', [Validators.required]),
   });
 
 

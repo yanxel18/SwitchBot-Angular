@@ -9,8 +9,8 @@ import {
 } from '../../../validator/formvalidator';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -29,24 +29,24 @@ export class DAccountRegComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<DAccountRegComponent>,
     private dialogService: DialogService
   ) {}
-  accountRegForm = new FormGroup(
+  accountRegForm = new UntypedFormGroup(
     {
-      GIDFull: new FormControl('', [
+      GIDFull: new UntypedFormControl('', [
         Validators.required,
         SpecialCharValidator(),
       ]),
-      FullName: new FormControl('', [
+      FullName: new UntypedFormControl('', [
         Validators.required,
         SpecialCharValidator(),
       ]),
-      AccLvl: new FormControl(null, [Validators.required]),
-      pass: new FormControl('', [
+      AccLvl: new UntypedFormControl(null, [Validators.required]),
+      pass: new UntypedFormControl('', [
         Validators.required,
         Validators.minLength(5),
         SpecialCharValidator(),
         noWhitespaceValidator,
       ]),
-      passB: new FormControl('', [
+      passB: new UntypedFormControl('', [
         Validators.required,
         Validators.minLength(5),
         SpecialCharValidator(),

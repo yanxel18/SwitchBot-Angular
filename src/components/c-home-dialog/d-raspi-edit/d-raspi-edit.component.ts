@@ -4,7 +4,7 @@ import * as Models from '../../../interface/Models';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { SpecialCharValidator, UrlValidator } from '../../../validator/formvalidator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DRaspiEditMsg } from 'src/utility/messages';
 @Component({
@@ -21,9 +21,9 @@ export class DRaspiEditComponent implements OnDestroy {
     private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: Models.Raspi
   ) { }
-  raspiUpdateForm = new FormGroup({
-    raspiName: new FormControl(this.data.raspiName, [Validators.required, SpecialCharValidator()]),
-    raspiServer: new FormControl(this.data.raspiServer, [Validators.required, UrlValidator()]),
+  raspiUpdateForm = new UntypedFormGroup({
+    raspiName: new UntypedFormControl(this.data.raspiName, [Validators.required, SpecialCharValidator()]),
+    raspiServer: new UntypedFormControl(this.data.raspiServer, [Validators.required, UrlValidator()]),
   });
 
   closeDialog(): void {
