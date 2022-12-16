@@ -58,7 +58,7 @@ export class DActionComponent implements OnInit, OnDestroy {
           text: CEventsMsg.machineStarting,
           timerProgressBar: true,
           didOpen: () => {
-            Swal.showLoading()
+            Swal.showLoading(null)
           },
         });
         this.subscription.push(
@@ -129,7 +129,7 @@ export class DActionComponent implements OnInit, OnDestroy {
           text: CEventsMsg.machineStarting,
           timerProgressBar: true,
           didOpen: () => {
-            Swal.showLoading();
+            Swal.showLoading(null);
           },
         });
         this.subscription.push(
