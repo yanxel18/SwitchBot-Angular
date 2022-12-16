@@ -4,7 +4,7 @@ import * as Models from '../../../interface/Models';
 import { MatDialogRef } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { MachineSpecialCharValidator } from '../../../validator/formvalidator';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../s-dialog-service/dialog.service';
 import { DRegisterMachineMsg } from 'src/utility/messages';
 @Component({
@@ -19,9 +19,9 @@ export class DMachineRegComponent implements OnDestroy {
     public dialogRef: MatDialogRef<DMachineRegComponent>,
     private dialogService: DialogService,
   ) { }
-  machineRegisterForm = new UntypedFormGroup({
-    machineName: new UntypedFormControl('', [Validators.required, MachineSpecialCharValidator()]),
-    machineModel: new UntypedFormControl('', [Validators.required, MachineSpecialCharValidator()])
+  machineRegisterForm = new FormGroup({
+    machineName: new FormControl('', [Validators.required, MachineSpecialCharValidator()]),
+    machineModel: new FormControl('', [Validators.required, MachineSpecialCharValidator()])
   });
 
   closeDialog(): void {

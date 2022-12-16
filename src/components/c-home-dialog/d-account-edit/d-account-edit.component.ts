@@ -6,8 +6,8 @@ import Swal from 'sweetalert2';
 import { SpecialCharValidator } from '../../../validator/formvalidator';
 import {
   AbstractControl,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormControl,
+  FormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -26,16 +26,16 @@ export class DAccountEditComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: Models.WorkerInfo
   ) {}
-  accountRegForm = new UntypedFormGroup({
-    GIDFull: new UntypedFormControl({ value: this.data.GIDFull, disabled: true }, [
+  accountRegForm = new FormGroup({
+    GIDFull: new FormControl({ value: this.data.GIDFull, disabled: true }, [
       Validators.required,
       SpecialCharValidator(),
     ]),
-    FullName: new UntypedFormControl(this.data.FullName, [
+    FullName: new FormControl(this.data.FullName, [
       Validators.required,
       SpecialCharValidator(),
     ]),
-    AccLvl: new UntypedFormControl(this.data.AccLvl, [Validators.required]),
+    AccLvl: new FormControl(this.data.AccLvl, [Validators.required]),
   });
   async ngOnInit(): Promise<void> {
     await this.dialogService.getAccountTypeList().refetch();

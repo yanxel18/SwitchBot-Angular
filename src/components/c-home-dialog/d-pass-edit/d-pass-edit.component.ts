@@ -9,8 +9,8 @@ import {
 } from '../../../validator/formvalidator';
 import {
   AbstractControl,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormControl,
+  FormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -30,15 +30,15 @@ export class DPassEditComponent implements OnDestroy {
     private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: Models.WorkerInfoRegister
   ) {}
-  accountRegForm = new UntypedFormGroup(
+  accountRegForm = new FormGroup(
     {
-      pass: new UntypedFormControl('', [
+      pass: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
         SpecialCharValidator(),
         noWhitespaceValidator,
       ]),
-      passB: new UntypedFormControl('', [
+      passB: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
         SpecialCharValidator(),

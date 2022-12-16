@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as Selectors from '../../store/selector';
 import { CQrpageService } from './c-qrpage.service';
-import { UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import { FormControl, FormGroup} from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import * as qrcode from 'qrcode-generator';
 import { saveAs } from 'file-saver';
@@ -19,8 +19,8 @@ export class CQrpageComponent implements OnInit, OnDestroy {
   appSubscription: Subscription[] = [];
   qrFields$: Models.QRFields[] = [];
   MACHINE_AUTOSELECT = "0";
-  qrForm = new UntypedFormGroup({
-    qrList: new UntypedFormControl(this.MACHINE_AUTOSELECT),
+  qrForm = new FormGroup({
+    qrList: new FormControl(this.MACHINE_AUTOSELECT),
 
   });
   constructor(

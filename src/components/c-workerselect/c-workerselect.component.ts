@@ -5,7 +5,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CWorkerselectService } from './c-workerselect.service';
 import { Subscription, Observable, map } from 'rxjs';
 import * as Models from '../../interface/Models';
@@ -79,8 +79,8 @@ export class CWorkerselectComponent implements OnInit, OnDestroy {
       }
     });
   }
-  qrform = new UntypedFormGroup({
-    qrscantxt: new UntypedFormControl(''),
+  qrform = new FormGroup({
+    qrscantxt: new FormControl(''),
   });
   resetScan(): void {
     this.scannedQRData = [];

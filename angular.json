@@ -117,10 +117,8 @@
       }
     }
   },
+  "defaultProject": "switchbot-angular",
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ],
-    "analytics": false
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

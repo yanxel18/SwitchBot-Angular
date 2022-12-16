@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CQrscanService } from './c-qrscan.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import * as Models from '../../interface/Models';
@@ -32,8 +32,8 @@ export class CQrscanComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.scanTxt.nativeElement.focus();
   }
-  qrform = new UntypedFormGroup({
-    qrscantxt: new UntypedFormControl('')
+  qrform = new FormGroup({
+    qrscantxt: new FormControl('')
   })
   resetScan(): void {
     this.scannedQRData = [];
