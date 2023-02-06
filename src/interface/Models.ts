@@ -105,11 +105,24 @@ export interface CreateEventLogs {
 export interface CreateEventLogsHold {
   createEventLogsHold: string
 }
+
+ 
+
+
+export interface LastEvent extends TerminalEvents {
+  LogDate?: string,
+  EventType?: string,
+  MachineID?: number, 
+}
+
+export interface LastEventResponse {
+  LastEvent: LastEvent[] | []
+}
 export interface TerminalEvents {
-  termID: number,
-  termMsgID: number,
-  termEventMsg: string,
-  termAction: number
+  termID?: number,
+  termMsgID?: number,
+  termEventMsg?: string,
+  termAction?: number
 }
 export interface TerminalListEventParam {
   terminalID: number,

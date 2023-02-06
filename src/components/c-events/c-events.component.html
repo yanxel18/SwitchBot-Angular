@@ -53,7 +53,7 @@
           [ngClass]="
             selected === i ? 'error-message-button-red' : 'error-message-button'
           "
-          (click)="errorSelect(item); selected = i"
+          (click)="eventmsg(item); selected = i"
           mat-button
           [class.mat-elevation-z1]="true"
         >

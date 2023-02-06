@@ -175,6 +175,8 @@ export class CWorkerselectComponent implements OnInit, OnDestroy {
 
   private removeItems(): void {
     this.store.dispatch(Actions.LoadWorkerInfo({ payload: [] }));
+    localStorage.removeItem('prevtermEventMsg');
+    localStorage.removeItem('prevtermMsgID');
     localStorage.removeItem('UserNoket');
     localStorage.removeItem('WName');
     localStorage.removeItem('GID');

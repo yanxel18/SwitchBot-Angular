@@ -8,12 +8,20 @@
 </div>
 
 <div mat-dialog-content>
+  <div fxLayout="row wrap" fxLayoutAlign="center" class="lastTitle" *ngIf="prevtermEventMsg && prevtermMsgID">
+   　以前イヴェント:<br/>　
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="center center" class="lastevent" *ngIf="prevtermEventMsg && prevtermMsgID">
+   {{prevtermEventMsg}} 
+   </div>
+
   <div
     class="button-container"
     *ngIf="terminalEvent$"
     fxLayout="row wrap"
     fxLayoutAlign="center"
   >
+
     <div
       class="buttons-loop"
       *ngFor="let item of terminalEvent$ | async; let i = index"
@@ -22,7 +30,7 @@
         [ngClass]="
           selected === i ? 'error-message-button-red' : 'error-message-button'
         "
-        (click)="terminalSelect(item); selected = i"
+        (click)="terminalSelect(); selected = i"
         mat-button
         [class.mat-elevation-z1]="true"
       >

@@ -19,8 +19,10 @@ export class DActionComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
   terminalEvent$!: Observable<Models.TerminalEvents[]>;
   selected?: number;
-  terminalID: string | null = "";
+  terminalID: string | null = '';
   defaultLang: string | null = '';
+  prevtermEventMsg!: string | null;
+  prevtermMsgID!: string | null;
   executeToast = Swal.mixin({
     showConfirmButton: false,
     allowEscapeKey: false,
@@ -35,7 +37,9 @@ export class DActionComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public selectedEvent: Models.TerminalEvents
   ) { }
 
-  async ngOnInit():  Promise<void> { 
+  async ngOnInit():  Promise<void> {  
+    this.prevtermEventMsg = localStorage?.getItem("prevtermEventMsg"); 
+    this.prevtermMsgID =  localStorage?.getItem("prevtermMsgID") 
     this.terminalID = localStorage?.getItem("Terminal"); 
     if (!localStorage?.getItem('lang')) localStorage.setItem('lang','jp');
     this.defaultLang = localStorage?.getItem('lang'); 
@@ -112,8 +116,9 @@ export class DActionComponent implements OnInit, OnDestroy {
         })
       );
   }
-  async terminalSelect(selectedItem: Models.TerminalEvents): Promise<void> { 
-    　    Swal.fire({
+  async terminalSelect(): Promise<void> { 
+    
+    　Swal.fire({
       title: '「' + this.selectedEvent.termEventMsg + '」',
       text:  '「' + this.selectedEvent.termEventMsg + '」'+ DSelectedActionMsg.selectedActionTitle,
       icon: 'question',
@@ -132,6 +137,7 @@ export class DActionComponent implements OnInit, OnDestroy {
             Swal.showLoading();
           },
         });
+        
         this.subscription.push(
           this.ceventservice
             .sendEventHold(this.selectedEvent.termMsgID)

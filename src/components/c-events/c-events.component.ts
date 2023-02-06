@@ -5,7 +5,7 @@ import { Subscription, Observable, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as Selectors from '../../store/selector';
-import Swal from 'sweetalert2';　
+import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../c-home-dialog/s-dialog-service/dialog.service';
 import { DTabletselectViewComponent } from '../c-home-dialog/d-tabletselect-view/d-tabletselect-view.component';
@@ -25,7 +25,7 @@ export class CEventsComponent implements OnInit, OnDestroy {
     minWidth: '320px',
     maxWidth: '825px',
   };
-  
+
   executeToast = Swal.mixin({
     showConfirmButton: false,
     allowEscapeKey: false,
@@ -38,6 +38,8 @@ export class CEventsComponent implements OnInit, OnDestroy {
   terminalID: string | null = '';
   selectedTerminal: string | null = '';
   defaultLang: string | null = '';
+  lastEventMsg?: Observable<Models.LastEvent[]>;
+
   constructor(
     private ceventservice: CEventsService,
     private router: Router,
@@ -53,25 +55,27 @@ export class CEventsComponent implements OnInit, OnDestroy {
     await this.validateWorkerLogin();
     this.terminalID = localStorage?.getItem('Terminal');
     this.selectedTerminal = localStorage?.getItem('TerminalName');
-    if (!localStorage?.getItem('lang')) localStorage.setItem('lang','jp');
-    this.defaultLang = localStorage?.getItem('lang'); 
+    if (!localStorage?.getItem('lang')) localStorage.setItem('lang', 'jp');
+    this.defaultLang = localStorage?.getItem('lang');
     this.initializeMessages();
     if (!this.terminalID && !this.selectedTerminal) {
       this.openDialogTerminalSelectView();
     } else if (this.terminalID && this.selectedTerminal) {
       this.initializedTerminalListEvent(parseInt(this.terminalID), 0);
     }
+
+    this.getMachineLastEvent();
   }
 
   async initializedTerminalListEvent(
     termID: number,
     tAction?: number
   ): Promise<void> {
-    const paramval : Models.TerminalListEventParam  ={
-        terminalID: termID,
-        termAction: tAction,
-        lang: this.defaultLang 
-    }
+    const paramval: Models.TerminalListEventParam = {
+      terminalID: termID,
+      termAction: tAction,
+      lang: this.defaultLang,
+    };
     await this.dialogService.getTerminalListEvent(paramval).refetch();
     this.terminalEvent$ = this.dialogService
       .getTerminalListEvent(paramval)
@@ -81,8 +85,30 @@ export class CEventsComponent implements OnInit, OnDestroy {
         })
       );
   }
+
+  async getMachineLastEvent(): Promise<void> { 
+    await this.ceventservice.getLastEvent().refetch();
+    this.subscription.push(this.ceventservice.getLastEvent().valueChanges.subscribe(({data}) =>{  
+      if (data.LastEvent){  
+        if (data.LastEvent.length === 1 && data.LastEvent[0].termAction === 2) {
+          const d = data.LastEvent[0];  
+          localStorage.setItem('prevtermEventMsg',d.termEventMsg ? d.termEventMsg : '');
+          localStorage.setItem('prevtermMsgID',d.termMsgID ? (d.termMsgID).toString() : '');
+          const selectedEvent: Models.TerminalEvents = {
+            termEventMsg: d.termEventMsg,
+            termMsgID: d.termMsgID
+          };
+          this.openDialogActionSelectView(selectedEvent)
+        }
+      }
+    }))
+       
+
+    
+  }
+
   activateLang(langvalue: string): void {
-    localStorage.setItem('lang',langvalue);
+    localStorage.setItem('lang', langvalue);
     this.ngOnInit();
   }
   reselectTerminal(): void {
@@ -105,11 +131,11 @@ export class CEventsComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDialogActionSelectView(selectedEvent: Models.TerminalEvents): void {
-   this.actionViewDialog.open(DActionComponent, {
+  openDialogActionSelectView(selectedEvent: Models.TerminalEvents): void { 
+    this.actionViewDialog.open(DActionComponent, {
       disableClose: false,
       minWidth: this.terminalDialog.minWidth,
-      data: selectedEvent
+      data: selectedEvent,
     });
   }
   async validateWorkerLogin(): Promise<void> {
@@ -119,10 +145,8 @@ export class CEventsComponent implements OnInit, OnDestroy {
       })
     );
   }
-  async errorSelect(selectedEvent: Models.TerminalEvents): Promise<void> {
-      this.openDialogActionSelectView(selectedEvent); 
-    
-
+  async eventmsg(selectedEvent: Models.TerminalEvents): Promise<void> {
+    this.openDialogActionSelectView(selectedEvent);
   }
 
   backButton(): void {

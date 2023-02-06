@@ -14,7 +14,19 @@ const GET_EVENTMSGS = gql`
     }
   }
 `;
-
+const GET_LASTEVENT = gql`
+  query LastEvent {
+    LastEvent {
+      LogDate
+      EventType
+      MachineID
+      termID
+      termMsgID
+      termEventMsg
+      termAction
+    }
+  }
+`;
 const SEND_EVENT = gql`
   mutation CreateEventLogs($input: EventParam!) {
   createEventLogs(input: $input)
@@ -39,7 +51,15 @@ export class CEventsService {
       { query: GET_EVENTMSGS }
     )
   }
-  sendEvent(msgID: number): Observable<FetchResult<Models.CreateEventLogs>> {
+
+  getLastEvent(): QueryRef<Models.LastEventResponse> {
+    return this.apollo.watchQuery<Models.LastEventResponse>(
+      { 
+        query: GET_LASTEVENT,
+       }
+    )
+  }
+  sendEvent(msgID: number | undefined): Observable<FetchResult<Models.CreateEventLogs>> {
     return this.apollo.mutate({
       mutation: SEND_EVENT,
       variables: {
@@ -49,7 +69,7 @@ export class CEventsService {
       }
     })
   }
-  sendEventHold(msgID: number): Observable<FetchResult<Models.CreateEventLogsHold>> {
+  sendEventHold(msgID: number | undefined): Observable<FetchResult<Models.CreateEventLogsHold>> {
     return this.apollo.mutate({
       mutation: SEND_EVENT_HOLD,
       variables: {
